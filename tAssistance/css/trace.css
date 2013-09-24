@@ -1,0 +1,36 @@
+.trace_grid * {
+  stroke: none;
+  stroke-width: 1px;
+  cursor: default;
+  font: default;
+  fill-opacity: 1;
+  fill: none;
+}
+
+.trace_grid text {
+  font: 10px sans-serif;
+  fill: #000000;
+}
+
+.trace_grid .background {
+  fill: none;
+  pointer-events: all;
+}
+.trace_grid {
+  margin-left: 0px;
+  
+}
+
+.trace_grid .background {
+   fill: #ddd; 
+}
+
+.trace_grid .obsel {
+  stroke: #000;
+}
+
+.trace_grid .axis path,.trace_grid .axis line {
+  fill: none;
+  stroke: #fff !important;
+  shape-rendering: crispEdges;
+}
