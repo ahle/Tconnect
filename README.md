@@ -25,7 +25,7 @@ To build a such system, see the tutorial [Install TConnect](doc/tut_setup.md)
 
 ### Requirements ###
 For kTBS : 
-* [Installing kTBS ](https://kernel-for-trace-based-systems.readthedocs.org/en/latest/tutorials/install.html)
+* See [Installing kTBS ](https://kernel-for-trace-based-systems.readthedocs.org/en/latest/tutorials/install.html)
 
 For end-user application : 
 * Apache 2.2.17 or later [Installing Apache 2](http://httpd.apache.org/download.cgi)
