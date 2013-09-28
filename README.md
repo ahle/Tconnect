@@ -5,7 +5,7 @@ a platform for collecting, visualizing traces
 
 ### Introduction ###
 
-
+![Tconnect architecture](doc/img/tconnect_archi.png)
 
 
 
