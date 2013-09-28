@@ -5,5 +5,9 @@ $ unzip tconnect.zip -d /var/www
 ~~~
 ### Setup end-user application ###
 
+Using tconnect-setup to config the application site
 
+~~~bash
+$ tconnect-setup -app app1.com
+~~~
 
