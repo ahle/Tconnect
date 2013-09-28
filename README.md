@@ -13,7 +13,7 @@ For facilitating the developement, TConnect is organized into modules specialize
 * tAssistance: API for high-level requests on traces (transformation, visualisation, analyse, mining).
 
 The figure below is an example of using TConnect in order to build a user assistance system. 
-To build a such system, see the tutorial [Setup TConnect](doc/tut_setup.md)
+To build a such system, see the tutorial [Install TConnect](doc/tut_setup.md)
 
 ![Tconnect architecture](doc/img/tconnect_archi.png)
 
