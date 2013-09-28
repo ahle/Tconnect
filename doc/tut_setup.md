@@ -1,3 +1,6 @@
+Install TConnect
+----
+
 First, download the tconnect.zip file, unzip it into the root of webserver then go to its "scripts" folder
 
 ~~~bash
