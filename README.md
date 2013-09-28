@@ -1,4 +1,4 @@
-tconnect
+TConnect
 ========
 
 a platform for collecting, visualizing traces 
