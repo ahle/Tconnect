@@ -12,7 +12,8 @@ For facilitating the developement, TConnect is organized into modules specialize
 * tApp: API for non-trace requests needed to maintain the connection between the end-user application and the other systems.
 * tAssistance: API for high-level requests on traces (transformation, visualisation, analyse, mining).
 
-The figure below is an example of using TConnect in order to build a user assistance system. To build a such system, see the tutorial (#tutorial)
+The figure below is an example of using TConnect in order to build a user assistance system. 
+To build a such system, see the tutorial [Setup TConnect](doc/tut_setup.md)
 
 ![Tconnect architecture](doc/img/tconnect_archi.png)
 
