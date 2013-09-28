@@ -31,7 +31,7 @@ For end-user application :
 * Apache 2.2.17 or later [Installing Apache 2](http://httpd.apache.org/download.cgi)
 * PHP 5.3.5 [Download PHP 5.3](http://php.net/downloads.php)
 
-For trace-based-assistance application :
+For user assistance website :
 * Apache 2.2.17 or later [Installing Apache 2](http://httpd.apache.org/download.cgi)
 * PHP 5.3.5 [Download PHP 5.3](http://php.net/downloads.php)
 
