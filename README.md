@@ -10,7 +10,7 @@ For facilitating the developement, TConnect is organized into modules specialize
 
 * tService: API for storing and accessing modelled traces in JavaScript.
 * tApp: API for non-trace requests needed to maintain the connection between the end-user application and the other systems.
-
+* tAssistance: API for high-level requests on traces (transformation, visualisation, analyse, mining).
 
 
 
