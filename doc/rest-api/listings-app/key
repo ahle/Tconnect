@@ -1,0 +1,37 @@
+{
+  "apiVersion": null,
+  "swaggerVersion": "1.2",
+  "basePath": "http://hello.com",
+  "resourcePath": "/key",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {   
+      "path": "/key/update",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "Get a new key and store it",
+          "notes": "",
+          "responseClass": "string",
+          "nickname": "update_key",
+          "parameters": [            
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": ""
+            },
+            {
+              "code": 500,
+              "message": "Key not found"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {           
+   }	  
+}

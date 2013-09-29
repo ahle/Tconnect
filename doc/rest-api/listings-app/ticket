@@ -1,0 +1,48 @@
+{
+  "apiVersion": null,
+  "swaggerVersion": "1.2",
+  "basePath": "http://hello.com",
+  "resourcePath": "/ticket",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/ticket/new",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "get a ticket ",
+          "notes": "",
+          "responseClass": "Ticket",
+          "nickname": "get_ticket",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [            
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": ""
+            },
+            {
+              "code": 404,
+              "message": "Ticket no found"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+    "Ticket": {
+	"properties":{
+	   "message": {
+              "type": "string",	     
+              "description": "The encrypted ticket contain information (app_id, session_id, user_id, expire)"
+           }
+	}
+    }
+  }
+}
