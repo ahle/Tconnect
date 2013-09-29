@@ -9,7 +9,7 @@ TConnect is a web based platform for connecting the trace based applications as 
 For facilitating the developement, TConnect is organized into modules specialized for different types of systems.  
 
 * tService: API for storing and accessing modelled traces in JavaScript. 
-See also [tService API](https://rawgithub.com/ahle/tconnect/master/doc/js-api/index.html)
+See also [tService JS API](https://rawgithub.com/ahle/tconnect/master/doc/js-api/index.html)
 * tApp: API for non-trace requests needed to maintain the connection between the end-user application and the other systems.
 [tApp REST API](https://rawgithub.com/ahle/tconnect/master/doc/rest-api/index_tapp.html)
 * tAssistance: API for high-level requests on traces (transformation, visualisation, analyse, mining).
