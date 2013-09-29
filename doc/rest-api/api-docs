@@ -3,16 +3,16 @@
   "swaggerVersion": "1.2",
   "apis": [
     {
-      "path": "https://rawgithub.com/ahle/tconnect/master/doc/rest-api/listings/store",
-      "description": "Operations about store"
+      "path": "http://localhost:8000/listings/style",
+      "description": "Operations about style"
     },
     {
-      "path": "https://rawgithub.com/ahle/tconnect/master/doc/rest-api/listings/pet",
-      "description": "Operations about pets"
+      "path": "http://localhost:8000/listings/key",
+      "description": "Operations about key"
     },
     {
-      "path": "https://rawgithub.com/ahle/tconnect/master/doc/rest-api/listings/user",
-      "description": "Operations about user"
+      "path": "http://localhost:8000/listings/session",
+      "description": "Operations about session"
     }
   ]
 }
