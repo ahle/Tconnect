@@ -8,7 +8,7 @@
   ],
   "apis": [
     {   
-      "path": "/key/new",
+      "path": "/key/{app_id}",
       "operations": [
         {
           "method": "GET",
