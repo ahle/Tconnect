@@ -1,0 +1,18 @@
+{
+  "apiVersion": "0.2",
+  "swaggerVersion": "1.2",
+  "apis": [
+    {
+      "path": "https://rawgithub.com/ahle/tconnect/master/doc/rest-api/listings/store",
+      "description": "Operations about store"
+    },
+    {
+      "path": "https://rawgithub.com/ahle/tconnect/master/doc/rest-api/listings/pet",
+      "description": "Operations about pets"
+    },
+    {
+      "path": "https://rawgithub.com/ahle/tconnect/master/doc/rest-api/listings/user",
+      "description": "Operations about user"
+    }
+  ]
+}
