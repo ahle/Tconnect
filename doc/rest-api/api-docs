@@ -3,15 +3,15 @@
   "swaggerVersion": "1.2",
   "apis": [
     {
-      "path": "http://localhost:8000/listings/style",
+      "path": "https://rawgithub.com/ahle/tconnect/master/doc/rest-api/listings/style",
       "description": "Operations about style"
     },
     {
-      "path": "http://localhost:8000/listings/key",
+      "path": "https://rawgithub.com/ahle/tconnect/master/doc/rest-api/listings/key",
       "description": "Operations about key"
     },
     {
-      "path": "http://localhost:8000/listings/session",
+      "path": "https://rawgithub.com/ahle/tconnect/master/doc/rest-api/listings/session",
       "description": "Operations about session"
     }
   ]
