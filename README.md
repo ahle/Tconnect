@@ -11,10 +11,10 @@ For facilitating the developement, TConnect is organized into modules specialize
 * tService: API for storing and accessing modelled traces in JavaScript. 
 See also [tService JS API](https://rawgithub.com/ahle/tconnect/master/doc/js-api/index_tservice.html)
 * tApp: API for non-trace requests needed to maintain the connection between the end-user application and the other systems.
-[tApp REST API](https://rawgithub.com/ahle/tconnect/master/doc/rest-api/index_tapp.html),
+See also [tApp REST API](https://rawgithub.com/ahle/tconnect/master/doc/rest-api/index_tapp.html),
 [tApp JS API](https://rawgithub.com/ahle/tconnect/master/doc/js-api/index_tapp.html)
 * tAssistance: API for high-level requests on traces (transformation, visualisation, analyse, mining).
-[tAssistance REST API](https://rawgithub.com/ahle/tconnect/master/doc/rest-api/index.html)
+See also [tAssistance REST API](https://rawgithub.com/ahle/tconnect/master/doc/rest-api/index.html)
 and [tAssistance JS API](https://rawgithub.com/ahle/tconnect/master/doc/js-api/index_tassistance.html)
 
 The figure below is an example of using TConnect in order to build a user assistance system. 
