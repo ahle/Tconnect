@@ -1,8 +1,0 @@
-@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-
-<> :hasBase <base1/>.
-<base1/>
-    a :Base ;
-    rdfs:label "A trace base" ;
-.

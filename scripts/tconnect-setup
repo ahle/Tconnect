@@ -23,6 +23,8 @@ usage: 	tconnect-setup -assist 	[options]  	Setup an assistance site
 	
 usage: 	tconnect-setup ktbs install		Install dependencies of the ktbs	
 
+usage:	tconnect-setup ktbs init_data		Populate data for ktbs	
+
 usage: 	tconnect-setup -ktbs	[options]	Launch a ktbs instance
 	Options:
 		-H	Host name of the ktbs. Default is localhost.
@@ -234,11 +236,13 @@ function run_ktbs(){
 }
 
 function install_ktbs(){
-	local ktbs_dir=$0
+	local ktbs_dir=$1
 
 	install_package "python-pip"
+	install_package "curl"
 	sudo pip install -r "$ktbs_dir/requirements.txt"
 	sudo python "$ktbs_dir/setup.py" install
+	#sudo chmod 777 "$ktbs_dir/bin/ktbs"
 }
 
 function install_package(){
@@ -388,5 +392,16 @@ then
 	
 fi
 
-
+if [[ "$1" = "ktbs" && "$2" = "init_data" ]]
+then	
+	ktbs_dir="$tconnect_dir/ktbs"	
+	url="$3"
+	headers="-HContent-type:text/turtle"
+	# adding a base
+	curl $url/ -XPOST $headers --data-binary @$tconnect_dir/bas_ozalid.ttl
+	# adding a model
+	#curl $url/base1/ -XPOST $headers --data-binary @$dir/mod_model1.ttl
+	# adding a primary trace
+	curl $url/ozalid/ -XPOST $headers --data-binary @$dir/trc_t4.ttl
+fi
 

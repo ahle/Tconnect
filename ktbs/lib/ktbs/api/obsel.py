@@ -98,7 +98,10 @@ class ObselMixin(KtbsResourceMixin):
         """
         I return the subject of the obsel.
         """
-        return self.state.value(self.uri, KTBS.hasSubject)
+        ret = self.state.value(self.uri, KTBS.hasSubject)
+        if ret is not None:
+            ret = unicode(ret)
+        return ret
 
     def iter_source_obsels(self):
         """
@@ -123,7 +126,7 @@ class ObselMixin(KtbsResourceMixin):
             }
         """ % self.uri
         factory = self.factory
-        for atype in self.state.query(query_str):
+        for atype, in self.state.query(query_str): #/!\ returns 1-uples
             if not atype.startswith(KTBS.uri) and atype != RDF.type:
                 yield factory(atype, KTBS.AttributeType)
 
@@ -139,7 +142,7 @@ class ObselMixin(KtbsResourceMixin):
             }
         """ % self.uri
         factory = self.factory
-        for rtype in self.state.query(query_str):
+        for rtype, in self.state.query(query_str): #/!\ returns 1-uples
             yield factory(rtype, KTBS.RelationType)
 
     def iter_related_obsels(self, rtype):
@@ -155,8 +158,8 @@ class ObselMixin(KtbsResourceMixin):
             }
         """ % (self.uri, rtype)
         factory = self.factory
-        for rtype in self.state.query(query_str):
-            yield factory(rtype, KTBS.Obsel)
+        for related, in self.state.query(query_str): #/!\ returns 1-uples
+            yield factory(related, KTBS.Obsel)
 
     def iter_inverse_relation_types(self):
         """
@@ -170,7 +173,7 @@ class ObselMixin(KtbsResourceMixin):
             }
         """ % self.uri
         factory = self.factory
-        for rtype in self.state.query(query_str):
+        for rtype, in self.state.query(query_str): #/!\ returns 1-uples
             yield factory(rtype, KTBS.RelationType)
 
     def iter_relating_obsels(self, rtype):
@@ -186,8 +189,8 @@ class ObselMixin(KtbsResourceMixin):
             }
         """ % (rtype, self.uri)
         factory = self.factory
-        for binding in self.state.query(query_str):
-            yield factory(binding, KTBS.Obsel)
+        for relating, in self.state.query(query_str): #/!\ returns 1-uples
+            yield factory(relating, KTBS.Obsel)
 
     def get_attribute_value(self, atype):
         """

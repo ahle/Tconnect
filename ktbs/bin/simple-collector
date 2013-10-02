@@ -1,4 +1,4 @@
-#!/home/ktbs/git/ktbs/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 #    This file is part of KTBS <http://liris.cnrs.fr/sbt-dev/ktbs>

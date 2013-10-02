@@ -1,9 +1,0 @@
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
-
-<super1/>
-    :hasMethod :supermethod ;
-    :hasSource <t01/> ;
-    :hasParameter "submethods=count" ;
-    :hasParameter "model=http://example.org/dummy/model" ;
-.

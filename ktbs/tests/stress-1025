@@ -1,7 +1,0 @@
-dir=`dirname "$0"`
-url="${1:-localhost:8001/}"
-headers="-HContent-type:text/turtle"
-
-# TODO: add options to chose the URL?
-
-curl $url -XPOST $headers --data-binary @$dir/obsel1025.ttl
