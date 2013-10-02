@@ -11,14 +11,14 @@ usage: 	tconnect-setup -app 	[options] 	Setup an application site
 	Options:
 		-s	Site name of the application. This option is required. For example: app1.com
 		-H	Host name of the application. Default is localhost.
-		-p	Port of the application. Default is 80.
+		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8002 if Hostname is not 'localhost'.
 		-m	Mode of setup [dev/runtime]. Default is runtime. In the 'dev' mode, the links used instead of copying the folders.  
 
 	tconnect-setup -assist 	[options]  	Setup an assistance site
 	Options:
-		-s	Site name of the application. This option is required. For example: app1.com
+		-s	Site name of the application. This option is required. For example: assist.com
 		-H	Host name of the application. Default is localhost.
-		-p	Port of the application. Default is 80.
+		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8003 if Hostname is not 'localhost'.
 		-m	Mode of setup [dev/runtime]. Default is runtime. In the 'dev' mode, the links used instead of copying the folders.  
 	
 	tconnect-setup -ktbs	[options]	Launch a ktbs instance
@@ -116,13 +116,15 @@ function enable_site(){
 	# summary
 	echo "*	 added 		/etc/apache2/sites-available/$site_name"
 	#echo "INFO: Apache needs to be restarted: /etc/init.d/apache2 restart !!!"
-	
+	# restart apache2	
+	service apache2 restart	
+
 	case "$port" in
-		"443") 	echo "INFO: Site at https://$site_name/"
+		"443") 	echo "INFO: Site at https://$host_name/"
     			;;
-		"80") 	echo "INFO: Site at http://$site_name/"    			
+		"80") 	echo "INFO: Site at http://$host_name/"
     			;;
-		"*") 	echo "INFO: Site at http://$site_name:$port/"    			
+		"*") 	echo "INFO: Site at http://$host_name:$port/"
     			;;
 	esac
 }
@@ -132,7 +134,7 @@ function make_assist(){
 	local sitename=$2
 	local type="assist"
 
-	local $site_dir="$webroot/$sitename"
+	local site_dir="$webroot/$sitename"
 	if [ $mode = "runtime" ]
 	then
 		cp -r "$tconnect_dir/tAssistance" "$site_dir"
@@ -211,7 +213,7 @@ function make_app(){
 
 function config_database(){
 	# make 'tassistance' database and 'tuser' user
-	mysql -uroot < "$tconnect_dir/scripts/init_database.sql"
+	mysql -uroot < "$tconnect_dir/scripts/init_db.sql"
 	# make tables
 	mysql -utuser -ptuser tassistance < "$tconnect_dir/scripts/make_tables.sql"
 }
@@ -225,6 +227,15 @@ function run_ktbs(){
 	
 	$ktbs_dir/bin/./ktbs -H $host -p $port -r "$ktbs_dir/data/$repo" --cors-allow-origin=* -A 0 -P jsonld_adhoc
 		
+}
+
+function install_package(){
+	the_package_name=$1
+	PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $the_package_name|grep "install ok installed")
+
+	if [ "" == "$PKG_OK" ]; then
+		sudo apt-get --force-yes --yes install $the_package_name
+	fi
 }
 
 if [[ "$1" = "status" ]]
@@ -266,6 +277,11 @@ then
 		echo "-s is required"
 		exit;
 	fi
+
+	# install packages
+	install_package "apache2"
+	install_package "libapache2-mod-php5"
+	install_package "php5-curl"
 	
 	make_app $mode $sitename
 			
@@ -278,7 +294,7 @@ fi
 if [[ "$1" = "-assist" ]]
 then	
 	sitename="assist.com"
-	host_name="localhost"
+	hostname="localhost"
 	port="80"
 	mode="runtime"
 	
@@ -309,9 +325,9 @@ then
 	
 	make_assist $mode $sitename
 
-	add_hostname $host_name 
+	add_hostname $hostname 
 	
-	enable_site $sitename $host_name $port "assist"
+	enable_site $sitename $hostname $port "assist"
 		
 	config_database	
 		
