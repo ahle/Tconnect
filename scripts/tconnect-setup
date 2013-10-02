@@ -398,10 +398,10 @@ then
 	url="$3"
 	headers="-HContent-type:text/turtle"
 	# adding a base
-	curl $url/ -XPOST $headers --data-binary @$tconnect_dir/bas_ozalid.ttl
+	curl $url/ -XPOST $headers --data-binary @$tconnect_dir/scripts/bas_ozalid.ttl
 	# adding a model
 	#curl $url/base1/ -XPOST $headers --data-binary @$dir/mod_model1.ttl
 	# adding a primary trace
-	curl $url/ozalid/ -XPOST $headers --data-binary @$dir/trc_t4.ttl
+	curl $url/ozalid/ -XPOST $headers --data-binary @$tconnect_dir/scripts/trc_t4.ttl
 fi
 
