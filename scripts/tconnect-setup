@@ -14,14 +14,16 @@ usage: 	tconnect-setup -app 	[options] 	Setup an application site
 		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8002 if Hostname is not 'localhost'.
 		-m	Mode of setup [dev/runtime]. Default is runtime. In the 'dev' mode, the links used instead of copying the folders.  
 
-	tconnect-setup -assist 	[options]  	Setup an assistance site
+usage: 	tconnect-setup -assist 	[options]  	Setup an assistance site
 	Options:
 		-s	Site name of the application. This option is required. For example: assist.com
 		-H	Host name of the application. Default is localhost.
 		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8003 if Hostname is not 'localhost'.
 		-m	Mode of setup [dev/runtime]. Default is runtime. In the 'dev' mode, the links used instead of copying the folders.  
 	
-	tconnect-setup -ktbs	[options]	Launch a ktbs instance
+usage: 	tconnect-setup ktbs install		Install dependencies of the ktbs	
+
+usage: 	tconnect-setup -ktbs	[options]	Launch a ktbs instance
 	Options:
 		-H	Host name of the ktbs. Default is localhost.
 		-p	Port of the ktbs. Default is 8001.
@@ -212,8 +214,10 @@ function make_app(){
 }
 
 function config_database(){
+	# require passwords for root user
+	read -p "Please, enter the password for root user in mysql : " pass
 	# make 'tassistance' database and 'tuser' user
-	mysql -uroot < "$tconnect_dir/scripts/init_db.sql"
+	mysql -uroot -p$pass < "$tconnect_dir/scripts/init_db.sql"
 	# make tables
 	mysql -utuser -ptuser tassistance < "$tconnect_dir/scripts/make_tables.sql"
 }
@@ -227,6 +231,14 @@ function run_ktbs(){
 	
 	$ktbs_dir/bin/./ktbs -H $host -p $port -r "$ktbs_dir/data/$repo" --cors-allow-origin=* -A 0 -P jsonld_adhoc
 		
+}
+
+function install_ktbs(){
+	local ktbs_dir=$0
+
+	install_package "python-pip"
+	sudo pip install -r "$ktbs_dir/requirements.txt"
+	sudo python "$ktbs_dir/setup.py" install
 }
 
 function install_package(){
@@ -322,6 +334,13 @@ then
 		echo "-s is required"
 		exit;
 	fi
+
+	# install packages
+	install_package "apache2"
+	install_package "libapache2-mod-php5"
+	install_package "php5-curl"
+	install_package "mysql-server"
+	install_package "php5-mysql"
 	
 	make_assist $mode $sitename
 
@@ -361,6 +380,13 @@ then
 	
 fi
 
+#	install ktbs 
+if [[ "$1" = "ktbs" && "$2" = "install" ]]
+then	
+	ktbs_dir="$tconnect_dir/ktbs"
+	install_ktbs $ktbs_dir
+	
+fi
 
 
 
