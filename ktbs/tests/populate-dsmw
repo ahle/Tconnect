@@ -1,0 +1,55 @@
+#!/bin/sh
+
+#
+# I populate kTBS with a base, a model, transformations and a bunch of traces
+#
+
+dir=`dirname "$0"`
+url="${1:-localhost:8001}"
+headers="-HContent-type:text/turtle"
+
+# TODO: add options to chose the URL?
+
+# adding a base
+#curl $url/        -XPOST $headers --data-binary @$dir/bas_base1.ttl
+# adding a model
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/mod_model1.ttl
+# adding a primary trace
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_t01.ttl
+# adding some transformation
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/met_helloworld.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/met_count.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/met_session.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/met_superm.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/met_external.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/met_count3.ttl
+
+# adding some transformed traces
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_count3.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_filtered1.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_filtered2.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_fusioned1.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_helloworld1_hoang.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_count1.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_count2.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_session1.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_super1.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_super2.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_ext1.ttl
+#curl $url/base1/ -XPOST $headers --data-binary @$dir/trc_ext2.ttl
+
+# populating the model (need the ETag to do that)
+#etag=`curl $url/base1/model1/ -D/dev/stdout -s | grep ETag | sed 's/ETag: //'`
+#curl $url/base1/model1/ -XPUT $headers -H"If-match:$etag" -s \
+#     --data-binary @$dir/gra_model1.ttl >/dev/null
+
+dir=`dirname "$0"`
+url="${1:-localhost:8001/base1/t01/}"
+headers="-HContent-type:text/turtle"
+
+# TODO: add options to chose the URL?
+
+#curl $url -XPOST $headers --data-binary @$dir/obs1.ttl
+#curl $url -XPOST $headers --data-binary @$dir/obs2.ttl
+#curl $url -XPOST $headers --data-binary @$dir/obs3.ttl
+curl $url -XPOST $headers --data-binary @$dir/test_obsel.ttl

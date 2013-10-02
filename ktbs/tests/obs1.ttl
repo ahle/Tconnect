@@ -1,0 +1,13 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ktbs: <http://liris.cnrs.fr/silex/2009/ktbs#> .
+@prefix : <../model1/> .
+
+<obs1> a :OpenChat ;
+  ktbs:hasTrace <> ;
+  ktbs:hasBeginDT "2010-04-28T18:09:01+00:00"^^xsd:dateTime ;
+  #ktbs:hasBegin 1000;
+  ktbs:hasEnd 1000 ;
+  ktbs:hasSubject "8001" ;
+  :channel "#my-channel" ;
+.
+

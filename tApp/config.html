@@ -1,0 +1,37 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>TConnect configuration</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+</head>
+<body>
+
+<form action="" method="post">
+<fieldset>
+  <legend>Application Config</legend>
+<label for="file">app.conf</label><br/>
+<textarea rows="10" cols="50" name="file_content" id="file">
+$file_content
+</textarea><br/>
+<span>INFO: Don't edit the private key. Use the function "get key from Assistance" !</span>
+ </fieldset>
+
+<button type="submit" >Save</button>
+<button type="reset" >Discard</button>
+<button type="button" onclick="get_key_from_assistance()">Get key from Assistance</button>
+</form>
+<script type="text/javascript">
+
+	function get_key_from_assistance() {
+		var url = window.location.href;
+		var tapp_url = url.substr(0, url.indexOf("config.php"));
+		$.get(tapp_url + "api.php?o=key&p1=update", function(data) {
+			if(data==""){
+				alert("error");
+			}
+			window.location = window.location.href;
+		});
+	}
+</script>
+</body>
+</html>

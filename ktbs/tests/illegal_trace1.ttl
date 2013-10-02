@@ -1,0 +1,12 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+# illegal because its URI does not end with a slash
+
+<> :contains <it01> .
+
+<it01>
+    a :StoredTrace ;
+    :hasModel <http://example.org/some_model/> ;
+    :hasOrigin "1970-01-01T00:00:00" ;
+.

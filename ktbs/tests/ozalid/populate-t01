@@ -1,0 +1,16 @@
+#!/bin/sh
+
+#
+# I populate trace t01 with obsels
+#
+
+dir=`dirname "$0"`
+url="${1:-localhost:8001/base1/t01/}"
+headers="-HContent-type:text/turtle"
+
+# TODO: add options to chose the URL?
+
+curl $url -XPOST $headers --data-binary @$dir/obs1.ttl
+#curl $url -XPOST $headers --data-binary @$dir/obs2.ttl
+#curl $url -XPOST $headers --data-binary @$dir/obs3.ttl
+#curl $url -XPOST $headers --data-binary @$dir/obs4.ttl

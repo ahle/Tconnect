@@ -1,0 +1,23 @@
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Edit Style</title>
+	<link href="../css/trace.css" rel="stylesheet" >
+	<link href="../css/bootstrap.css" rel="stylesheet" >
+	<script type="text/javascript" src="js/js.php"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+	</head>
+	<body>
+	<form>
+	  <fieldset>
+	    <legend>Style: $style_id</legend>
+	    <label>Source</label>
+	    <input type="hidden" name="action" value="edit_style"/>
+	    <input type="hidden" name="id" value="'.$style_id.'"/>
+	    <textarea class="span8" rows="18" placeholder="Type something…"></textarea><br/>
+	    <button type="submit" class="btn">Save</button>
+	    <button class="btn" onclick="close();return false;">Discard</button>
+	  </fieldset>
+	</form>
+	</body>
+</html>

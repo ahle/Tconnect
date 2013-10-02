@@ -1,0 +1,20 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+<> :contains <external> .
+
+<external>
+    a :Method ;
+    :inherits :external ;
+    :hasParameter """foo=
+    this
+    is
+    a
+    multi-line
+    message""";
+    :hasParameter """command-line=
+        echo === DEBUG {%(__sources__)s} '''%(foo)s''' >&2
+        curl -s %(__sources__)s@obsels \\
+        | sed 's|%(__sources__)s||'
+    """ ;
+.

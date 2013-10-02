@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteRule ^style/?([^/]*)/?([^/]*)/?$		api.php?o=style&p1=$1&p2=$2&%{QUERY_STRING} 
+RewriteRule ^key/?([^/]*)/?([^/]*)/?$		api.php?o=key&p1=$1&p2=$2&%{QUERY_STRING}   
+RewriteRule ^session/?([^/]*)/?([^/]*)/?$	api.php?o=session&p1=$1&p2=$2&%{QUERY_STRING}   

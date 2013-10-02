@@ -1,0 +1,13 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ktbs: <http://liris.cnrs.fr/silex/2009/ktbs#> .
+@prefix : <../model1/> .
+
+# illegal because its start is after its end
+
+[] a :OpenChat ;
+  ktbs:hasTrace <> ;
+  ktbs:hasBegin 2000 ;
+  ktbs:hasEnd 1000 ;
+  ktbs:hasSubject "alice" ;
+  :channel "#my-channel".
+

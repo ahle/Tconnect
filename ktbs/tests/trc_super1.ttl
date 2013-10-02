@@ -1,0 +1,12 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+<> :contains <super1/> .
+
+<super1/>
+    a :ComputedTrace ;
+    :hasMethod :supermethod ;
+    :hasSource <t01/> ;
+    :hasParameter "submethods=count session" ;
+    :hasParameter "model=http://example.org/dummy/model" ;
+.

@@ -1,0 +1,10 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+<> :contains <fusioned1/> .
+
+<fusioned1/>
+    a :ComputedTrace ;
+    :hasMethod :fusion ;
+    :hasSource <t01/>, <filtered2/> ;
+.

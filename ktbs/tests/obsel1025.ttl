@@ -1,0 +1,14 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ktbs: <http://liris.cnrs.fr/silex/2009/ktbs#> .
+@prefix : <http://localhost:8001/base1/model1/> .
+<changetext_775797765> a <http://localhost:8001/base1/model1/ChangeText>.
+<changetext_775797765> ktbs:hasTrace <> .
+<changetext_775797765> ktbs:hasBeginDT "2012-05-05T01:01:30.851Z"^^xsd:dateTime .
+<changetext_775797765> ktbs:hasEndDT "2012-05-05T01:01:30.851Z"^^xsd:dateTime .
+<changetext_775797765> :user_id "0" .
+<changetext_775797765> :user_name "127.0.0.1" .
+<changetext_775797765> :site_id "AD5B058F453F860DD3FBFCAB0A58AB2B" .
+<changetext_775797765> :location """http://localhost/wiki1/index.php?title=Ds&action=edit""" .
+<changetext_775797765> :changes """<ins pos=0>12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678 </ins>""" .
+<changetext_775797765> :title """changed wpTextbox1""" .
+<changetext_775797765> :description """element_id=wpTextbox""" .

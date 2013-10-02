@@ -1,0 +1,5 @@
+#@base <http://localhost:8001/> .
+@prefix rdfrest: <http://liris.cnrs.fr/silex/2009/rdfrest#> .
+
+<>
+    rdfrest:hasMaintainer "pchampin@liris.cnrs.fr" .

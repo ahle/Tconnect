@@ -1,0 +1,13 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+# illegal because it has an invalid parameter value.
+
+<> :contains <filtered1/> .
+
+<itt3/>
+    a :ComputedTrace ;
+    :hasMethod <filter/> ;
+    :hasSource <t01/> ;
+    :hasParameter "finish=foobar" ;
+.

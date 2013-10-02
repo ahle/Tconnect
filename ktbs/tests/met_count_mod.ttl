@@ -1,0 +1,75 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+<count>
+    :inherits :script-python ;
+    :hasParameter """script=
+'''
+I count the obsels in all the sources, and generate one obsel by time window (see below) containing the number of counted obsel as an attribute.
+
+The width of the time window is given as a parameter 'window', and defaults to 1.
+'''
+from __future__ import with_statement
+
+def check_sources_and_parameters(sources, parameters):
+    window = parameters.pop("window", 1)
+    try:
+        int(window)
+    except ValueError:
+        return "parameter 'window' should be an integer"
+    if parameters:
+        return "unrecognized parameters %s" % " ".join(parameters)
+
+def set_computed_metadata(transformed_trace):
+    # TODO we should give an existing trace model
+    # TODO we should check that the sources have compatible time domains and
+    #      origins
+    transformed_trace.set_model("http://example.com/counting-model")
+    transformed_trace.set_origin("1970-01-01T00:00:00")
+    return True
+
+def process_obsel(obsel, transformed_trace, sources, change_levels, parameters,
+                  state):
+    if state is None:
+        window = int(parameters.get('window', 1000))
+        current = window-1
+        state = { 'window':window, 'set':set(), 'current':current, }
+    else:
+        state = eval(state)
+        window = state['window']
+        current = state['current']
+
+    ## just a test to explore access to obsel properties
+    #print "---", obsel
+    #for i in obsel.outgoing:
+    #   print "---", " ->", i
+    #    for j in obsel.outgoing[i]:
+    #       print "---", "   ", j
+    #for i in obsel.incoming:
+    #    print "---", " <-", i
+    #    for j in obsel.incoming[i]:
+    #        print "---", "   ", j
+
+    #print "===", state
+    modified = 0
+    while obsel.end > current:
+        current += window
+        modified = 1
+    if modified:
+        obsels = state['set']
+        if obsels:
+            obsel_type = "http://example.com/counting-model#Count_mod"
+            attr_type = "http://example.com/counting-model#value_mod"
+            end = state['current']
+            begin = end + 1 - state['window']
+            with transformed_trace.add_obsel(
+                 obsel_type, begin, end, source_obsels=obsels
+            ) as o:
+                o.add_out(attr_type, str(len(obsels)))
+        state['current'] = current
+        state['set'] = set([str(obsel.node)])
+    else:
+        state['set'].add(str(obsel.node))
+    return modified, 0, repr(state)
+""" ;
+.

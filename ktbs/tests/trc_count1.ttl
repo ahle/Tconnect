@@ -1,0 +1,11 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+<> :contains <count1/> .
+
+<count1/>
+    a :ComputedTrace ;
+    :hasMethod <count> ;
+    :hasSource <fusioned1/> ;
+    :hasParameter "window=5000" ;
+.

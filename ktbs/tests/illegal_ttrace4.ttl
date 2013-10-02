@@ -1,0 +1,13 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+# illegal because it has an unknown parameter.
+
+<> :contains <filtered1/> .
+
+<itt4/>
+    a :ComputedTrace ;
+    :hasMethod <fusion/> ;
+    :hasSource <t01/>, <filtered1/> ;
+    :hasParameter "foobar=1" ;
+.

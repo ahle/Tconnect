@@ -1,0 +1,10 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+<> :contains <t01/> .
+
+<t01/>
+    a :StoredTrace ;
+    :hasModel <model1/> ;
+    :hasOrigin "2010-04-28T18:09:00Z"^^xsd:dateTime ;
+.

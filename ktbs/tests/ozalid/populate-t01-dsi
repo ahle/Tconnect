@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#
+# I populate trace t01 with obsels
+#
+
+dir=`dirname "$0"`
+url="-k https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/base1/t01/"
+headers="-HContent-type:text/turtle"
+
+# TODO: add options to chose the URL?
+
+curl $url -XPOST $headers --data-binary @$dir/obs1_dsi.ttl

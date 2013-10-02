@@ -1,0 +1,11 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://liris.cnrs.fr/silex/2009/ktbs#> .
+
+<> :contains <superm> .
+
+<superm>
+    a :Method ;
+    :inherits :supermethod ;
+    :hasParameter "submethods=count session" ;
+    :hasParameter "model=http://example.org/dummy/model" ;
+.

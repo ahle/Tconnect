@@ -1,0 +1,14 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ktbs: <http://liris.cnrs.fr/silex/2009/ktbs#> .
+@prefix : <../model1/> .
+
+# illegal because it uses an unauthorized property from the ktbs namespace
+
+[] a :OpenChat ;
+  ktbs:hasTrace <> ;
+  ktbs:hasBegin 1000 ;
+  ktbs:hasEnd 1000 ;
+  ktbs:hasSubject "alice" ;
+  ktbs:foo "bar" ; # unauthorized
+  :channel "#my-channel".
+

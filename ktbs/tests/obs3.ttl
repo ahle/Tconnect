@@ -1,0 +1,13 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ktbs: <http://liris.cnrs.fr/silex/2009/ktbs#> .
+@prefix : <../model1/> .
+
+[ a :RecvMsg ;
+  ktbs:hasTrace <> ;
+  ktbs:hasBegin 5000 ;
+  ktbs:hasEnd 5000 ;
+  ktbs:hasSubject "8001" ;
+  :from "world" ;
+  :message "hello yourself" ;
+  :onChannel <obs1>
+].

@@ -1,0 +1,350 @@
+#!/bin/bash
+
+#
+# I create links and folders for testing tConnect
+#
+
+if [[ "$1" = "-help" || "$1" = "--help" ]]
+then
+	echo "tconnect-setup - setup tool for tconnect.
+usage: 	tconnect-setup -app 	[options] 	Setup an application site
+	Options:
+		-s	Site name of the application. This option is required. For example: app1.com
+		-H	Host name of the application. Default is localhost.
+		-p	Port of the application. Default is 80.
+		-m	Mode of setup [dev/runtime]. Default is runtime. In the 'dev' mode, the links used instead of copying the folders.  
+
+	tconnect-setup -assist 	[options]  	Setup an assistance site
+	Options:
+		-s	Site name of the application. This option is required. For example: app1.com
+		-H	Host name of the application. Default is localhost.
+		-p	Port of the application. Default is 80.
+		-m	Mode of setup [dev/runtime]. Default is runtime. In the 'dev' mode, the links used instead of copying the folders.  
+	
+	tconnect-setup -ktbs	[options]	Launch a ktbs instance
+	Options:
+		-H	Host name of the ktbs. Default is localhost.
+		-p	Port of the ktbs. Default is 8001.
+		-r	the filename/identifier of the RDF database stocked in the folder '/ktbs/data/'  (default: db_demo). 
+	"
+	exit 0
+fi
+# regroup the commands with -app
+
+webroot="/var/www"
+mode="app"
+tconnect_dir=$(dirname "$( cd "$( dirname "$0" )" && pwd )")
+
+function add_hostname(){
+	local host_name=$1
+	
+	if [ -z $host_name ]
+	then
+		exit;
+	fi
+
+	# backup	
+	d_now=$(date "+%s")
+	cp /etc/hosts "/etc/hosts.bk."$d_now || { echo "command failed"; exit 1; }
+
+	# remove if exists
+	sed -i "s/ $host_name//" /etc/hosts
+	
+	echo "Hostname: $host_name"
+
+	# add new hostname after localhost
+	sed -i "s/localhost/localhost $host_name/" /etc/hosts
+	
+	# log
+	#diff /etc/hosts "/etc/hosts.bk."d_now
+	echo "*  modified		/etc/hosts			backup:	/etc/hosts.bk.$d_now"
+}
+
+function add_port_listen(){
+	local port=$1
+	# backup
+	d_now=$(date "+%s")
+	cp /etc/apache2/ports.conf "/etc/apache2/ports.conf.bk."$d_now || { echo "command failed"; exit 1; }	
+	
+	# check and add new Listen if not exist
+	[[ $(grep "^Listen[^0-9]*$port[^0-9]*" /etc/apache2/ports.conf) ]] || sed -i "s/Listen/Listen $port\nListen/" /etc/apache2/ports.conf
+	
+	# log	
+	# diff /etc/hosts "/etc/hosts.bk."d_now
+	echo "*  modified		/etc/apache2/ports.conf		backup:	/etc/apache2/ports.conf.bk.$d_now"
+}
+
+function enable_site(){
+	local site_name=$1
+	local host_name=$2
+	local port=$3
+	local type=$4 # []
+	
+	resultat="+++"
+	### sites-available
+	# copy the default  
+	cp /etc/apache2/sites-available/default /etc/apache2/sites-available/$site_name	|| { echo "command failed"; exit 1; }	
+
+	# configure ServerName, DocumentRoot, Port, Enable	
+	if grep "ServerName" /etc/apache2/sites-available/$site_name
+	then
+	    # if found 
+	    sed -i "s/ServerName .*/ServerName $host_name/" /etc/apache2/sites-available/$site_name	    
+	else
+	    # if not found	    
+	    sed -i "s/DocumentRoot/ServerName $host_name\n\tDocumentRoot/" /etc/apache2/sites-available/$site_name	    
+	fi
+	site_dir="$webroot/$site_name"
+
+	# modify DocumentRoot
+	sed -i  "s,DocumentRoot .*,DocumentRoot $site_dir," /etc/apache2/sites-available/$site_name
+	# modify Port
+	sed -i  "s,\*:80,\*:$port," /etc/apache2/sites-available/$site_name
+	# modify AllowOverride None => All (first twice positions) for rewrite module. 
+	sed -i  "s,AllowOverride None,AllowOverride All," /etc/apache2/sites-available/$site_name
+	sed -i  "s,AllowOverride None,AllowOverride All," /etc/apache2/sites-available/$site_name
+
+	# modify ports.conf
+	add_port_listen $port
+	
+	# enable rewrite module	
+	a2enmod rewrite
+	
+	# enable site
+	a2ensite $site_name
+	# restart apache2
+	# summary
+	echo "*	 added 		/etc/apache2/sites-available/$site_name"
+	#echo "INFO: Apache needs to be restarted: /etc/init.d/apache2 restart !!!"
+	
+	case "$port" in
+		"443") 	echo "INFO: Site at https://$site_name/"
+    			;;
+		"80") 	echo "INFO: Site at http://$site_name/"    			
+    			;;
+		"*") 	echo "INFO: Site at http://$site_name:$port/"    			
+    			;;
+	esac
+}
+
+function make_assist(){
+	local mode=$1 # [runtime,dev]
+	local sitename=$2
+	local type="assist"
+
+	local $site_dir="$webroot/$sitename"
+	if [ $mode = "runtime" ]
+	then
+		cp -r "$tconnect_dir/tAssistance" "$site_dir"
+		cp -r "$tconnect_dir/tService" "$site_dir/tService"
+	fi
+	if [ $mode = "dev" ]
+	then
+		ln -s "$tconnect_dir/tAssistance" "$site_dir"
+		ln -s "$tconnect_dir/tService" "$site_dir/tService"
+	fi
+
+	# copy .htaccess
+	if [ $mode = "runtime" ]
+	then
+		cp "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
+	fi
+	if [ $mode = "dev" ]
+	then
+		ln -s "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
+	fi		
+	
+	echo "* added		$site_dir"
+}
+
+function make_app(){
+	local mode=$1 # [runtime,dev]
+	local sitename=$2
+	local type="app"
+
+	local site_dir="$webroot/$sitename"
+	mkdir "$site_dir" || true
+	if [ $mode = "runtime" ]
+	then		
+		cp -r "$tconnect_dir/tApp" "$site_dir/tApp"
+		cp -r "$tconnect_dir/tService" "$site_dir/tService"
+	fi
+	if [ $mode = "dev" ]
+	then
+		ln -s "$tconnect_dir/tApp" "$site_dir/tApp"
+		ln -s "$tconnect_dir/tService" "$site_dir/tService"
+	fi
+
+	# copy .htaccess
+	if [ $mode = "runtime" ]
+	then
+		cp "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"		
+	fi
+	if [ $mode = "dev" ]
+	then
+		ln -s "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
+	fi
+	# copy index.html
+	if [ $mode = "runtime" ]
+	then
+		cp "$tconnect_dir/app/index.html" "$site_dir/index.html"		
+	fi
+	if [ $mode = "dev" ]
+	then
+		ln -s "$tconnect_dir/app/index.html" "$site_dir/index.html"
+	fi
+	
+	echo "*  added		$site_dir"
+
+	# set rights for config
+
+	if [ $mode = "runtime" ]
+	then
+		chmod 777 -R "$site_dir/tApp/config"	
+	fi
+	if [ $mode = "dev" ]
+	then
+		chmod 777 -R "$tconnect_dir/tApp/config"
+	fi
+	
+}
+
+function config_database(){
+	# make 'tassistance' database and 'tuser' user
+	mysql -uroot < "$tconnect_dir/scripts/init_database.sql"
+	# make tables
+	mysql -utuser -ptuser tassistance < "$tconnect_dir/scripts/make_tables.sql"
+}
+
+function run_ktbs(){
+	host=$1
+	port=$2
+	repo=$3
+
+	ktbs_dir="$tconnect_dir/ktbs"
+	
+	$ktbs_dir/bin/./ktbs -H $host -p $port -r "$ktbs_dir/data/$repo" --cors-allow-origin=* -A 0 -P jsonld_adhoc
+		
+}
+
+if [[ "$1" = "status" ]]
+then	
+	echo "** 	Global variables"
+	echo "**	webroot=$webroot"
+	echo "**	tconnect_dir=$tconnect_dir"
+	
+fi
+
+if [[ "$1" = "-app" ]]
+then	
+	sitename="app1.com"
+	port="80"
+	hostname="localhost"
+	mode="runtime"
+
+	s_true=true
+	OPTIND=2 # Reset is necessary if getopts was used previously in the script.
+     	while getopts "s:H:p:m:" opt; do
+          case "$opt" in
+	     s)
+                 sitename=$OPTARG
+		 s_true=false
+		 ;;
+             H)
+                 hostname=$OPTARG
+		 ;;
+             p)  port=$OPTARG
+                 ;;
+             m)  mode=$OPTARG
+                 ;;
+          esac
+     	done
+  	shift $((OPTIND-1)) # Shift off the options and optional --.
+
+	if $s_true ;
+	then
+		echo "-s is required"
+		exit;
+	fi
+	
+	make_app $mode $sitename
+			
+	add_hostname $hostname
+	
+	enable_site $sitename $hostname $port "app"
+	exit;
+fi
+
+if [[ "$1" = "-assist" ]]
+then	
+	sitename="assist.com"
+	host_name="localhost"
+	port="80"
+	mode="runtime"
+	
+	s_true=true
+	OPTIND=2 # Reset is necessary if getopts was used previously in the script.
+     	while getopts "s:H:p:m:" opt; do
+          case "$opt" in
+	     s)
+                 sitename=$OPTARG
+		 s_true=false
+		 ;;
+             H)
+                 hostname=$OPTARG
+		 ;;
+             p)  port=$OPTARG
+                 ;;
+             m)  mode=$OPTARG
+                 ;;
+          esac
+     	done
+  	shift $((OPTIND-1)) # Shift off the options and optional --.
+
+	if $s_true;
+	then
+		echo "-s is required"
+		exit;
+	fi
+	
+	make_assist $mode $sitename
+
+	add_hostname $host_name 
+	
+	enable_site $sitename $host_name $port "assist"
+		
+	config_database	
+		
+	echo "- done -"
+	exit;
+fi
+
+#	run ktbs 
+if [[ "$1" = "-ktbs" ]]
+then	
+	host="localhost"
+	port="8001"
+	repo="db_demo"
+	
+	#h_true=0
+	OPTIND=2 # Reset is necessary if getopts was used previously in the script.
+     	while getopts "H:p:d:" opt; do
+          case "$opt" in
+             H)
+                 host=$OPTARG
+		 ;;
+             p)  port=$OPTARG
+                 ;;
+             r)  repo=$OPTARG
+                 ;;
+          esac
+     	done
+  	shift $((OPTIND-1)) # Shift off the options and optional --.
+		
+	run_ktbs $host $port $repo
+	
+fi
+
+
+
+
