@@ -13,7 +13,7 @@ function get_user($session_id){
 		exit;
 	}
 
-	$select_sql = "SELECT * FROM ta_session WHERE local_session = '".$session_id."'";
+	$select_sql = "SELECT * FROM ta_session WHERE local_session = '".$session_id."' order by modified_date desc";
 
 	if ($result = mysqli_query($con,$select_sql))
 	{
