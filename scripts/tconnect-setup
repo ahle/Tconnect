@@ -4,40 +4,48 @@
 # I create links and folders for testing tConnect
 #
 
-if [[ "$1" = "-help" || "$1" = "--help" ]]
-then
-	echo "tconnect-setup - setup tool for tconnect.
-usage: 	tconnect-setup -app 	[options] 	Setup an application site
-	Options:
-		-s	Site name of the application. This option is required. For example: app1.com
-		-H	Host name of the application. Default is localhost.
-		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8002 if Hostname is not 'localhost'.
-		-m	Mode of setup [dev/runtime]. Default is runtime. In the 'dev' mode, the links used instead of copying the folders.  
-
-usage: 	tconnect-setup -assist 	[options]  	Setup an assistance site
-	Options:
-		-s	Site name of the application. This option is required. For example: assist.com
-		-H	Host name of the application. Default is localhost.
-		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8003 if Hostname is not 'localhost'.
-		-m	Mode of setup [dev/runtime]. Default is runtime. In the 'dev' mode, the links used instead of copying the folders.  
-	
-usage: 	tconnect-setup ktbs install		Install dependencies of the ktbs	
-
-usage:	tconnect-setup ktbs init_data		Populate data for ktbs	
-
-usage: 	tconnect-setup -ktbs	[options]	Launch a ktbs instance
-	Options:
-		-H	Host name of the ktbs. Default is localhost.
-		-p	Port of the ktbs. Default is 8001.
-		-r	the filename/identifier of the RDF database stocked in the folder '/ktbs/data/'  (default: db_demo). 
-	"
-	exit 0
-fi
-# regroup the commands with -app
+# global variables
 
 webroot="/var/www"
 mode="app"
 tconnect_dir=$(dirname "$( cd "$( dirname "$0" )" && pwd )")
+
+# functions
+
+function print_help(){
+	echo "tconnect-setup - setup tool for tconnect.
+usage: 	tconnect-setup	app 	[options] 		Setup an empty application site with an extension for trace
+	Options:
+		-s	Site name of the application. This option is required. For example: app1.com
+		-H	Host name of the application. Default is localhost.
+		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8002 if Hostname is not 'localhost'.
+		-m	Mode of setup [dev,runtime]. Default is 'runtime'. In the 'dev' mode, the links used instead of copying the folders.
+
+usage: 	tconnect-setup	app-ext	[options] 		Setup an extension for trace in an existing site
+	Options:
+		-d	Site directory of the application site. This option is required. For example: /var/www/app1.com (without a '/' in the end) 
+		-m	Mode of setup [dev,runtime]. Default is 'runtime'. In the 'dev' mode, the links used instead of copying the folders.  
+
+usage: 	tconnect-setup 	assist 	[options]  		Setup an assistance site
+	Options:
+		-s	Site name of the application. This option is required. For example: assist.com
+		-H	Host name of the application. Default is localhost.
+		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8003 if Hostname is not 'localhost'.
+		-m	Mode of setup [dev,runtime]. Default is 'runtime'. In the 'dev' mode, the links used instead of copying the folders.  
+	
+usage: 	tconnect-setup 	ktbs install			Install dependencies of the ktbs	
+
+usage:	tconnect-setup 	ktbs populate <ktbs_base_url>	Populate data for ktbs
+	Options:	
+		ktbs_base_url	The base URL of the ktbs. This option is required. For example: http://localhost:8001/ (Attention: Base urls end with a '/') 
+
+usage: 	tconnect-setup 	ktbs	[options]		Launch a ktbs instance
+	Options:
+		-H	Host name of the ktbs. Default is localhost.
+		-p	Port of the ktbs. Default is 8001.
+		-r	the filename/identifier of the RDF database stocked in the folder '/ktbs/data/'  (default: db_demo). 
+	";
+}
 
 function add_hostname(){
 	local host_name=$1
@@ -139,28 +147,68 @@ function make_assist(){
 	local type="assist"
 
 	local site_dir="$webroot/$sitename"
-	if [ $mode = "runtime" ]
-	then
-		cp -r "$tconnect_dir/tAssistance" "$site_dir"
-		cp -r "$tconnect_dir/tService" "$site_dir/tService"
-	fi
 	if [ $mode = "dev" ]
 	then
 		ln -s "$tconnect_dir/tAssistance" "$site_dir"
 		ln -s "$tconnect_dir/tService" "$site_dir/tService"
+		
+	elif [ $mode = "runtime" ]
+	then
+		cp -r "$tconnect_dir/tAssistance" "$site_dir"
+		cp -r "$tconnect_dir/tService" "$site_dir/tService"
 	fi
 
 	# copy .htaccess
-	if [ $mode = "runtime" ]
-	then
-		cp "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
-	fi
+	#if [ $mode = "runtime" ]
+	#then
+	#	cp "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
+	#fi
+	#if [ $mode = "dev" ]
+	#then
+	#	ln -s "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
+	#fi		
+	#
+	echo "* added		$site_dir"
+}
+
+function make_app_ext(){
+	local mode=$1 # [runtime,dev]
+	local sitedir=$2
+	local type="app"
+	#local site_dir="$webroot/$sitename"
+
+	# copy .htaccess
+	#if [ $mode = "runtime" ]
+	#then
+	#	cp "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"		
+	#fi
+	#if [ $mode = "dev" ]
+	#then
+	#	ln -s "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
+	#fi
+	
 	if [ $mode = "dev" ]
 	then
-		ln -s "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
-	fi		
+		ln -s "$tconnect_dir/tApp" "$site_dir/tApp"
+		ln -s "$tconnect_dir/tService" "$site_dir/tService"
 	
-	echo "* added		$site_dir"
+	elif [ $mode = "runtime" ]
+	then		
+		cp -r "$tconnect_dir/tApp" "$site_dir/tApp"
+		cp -r "$tconnect_dir/tService" "$site_dir/tService"
+	fi
+	
+
+	# set rights for config
+
+	if [ $mode = "runtime" ]
+	then
+		chmod 777 -R "$site_dir/tApp/config"	
+	elif [ $mode = "dev" ]
+	then
+		chmod 777 -R "$tconnect_dir/tApp/config"
+	fi
+
 }
 
 function make_app(){
@@ -170,54 +218,25 @@ function make_app(){
 
 	local site_dir="$webroot/$sitename"
 	mkdir "$site_dir" || true
-	if [ $mode = "runtime" ]
-	then		
-		cp -r "$tconnect_dir/tApp" "$site_dir/tApp"
-		cp -r "$tconnect_dir/tService" "$site_dir/tService"
-	fi
-	if [ $mode = "dev" ]
-	then
-		ln -s "$tconnect_dir/tApp" "$site_dir/tApp"
-		ln -s "$tconnect_dir/tService" "$site_dir/tService"
-	fi
+	
+	make_app_ext $mode $site_dir
 
-	# copy .htaccess
-	if [ $mode = "runtime" ]
-	then
-		cp "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"		
-	fi
-	if [ $mode = "dev" ]
-	then
-		ln -s "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
-	fi
-	# copy index.html
+	# copy index.html as an example
 	if [ $mode = "runtime" ]
 	then
 		cp "$tconnect_dir/app/index.html" "$site_dir/index.html"		
-	fi
-	if [ $mode = "dev" ]
+	elif [ $mode = "dev" ]
 	then
 		ln -s "$tconnect_dir/app/index.html" "$site_dir/index.html"
 	fi
 	
 	echo "*  added		$site_dir"
-
-	# set rights for config
-
-	if [ $mode = "runtime" ]
-	then
-		chmod 777 -R "$site_dir/tApp/config"	
-	fi
-	if [ $mode = "dev" ]
-	then
-		chmod 777 -R "$tconnect_dir/tApp/config"
-	fi
 	
 }
 
 function config_database(){
 	# require passwords for root user
-	read -p "Please, enter the password for root user in mysql : " pass
+	read -p "Please, enter the password for "root" user in mysql : " pass
 	# make 'tassistance' database and 'tuser' user
 	mysql -uroot -p$pass < "$tconnect_dir/scripts/init_db.sql"
 	# make tables
@@ -231,8 +250,7 @@ function run_ktbs(){
 
 	ktbs_dir="$tconnect_dir/ktbs"
 	
-	$ktbs_dir/bin/./ktbs -H $host -p $port -r "$ktbs_dir/data/$repo" --cors-allow-origin=* -A 0 -P jsonld_adhoc
-		
+	$ktbs_dir/bin/./ktbs -H $host -p $port -r "$ktbs_dir/data/$repo" --cors-allow-origin=* -A 0 -P jsonld_adhoc		
 }
 
 function install_ktbs(){
@@ -254,15 +272,23 @@ function install_package(){
 	fi
 }
 
+# commands
+
+if [[ "$1" = "-help" || "$1" = "--help" ]]
+then
+	print_help();
+	exit;
+fi
+
 if [[ "$1" = "status" ]]
 then	
 	echo "** 	Global variables"
 	echo "**	webroot=$webroot"
 	echo "**	tconnect_dir=$tconnect_dir"
-	
+	exit;
 fi
 
-if [[ "$1" = "-app" ]]
+if [[ "$1" = "app" ]]
 then	
 	sitename="app1.com"
 	port="80"
@@ -307,7 +333,7 @@ then
 	exit;
 fi
 
-if [[ "$1" = "-assist" ]]
+if [[ "$1" = "assist" ]]
 then	
 	sitename="assist.com"
 	hostname="localhost"
@@ -359,7 +385,7 @@ then
 fi
 
 #	run ktbs 
-if [[ "$1" = "-ktbs" ]]
+if [[ "$1" = "ktbs" ]]
 then	
 	host="localhost"
 	port="8001"
@@ -381,7 +407,7 @@ then
   	shift $((OPTIND-1)) # Shift off the options and optional --.
 		
 	run_ktbs $host $port $repo
-	
+	exit;
 fi
 
 #	install ktbs 
@@ -389,19 +415,52 @@ if [[ "$1" = "ktbs" && "$2" = "install" ]]
 then	
 	ktbs_dir="$tconnect_dir/ktbs"
 	install_ktbs $ktbs_dir
-	
+	exit;
 fi
 
+# 	initialize base et trace in ktbs
 if [[ "$1" = "ktbs" && "$2" = "init_data" ]]
 then	
-	ktbs_dir="$tconnect_dir/ktbs"	
+	ktbs_dir="$tconnect_dir/ktbs"
 	url="$3"
 	headers="-HContent-type:text/turtle"
 	# adding a base
 	curl $url/ -XPOST $headers --data-binary @$tconnect_dir/scripts/bas_ozalid.ttl
 	# adding a model
-	#curl $url/base1/ -XPOST $headers --data-binary @$dir/mod_model1.ttl
+	# curl $url/base1/ -XPOST $headers --data-binary @$dir/mod_model1.ttl
 	# adding a primary trace
 	curl $url/ozalid/ -XPOST $headers --data-binary @$tconnect_dir/scripts/trc_t4.ttl
+	exit;
 fi
 
+# 	make tApp as an extension
+if [[ "$1" = "app-ext" ]]
+then	
+	site_dir="/var/www/app1" # 
+	mode="runtime"
+	
+	d_true=true # flag for -d
+	OPTIND=2 # Reset is necessary if getopts was used previously in the script.
+     	while getopts "d:m:" opt; do
+          case "$opt" in
+	     d)
+                 site_dir=$OPTARG
+		 d_true=false
+		 ;;
+             m)  mode=$OPTARG
+                 ;;
+          esac
+     	done
+  	shift $((OPTIND-1)) # Shift off the options and optional --.
+
+	if $d_true;
+	then
+		echo "-d is required"
+		exit;
+	fi
+	
+	make_app_ext $mode $site_dir
+	exit;
+fi
+
+print_help();
