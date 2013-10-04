@@ -1,46 +1,50 @@
-Install TConnect
+Install TConnect 
 ----
+#####Download and ready for installation #####
+Tconnect can be downloaded from this site: [master.zip](https://github.com/ahle/tconnect/archive/master.zip).
+Unzip the downloaded file into a directory and go to the "scripts" directory.
+~~~bash
+$ unzip tconnect.zip -d $tconnect_dir
+$ cd $tconnect_dir/scripts
+~~~
+or using GIT:
+~~~bash
+$ git clone https://github.com/ahle/tconnect
+$ cd $tconnect_dir/scripts
+~~~
 
-##### Installing the user assistance website #####
-Download the tconnect.zip file from [source](https://github.com/ahle/tconnect).
-Unzip the downloaded file into the root of webserver then go to its "scripts" folder.
+##### Install a standalone assistance site #####
+
+Use the ``tconnect-setup`` tool to build an assistance site.
 ~~~bash
-$ unzip tconnect.zip -d /var/www
-$ cd /var/www/tconnect/scripts
+$ tconnect-setup assist -s $site_name -H $host_name -p $port
 ~~~
-Use the ``tconnect-setup`` tool to enable the user assistance website.
+For example, to enable a site which can be accessed by: http://assist.com/, the `$host_name` is "assist.com", the `port` is "80" 
+and the `$site_name` is "assist.com". The site name is only used to distinct its site with others in the same server.
 ~~~bash
-$ tconnect-setup -assist assist.com
+$ sudo bash tconnect-setup assist -s assist.com -H assist.com
 ~~~
 
-##### Installing the plug-in tApp on the application server #####
-Download the tconnect.zip file from [source](https://github.com/ahle/tconnect).
-Unzip the downloaded file into the root of webserver then go to its "scripts" folder.
+##### Install a plug-in for trace on application site #####
+Use ``tconnect-setup`` to put a plug-in for trace on an existing application site.
 ~~~bash
-$ unzip tconnect.zip -d /var/www
-$ cd /var/www/tconnect/scripts
+$ tconnect-setup app $site_dir
 ~~~
-Using ``tconnect-setup`` to enable the application site.
+In which, `$site_dir` is the directory of the application site. For example:
 ~~~bash
-$ tconnect-setup -app app1.com
+$ sudo bash tconnect-setup app /var/www/app1.com
 ~~~
-##### Running the kTBS #####
-If kTBS won't be installed on the same server with the application or the user assistance website.
-In the other word, it will be installed on the different server.
-* Download the tconnect.zip file from [source](https://github.com/ahle/tconnect). Unzip the downloaded file into the root of webserver.
 
-     `````
-     $ unzip tconnect.zip -d /var/www
-    ````
-
-If kTBS will be installed on the same server with the application or the user assistance website, 
-the TConnect folder is avaiable. 
-
-Go to its "scripts" folder.
+##### Install kTBS #####
+Use ``tconnect-setup`` to install kTBS requirements.
 ~~~bash
-$ cd /var/www/tconnect/scripts
+$ tconnect-setup ktbs install
 ~~~
-Using ``tconnect-setup`` to run the kTBS.
+
+##### Run kTBS as a standalone web application #####
+Use ``tconnect-setup`` to launch an instance of kTBS.
+
 ~~~bash
-$ tconnect-setup -ktbs localhost
+$ tconnect-setup ktbs -H $host_name -p $port
 ~~~
+
