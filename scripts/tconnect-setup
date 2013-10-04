@@ -12,7 +12,7 @@ tconnect_dir=$(dirname "$( cd "$( dirname "$0" )" && pwd )")
 
 # functions
 
-function print_help(){
+function usage(){
 	echo "tconnect-setup - setup tool for tconnect.
 usage: 	tconnect-setup	app 	[options] 		Setup an empty application site with an extension for trace
 	Options:
@@ -75,20 +75,30 @@ usage: 	tconnect-setup 	ktbs	[options]		Launch a ktbs instance
 			Default is 8001.
 
 		-r	the filename/identifier of the RDF database stocked in the folder '/ktbs/data/'  (default: db_demo). 
-	";
+	
+usage: 	tconnect-setup 	rollback <trans_id>		Rollback an transaction
+	Options:	
+	trans_id	The ID of transaction.			
+			
+
+
+
+
+";
 }
 
 function add_hostname(){
 	local host_name=$1
+	local trans_dir=$2
 	
 	if [ -z $host_name ]
 	then
 		exit;
 	fi
 
-	# backup	
-	d_now=$(date "+%s")
-	cp /etc/hosts "/etc/hosts.bk."$d_now || { echo "command failed"; exit 1; }
+	# backup & rollback	
+	cp /etc/hosts "$trans_dir/hosts" || { echo "backup failed"; exit 1; }
+	echo "cp -f \"$trans_dir/hosts\" /etc/hosts" >> "$trans_dir/rollback"
 
 	# remove if exists
 	sed -i "s/ $host_name//" /etc/hosts
@@ -99,22 +109,23 @@ function add_hostname(){
 	sed -i "s/localhost/localhost $host_name/" /etc/hosts
 	
 	# log
-	#diff /etc/hosts "/etc/hosts.bk."d_now
-	echo "*  modified		/etc/hosts			backup:	/etc/hosts.bk.$d_now"
+	echo "*  modified		/etc/hosts			backup:	$trans_dir/hosts"
 }
 
 function add_port_listen(){
 	local port=$1
-	# backup
-	d_now=$(date "+%s")
-	cp /etc/apache2/ports.conf "/etc/apache2/ports.conf.bk."$d_now || { echo "command failed"; exit 1; }	
+	local trans_dir=$2
+	
+	# backup	
+	cp /etc/apache2/ports.conf "$trans_dir/ports.conf" || { echo "backup failed"; exit 1; }
+	echo "cp -f \"$trans_dir/ports.conf\" /etc/apache2/ports.conf" >> "$trans_dir/rollback"
 	
 	# check and add new Listen if not exist
 	[[ $(grep "^Listen[^0-9]*$port[^0-9]*" /etc/apache2/ports.conf) ]] || sed -i "s/Listen/Listen $port\nListen/" /etc/apache2/ports.conf
 	
 	# log	
 	# diff /etc/hosts "/etc/hosts.bk."d_now
-	echo "*  modified		/etc/apache2/ports.conf		backup:	/etc/apache2/ports.conf.bk.$d_now"
+	echo "*  modified		/etc/apache2/ports.conf		backup:	$trans_dir/ports.conf"
 }
 
 function enable_site(){
@@ -122,33 +133,41 @@ function enable_site(){
 	local host_name=$2
 	local port=$3
 	local type=$4 # []
-	
-	resultat="+++"
+	local trans_dir=$5
+	local sitef="/etc/apache2/sites-available/$site_name" # site file
+
 	### sites-available
-	# copy the default  
-	cp /etc/apache2/sites-available/default /etc/apache2/sites-available/$site_name	|| { echo "command failed"; exit 1; }	
+	
+	# check file exist
+	if [ -f $sitef ]; then echo "Error: file $sitef exists"; exit; fi
+	# copy the default
+	cp /etc/apache2/sites-available/default $sitef	|| { echo "copy failed"; exit; }	
+
+	# backup && rollback
+	echo "a2dissite \"$site_name\" " >> "$trans_dir/rollback"
+	echo "rm \"$sitef\" " >> "$trans_dir/rollback"
 
 	# configure ServerName, DocumentRoot, Port, Enable	
-	if grep "ServerName" /etc/apache2/sites-available/$site_name
+	if grep "ServerName" $sitef
 	then
 	    # if found 
-	    sed -i "s/ServerName .*/ServerName $host_name/" /etc/apache2/sites-available/$site_name	    
+	    sed -i "s/ServerName .*/ServerName $host_name/" $sitef 
 	else
 	    # if not found	    
-	    sed -i "s/DocumentRoot/ServerName $host_name\n\tDocumentRoot/" /etc/apache2/sites-available/$site_name	    
+	    sed -i "s/DocumentRoot/ServerName $host_name\n\tDocumentRoot/"  $sitef
 	fi
 	site_dir="$webroot/$site_name"
 
 	# modify DocumentRoot
-	sed -i  "s,DocumentRoot .*,DocumentRoot $site_dir," /etc/apache2/sites-available/$site_name
+	sed -i  "s,DocumentRoot .*,DocumentRoot $site_dir," $sitef
 	# modify Port
-	sed -i  "s,\*:80,\*:$port," /etc/apache2/sites-available/$site_name
+	sed -i  "s,\*:80,\*:$port," $sitef
 	# modify AllowOverride None => All (first twice positions) for rewrite module. 
-	sed -i  "s,AllowOverride None,AllowOverride All," /etc/apache2/sites-available/$site_name
-	sed -i  "s,AllowOverride None,AllowOverride All," /etc/apache2/sites-available/$site_name
+	sed -i  "s,AllowOverride None,AllowOverride All," $sitef
+	sed -i  "s,AllowOverride None,AllowOverride All," $sitef
 
 	# modify ports.conf
-	add_port_listen $port
+	add_port_listen $port $trans_dir
 	
 	# enable rewrite module	
 	a2enmod rewrite
@@ -157,7 +176,7 @@ function enable_site(){
 	a2ensite $site_name
 	# restart apache2
 	# summary
-	echo "*	 added 		/etc/apache2/sites-available/$site_name"
+	echo "*	 added 		$sitef"
 	#echo "INFO: Apache needs to be restarted: /etc/init.d/apache2 restart !!!"
 	# restart apache2	
 	service apache2 restart	
@@ -176,8 +195,13 @@ function make_assist(){
 	local mode=$1 # [runtime,dev]
 	local sitename=$2
 	local type="assist"
-
 	local site_dir="$webroot/$sitename"
+	local trans_dir=$3
+
+	# check directory exist
+	if [ -d $site_dir ]; then echo "Error: directory $site_dir exists"; exit; fi
+	
+	# copy 
 	if [ $mode = "dev" ]
 	then
 		ln -s "$tconnect_dir/tAssistance" "$site_dir"
@@ -188,6 +212,9 @@ function make_assist(){
 		cp -r "$tconnect_dir/tAssistance" "$site_dir"
 		cp -r "$tconnect_dir/tService" "$site_dir/tService"
 	fi
+
+	# backup && rollback	
+	echo "rm -rf \"$site_dir\" " >> "$trans_dir/rollback"
 
 	# copy .htaccess
 	#if [ $mode = "runtime" ]
@@ -207,17 +234,7 @@ function make_app_ext(){
 	local sitedir=$2
 	local type="app"
 	#local site_dir="$webroot/$sitename"
-
-	# copy .htaccess
-	#if [ $mode = "runtime" ]
-	#then
-	#	cp "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"		
-	#fi
-	#if [ $mode = "dev" ]
-	#then
-	#	ln -s "$tconnect_dir/scripts/.htaccess-$type" "$site_dir/.htaccess"
-	#fi
-	
+		
 	if [ $mode = "dev" ]
 	then
 		ln -s "$tconnect_dir/tApp" "$site_dir/tApp"
@@ -227,8 +244,7 @@ function make_app_ext(){
 	then		
 		cp -r "$tconnect_dir/tApp" "$site_dir/tApp"
 		cp -r "$tconnect_dir/tService" "$site_dir/tService"
-	fi
-	
+	fi	
 
 	# set rights for config
 
@@ -240,15 +256,18 @@ function make_app_ext(){
 		chmod 777 -R "$tconnect_dir/tApp/config"
 	fi
 
+	
 }
 
 function make_app(){
 	local mode=$1 # [runtime,dev]
 	local sitename=$2
 	local type="app"
-
 	local site_dir="$webroot/$sitename"
-	mkdir "$site_dir" || true
+
+	# check directory exist
+	if [ -d $site_dir ]; then echo "Error: directory $site_dir exists"; exit; fi
+	mkdir "$site_dir" || { echo "make directory failed"; exit; }
 	
 	make_app_ext $mode $site_dir
 
@@ -303,11 +322,32 @@ function install_package(){
 	fi
 }
 
+function make_transaction(){
+	local trans_id=$0
+	mkdir "$tconnect_dir/$trans_id"
+}
+
+function install_reqs_app(){
+	# packages
+	install_package "apache2"
+	install_package "libapache2-mod-php5"
+	install_package "php5-curl"
+}
+
+function install_reqs_assist(){
+	# install packages
+	install_package "apache2"
+	install_package "libapache2-mod-php5"
+	install_package "php5-curl"
+	install_package "mysql-server"
+	install_package "php5-mysql"
+}
+
 # commands
 
 if [[ "$1" = "-help" || "$1" = "--help" ]]
 then
-	print_help
+	usage
 	exit;
 fi
 
@@ -359,15 +399,20 @@ then
 	fi
 
 	# install packages
-	install_package "apache2"
-	install_package "libapache2-mod-php5"
-	install_package "php5-curl"
+	install_reqs_app
 	
 	make_app $mode $sitename
-			
-	add_hostname $hostname
 	
-	enable_site $sitename $hostname $port "app"
+	# protect system files with transaction
+	trans_id=$(date "+%s")
+	trans_dir="$tconnect_dir/scripts/$trans_id"
+	mkdir $trans_dir
+	echo "Transaction Id: $trans_id. If an error occurs, use the command 'tconnect_setup rollback' for rollback the transaction !!! " 
+
+	add_hostname $hostname $trans_dir
+	
+	enable_site $sitename $hostname $port "app" $trans_dir
+
 	exit
 fi
 
@@ -411,11 +456,7 @@ then
 	fi
 
 	# install packages
-	install_package "apache2"
-	install_package "libapache2-mod-php5"
-	install_package "php5-curl"
-	install_package "mysql-server"
-	install_package "php5-mysql"
+	install_reqs_assist
 	
 	make_assist $mode $sitename
 
@@ -464,7 +505,7 @@ then
 fi
 
 # 	initialize base et trace in ktbs
-if [[ "$1" = "ktbs" && "$2" = "init_data" ]]
+if [[ "$1" = "ktbs" && "$2" = "populate" ]]
 then	
 	ktbs_dir="$tconnect_dir/ktbs"
 	url="$3"
@@ -504,8 +545,26 @@ then
 		exit;
 	fi
 	
-	make_app_ext $mode $site_dir
+	install_reqs_app	
+
+	make_app_ext $mode $site_dir	
+
+	echo "INFO: It should enable 'rewrite module' for your site: http://askubuntu.com/questions/48362/how-to-enable-mod-rewrite-in-apache"
+	
 	exit 
 fi
 
-print_help
+# 	rollback
+
+if [[ "$1" = "rollback" ]]
+then	
+	trans_id=$2
+	trans_dir="$tconnect_dir/scripts/$trans_id" # 
+
+	bash -x "$tconnect_dir/scripts/$trans_id/rollback"
+
+	echo "-- done --"	
+	exit 
+fi
+
+usage
