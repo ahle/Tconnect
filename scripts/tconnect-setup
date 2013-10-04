@@ -276,7 +276,7 @@ function install_package(){
 
 if [[ "$1" = "-help" || "$1" = "--help" ]]
 then
-	print_help();
+	print_help
 	exit;
 fi
 
@@ -285,7 +285,7 @@ then
 	echo "** 	Global variables"
 	echo "**	webroot=$webroot"
 	echo "**	tconnect_dir=$tconnect_dir"
-	exit;
+	exit
 fi
 
 if [[ "$1" = "app" ]]
@@ -330,7 +330,7 @@ then
 	add_hostname $hostname
 	
 	enable_site $sitename $hostname $port "app"
-	exit;
+	exit
 fi
 
 if [[ "$1" = "assist" ]]
@@ -381,7 +381,7 @@ then
 	config_database	
 		
 	echo "- done -"
-	exit;
+	exit
 fi
 
 #	run ktbs 
@@ -407,7 +407,7 @@ then
   	shift $((OPTIND-1)) # Shift off the options and optional --.
 		
 	run_ktbs $host $port $repo
-	exit;
+	exit
 fi
 
 #	install ktbs 
@@ -415,7 +415,7 @@ if [[ "$1" = "ktbs" && "$2" = "install" ]]
 then	
 	ktbs_dir="$tconnect_dir/ktbs"
 	install_ktbs $ktbs_dir
-	exit;
+	exit
 fi
 
 # 	initialize base et trace in ktbs
@@ -430,7 +430,7 @@ then
 	# curl $url/base1/ -XPOST $headers --data-binary @$dir/mod_model1.ttl
 	# adding a primary trace
 	curl $url/ozalid/ -XPOST $headers --data-binary @$tconnect_dir/scripts/trc_t4.ttl
-	exit;
+	exit
 fi
 
 # 	make tApp as an extension
@@ -460,7 +460,7 @@ then
 	fi
 	
 	make_app_ext $mode $site_dir
-	exit;
+	exit 
 fi
 
-print_help();
+print_help
