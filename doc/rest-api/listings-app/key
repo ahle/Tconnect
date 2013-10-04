@@ -11,7 +11,7 @@
       "path": "/key/update",
       "operations": [
         {
-          "method": "POST",
+          "method": "GET",
           "summary": "Get a new key and store it",
           "notes": "",
           "responseClass": "string",

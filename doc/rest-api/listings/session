@@ -54,7 +54,7 @@
       "path": "/session/{app_id}",
       "operations": [
         {
-          "method": "POST",
+          "method": "GET",
           "summary": "validate a ticket ",
           "notes": "",
           "responseClass": "",
@@ -72,12 +72,20 @@
               "paramType": "path"
             },
             {
-              "name": "body",
+              "name": "ticket",
               "description": "Ticket object that needs to be validated",
               "required": true,
               "allowMultiple": false,
               "dataType": "Ticket",
-              "paramType": "body"
+              "paramType": "query"
+            },
+	    {
+              "name": "returnUrl",
+              "description": "If ticket is validated, the request will be redirected to this url ",
+              "required": true,
+              "allowMultiple": false,
+              "dataType": "string",
+              "paramType": "query"
             }
           ],
           "responseMessages": [
