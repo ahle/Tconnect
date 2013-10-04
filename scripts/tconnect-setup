@@ -97,8 +97,8 @@ function add_hostname(){
 	fi
 
 	# backup & rollback	
-	cp /etc/hosts "$trans_dir/hosts" || { echo "backup failed"; exit 1; }
-	echo "cp -f \"$trans_dir/hosts\" /etc/hosts" >> "$trans_dir/rollback"
+	cp -p /etc/hosts "$trans_dir/hosts" || { echo "backup failed"; exit 1; }
+	echo "cp -pf \"$trans_dir/hosts\" /etc/hosts" >> "$trans_dir/rollback"
 
 	# remove if exists
 	sed -i "s/ $host_name//" /etc/hosts
@@ -117,8 +117,8 @@ function add_port_listen(){
 	local trans_dir=$2
 	
 	# backup	
-	cp /etc/apache2/ports.conf "$trans_dir/ports.conf" || { echo "backup failed"; exit 1; }
-	echo "cp -f \"$trans_dir/ports.conf\" /etc/apache2/ports.conf" >> "$trans_dir/rollback"
+	cp -p /etc/apache2/ports.conf "$trans_dir/ports.conf" || { echo "backup failed"; exit 1; }
+	echo "cp -pf \"$trans_dir/ports.conf\" /etc/apache2/ports.conf" >> "$trans_dir/rollback"
 	
 	# check and add new Listen if not exist
 	[[ $(grep "^Listen[^0-9]*$port[^0-9]*" /etc/apache2/ports.conf) ]] || sed -i "s/Listen/Listen $port\nListen/" /etc/apache2/ports.conf
@@ -141,7 +141,7 @@ function enable_site(){
 	# check file exist
 	if [ -f $sitef ]; then echo "Error: file $sitef exists"; exit; fi
 	# copy the default
-	cp /etc/apache2/sites-available/default $sitef	|| { echo "copy failed"; exit; }	
+	cp -p /etc/apache2/sites-available/default $sitef	|| { echo "copy failed"; exit; }	
 
 	# backup && rollback
 	echo "a2dissite \"$site_name\" " >> "$trans_dir/rollback"
@@ -209,8 +209,8 @@ function make_assist(){
 		
 	elif [ $mode = "runtime" ]
 	then
-		cp -r "$tconnect_dir/tAssistance" "$site_dir"
-		cp -r "$tconnect_dir/tService" "$site_dir/tService"
+		cp -rp "$tconnect_dir/tAssistance" "$site_dir"
+		cp -rp "$tconnect_dir/tService" "$site_dir/tService"
 	fi
 
 	# backup && rollback	
@@ -242,18 +242,18 @@ function make_app_ext(){
 	
 	elif [ $mode = "runtime" ]
 	then		
-		cp -r "$tconnect_dir/tApp" "$site_dir/tApp"
-		cp -r "$tconnect_dir/tService" "$site_dir/tService"
+		cp -rp "$tconnect_dir/tApp" "$site_dir/tApp"
+		cp -rp "$tconnect_dir/tService" "$site_dir/tService"
 	fi	
 
 	# set rights for config
 
 	if [ $mode = "runtime" ]
 	then
-		chmod 777 -R "$site_dir/tApp/config"	
+		chmod o+w -R "$site_dir/tApp/config"	
 	elif [ $mode = "dev" ]
 	then
-		chmod 777 -R "$tconnect_dir/tApp/config"
+		chmod o+w -R "$tconnect_dir/tApp/config"
 	fi
 
 	
@@ -274,7 +274,7 @@ function make_app(){
 	# copy index.html as an example
 	if [ $mode = "runtime" ]
 	then
-		cp "$tconnect_dir/app/index.html" "$site_dir/index.html"		
+		cp -p "$tconnect_dir/app/index.html" "$site_dir/index.html"		
 	elif [ $mode = "dev" ]
 	then
 		ln -s "$tconnect_dir/app/index.html" "$site_dir/index.html"
