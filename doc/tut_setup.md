@@ -2,12 +2,12 @@ Install TConnect
 ----
 #####Download and ready for installation #####
 Tconnect can be downloaded from this site: [master.zip](https://github.com/ahle/tconnect/archive/master.zip).
-Unzip the downloaded file into a directory and go to the "scripts" directory.
+Then, unzip the downloaded file into a directory and go to the "scripts" directory.
 ~~~bash
 $ unzip tconnect.zip -d $tconnect_dir
 $ cd $tconnect_dir/scripts
 ~~~
-or using GIT:
+or use GIT for download:
 ~~~bash
 $ git clone https://github.com/ahle/tconnect
 $ cd $tconnect_dir/scripts
