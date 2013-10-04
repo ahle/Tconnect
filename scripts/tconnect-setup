@@ -416,6 +416,41 @@ then
 	exit
 fi
 
+# 	make tApp as an extension
+if [[ "$1" = "app-ext" ]]
+then	
+	site_dir="/var/www/app1" # 
+	mode="runtime"
+	
+	d_true=true # flag for -d
+	OPTIND=2 # Reset is necessary if getopts was used previously in the script.
+     	while getopts "d:m:" opt; do
+          case "$opt" in
+	     d)
+                 site_dir=$OPTARG
+		 d_true=false
+		 ;;
+             m)  mode=$OPTARG
+                 ;;
+          esac
+     	done
+  	shift $((OPTIND-1)) # Shift off the options and optional --.
+
+	if $d_true;
+	then
+		echo "-d is required"
+		exit;
+	fi
+	
+	install_reqs_app	
+
+	make_app_ext $mode $site_dir	
+
+	echo "INFO: It should enable 'rewrite module' for your site: http://askubuntu.com/questions/48362/how-to-enable-mod-rewrite-in-apache"
+	
+	exit 
+fi
+
 if [[ "$1" = "assist" ]]
 then	
 	sitename="assist.com"
@@ -460,9 +495,15 @@ then
 	
 	make_assist $mode $sitename
 
-	add_hostname $hostname 
+	# protect system files with transaction
+	trans_id=$(date "+%s")
+	trans_dir="$tconnect_dir/scripts/$trans_id"
+	mkdir $trans_dir
+	echo "Transaction Id: $trans_id. If an error occurs, use the command 'tconnect_setup rollback' for rollback the transaction !!! " 
+
+	add_hostname $hostname $trans_dir
 	
-	enable_site $sitename $hostname $port "assist"
+	enable_site $sitename $hostname $port "assist" $trans_dir
 		
 	config_database	
 		
@@ -519,40 +560,6 @@ then
 	exit
 fi
 
-# 	make tApp as an extension
-if [[ "$1" = "app-ext" ]]
-then	
-	site_dir="/var/www/app1" # 
-	mode="runtime"
-	
-	d_true=true # flag for -d
-	OPTIND=2 # Reset is necessary if getopts was used previously in the script.
-     	while getopts "d:m:" opt; do
-          case "$opt" in
-	     d)
-                 site_dir=$OPTARG
-		 d_true=false
-		 ;;
-             m)  mode=$OPTARG
-                 ;;
-          esac
-     	done
-  	shift $((OPTIND-1)) # Shift off the options and optional --.
-
-	if $d_true;
-	then
-		echo "-d is required"
-		exit;
-	fi
-	
-	install_reqs_app	
-
-	make_app_ext $mode $site_dir	
-
-	echo "INFO: It should enable 'rewrite module' for your site: http://askubuntu.com/questions/48362/how-to-enable-mod-rewrite-in-apache"
-	
-	exit 
-fi
 
 # 	rollback
 
