@@ -16,33 +16,64 @@ function print_help(){
 	echo "tconnect-setup - setup tool for tconnect.
 usage: 	tconnect-setup	app 	[options] 		Setup an empty application site with an extension for trace
 	Options:
-		-s	Site name of the application. This option is required. For example: app1.com
-		-H	Host name of the application. Default is localhost.
-		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8002 if Hostname is not 'localhost'.
-		-m	Mode of setup [dev,runtime]. Default is 'runtime'. In the 'dev' mode, the links used instead of copying the folders.
+		-s	Site name of the application. 
+			This option is required. 
+			For example: app1.com
+
+		-H	Host name of the application. 
+			Default is localhost.
+
+		-p	Port of the application. 
+			By default, 8002 in case Hostname is 'localhost' 
+			and 80 if Hostname is not 'localhost'.
+	
+		-m	Mode of setup [dev,runtime]. 
+			Default is 'runtime'. 
+			In the 'dev' mode, the links used instead of copying the folders.
 
 usage: 	tconnect-setup	app-ext	[options] 		Setup an extension for trace in an existing site
 	Options:
-		-d	Site directory of the application site. This option is required. For example: /var/www/app1.com (without a '/' in the end) 
-		-m	Mode of setup [dev,runtime]. Default is 'runtime'. In the 'dev' mode, the links used instead of copying the folders.  
+		-d	Site directory of the application site. 
+			This option is required. 
+			For example: /var/www/app1.com (without a '/' in the end)
+	
+		-m	Mode of setup [dev,runtime]. 
+			Default is 'runtime'. 
+			In the 'dev' mode, the links used instead of copying the folders.  
 
 usage: 	tconnect-setup 	assist 	[options]  		Setup an assistance site
 	Options:
-		-s	Site name of the application. This option is required. For example: assist.com
-		-H	Host name of the application. Default is localhost.
-		-p	Port of the application. By default, it is 80 if Hostname is 'localhost' and 8003 if Hostname is not 'localhost'.
-		-m	Mode of setup [dev,runtime]. Default is 'runtime'. In the 'dev' mode, the links used instead of copying the folders.  
+		-s	Site name of the application. 
+			This option is required. 
+			For example: assist.com
+
+		-H	Host name of the application. 
+			Default is localhost.
+
+		-p	Port of the application. 
+			By default, 8003 in case Hostname is 'localhost' 
+			and 8003 if Hostname is not 'localhost'.
+	
+		-m	Mode of setup [dev,runtime]. 
+			Default is 'runtime'. 
+			In the 'dev' mode, the links used instead of copying the folders.  
 	
 usage: 	tconnect-setup 	ktbs install			Install dependencies of the ktbs	
 
 usage:	tconnect-setup 	ktbs populate <ktbs_base_url>	Populate data for ktbs
 	Options:	
-		ktbs_base_url	The base URL of the ktbs. This option is required. For example: http://localhost:8001/ (Attention: Base urls end with a '/') 
+	ktbs_base_url	The base URL of the ktbs. 
+			This option is required. 
+			For example: http://localhost:8001/ (Attention: Base urls end with a '/') 
 
 usage: 	tconnect-setup 	ktbs	[options]		Launch a ktbs instance
 	Options:
-		-H	Host name of the ktbs. Default is localhost.
-		-p	Port of the ktbs. Default is 8001.
+		-H	Host name of the ktbs. 
+			Default is localhost.
+
+		-p	Port of the ktbs. 
+			Default is 8001.
+
 		-r	the filename/identifier of the RDF database stocked in the folder '/ktbs/data/'  (default: db_demo). 
 	";
 }
@@ -291,11 +322,12 @@ fi
 if [[ "$1" = "app" ]]
 then	
 	sitename="app1.com"
-	port="80"
+	port="8002"
 	hostname="localhost"
 	mode="runtime"
 
 	s_true=true
+	p_false=true
 	OPTIND=2 # Reset is necessary if getopts was used previously in the script.
      	while getopts "s:H:p:m:" opt; do
           case "$opt" in
@@ -307,6 +339,7 @@ then
                  hostname=$OPTARG
 		 ;;
              p)  port=$OPTARG
+		 p_false=false
                  ;;
              m)  mode=$OPTARG
                  ;;
@@ -317,7 +350,12 @@ then
 	if $s_true ;
 	then
 		echo "-s is required"
-		exit;
+		exit
+	fi
+
+	if [[ $hostname != "localhost" && $p_false; ]]
+	then
+		port="80"
 	fi
 
 	# install packages
