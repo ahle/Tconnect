@@ -167,7 +167,7 @@ function enable_site(){
     			;;
 		"80") 	echo "INFO: Site at http://$host_name/"
     			;;
-		"*") 	echo "INFO: Site at http://$host_name:$port/"
+		*) 	echo "INFO: Site at http://$host_name:$port/"
     			;;
 	esac
 }
@@ -353,7 +353,7 @@ then
 		exit
 	fi
 
-	if [[ $hostname != "localhost" && $p_false; ]]
+	if [[ $hostname != "localhost" && "$p_false" = "true" ]]
 	then
 		port="80"
 	fi
@@ -375,10 +375,11 @@ if [[ "$1" = "assist" ]]
 then	
 	sitename="assist.com"
 	hostname="localhost"
-	port="80"
+	port="8003"
 	mode="runtime"
 	
 	s_true=true
+	p_false=true
 	OPTIND=2 # Reset is necessary if getopts was used previously in the script.
      	while getopts "s:H:p:m:" opt; do
           case "$opt" in
@@ -390,6 +391,7 @@ then
                  hostname=$OPTARG
 		 ;;
              p)  port=$OPTARG
+		 p_false=false
                  ;;
              m)  mode=$OPTARG
                  ;;
@@ -401,6 +403,11 @@ then
 	then
 		echo "-s is required"
 		exit;
+	fi
+
+	if [[ $hostname != "localhost" && "$p_false" = "true" ]]
+	then
+		port="80"
 	fi
 
 	# install packages
