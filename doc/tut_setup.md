@@ -32,7 +32,7 @@ $ ./tconnect-setup app $site_dir
 ~~~
 In which, `$site_dir` is the directory of the application site. For example:
 ~~~bash
-$ sudo ./tconnect-setup app /var/www/app1.com
+$ sudo ./tconnect-setup app -d /var/www/app1.com
 ~~~
 
 ##### Install kTBS #####
