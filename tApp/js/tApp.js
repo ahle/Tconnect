@@ -22,7 +22,7 @@ tApp.active_btn_assistance = function() {
 	
 	$(".assistance.btn").mouseover(function() {
 		bt_assistance = this; 
-		$.get("ticket/new", function(data){
+		$.get("/ticket/new", function(data){
 			var msg = data;
 			bt_assistance.href = tApp.AssistanceUri+"session/"+tApp.app_id+"?ticket="+encodeURIComponent(msg)+"&returnUrl="+encodeURIComponent(tApp.AssistanceUri+"index.php?page=TraceView");
 			bt_assistance.target = "_blank";
@@ -32,7 +32,7 @@ tApp.active_btn_assistance = function() {
 }
 
 tApp.changeUser = function(user){
-	$.post("tApp/api.php", {"user": user}, function(data){
+	$.post("/tApp/api.php", {"user": user}, function(data){
 		console.log(data);
 	});	
 }
