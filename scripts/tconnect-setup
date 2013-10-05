@@ -9,7 +9,7 @@
 webroot="/var/www"
 mode="app"
 tconnect_dir=$(dirname "$( cd "$( dirname "$0" )" && pwd )")
-yellow='\e[0,33m'
+yellow='\e[0;33m'
 endColor='\e[0m'
 
 # functions
