@@ -14,7 +14,8 @@ tconnect_dir=$(dirname "$( cd "$( dirname "$0" )" && pwd )")
 
 function usage(){
 	echo "tconnect-setup - setup tool for tconnect.
-usage: 	tconnect-setup	app 	[options] 		Setup an empty application site with an extension for trace
+Usage: 	tconnect-setup	app 	[options] 		
+Description: Setup an empty application site with an extension for trace
 	Options:
 		-s	Site name of the application. 
 			This option is required. 
@@ -31,7 +32,8 @@ usage: 	tconnect-setup	app 	[options] 		Setup an empty application site with an 
 			Default is 'runtime'. 
 			In the 'dev' mode, the links used instead of copying the folders.
 
-usage: 	tconnect-setup	app-ext	[options] 		Setup an extension for trace in an existing site
+Usage: 	tconnect-setup	app-ext	[options] 		
+Description: Setup an extension for trace in an existing site
 	Options:
 		-d	Site directory of the application site. 
 			This option is required. 
@@ -41,7 +43,8 @@ usage: 	tconnect-setup	app-ext	[options] 		Setup an extension for trace in an ex
 			Default is 'runtime'. 
 			In the 'dev' mode, the links used instead of copying the folders.  
 
-usage: 	tconnect-setup 	assist 	[options]  		Setup an assistance site
+Usage: 	tconnect-setup 	assist 	[options]  		
+Description: Setup an assistance site
 	Options:
 		-s	Site name of the application. 
 			This option is required. 
@@ -58,15 +61,19 @@ usage: 	tconnect-setup 	assist 	[options]  		Setup an assistance site
 			Default is 'runtime'. 
 			In the 'dev' mode, the links used instead of copying the folders.  
 	
-usage: 	tconnect-setup 	ktbs install			Install dependencies of the ktbs	
+Usage: 	tconnect-setup 	ktbs install			
+Description: Install dependencies of the ktbs	
 
-usage:	tconnect-setup 	ktbs populate <ktbs_base_url>	Populate data for ktbs
+Usage:	tconnect-setup 	ktbs populate <ktbs_base_url>	
+Description: Populate data for ktbs
 	Options:	
 	ktbs_base_url	The base URL of the ktbs. 
 			This option is required. 
-			For example: http://localhost:8001/ (Attention: Base urls end with a '/') 
+			For example: http://localhost:8001/
+			Attention: Base urls end with a '/'
 
-usage: 	tconnect-setup 	ktbs	[options]		Launch a ktbs instance
+Usage: 	tconnect-setup 	ktbs	[options]		
+Description: Launch a ktbs instance
 	Options:
 		-H	Host name of the ktbs. 
 			Default is localhost.
@@ -76,14 +83,10 @@ usage: 	tconnect-setup 	ktbs	[options]		Launch a ktbs instance
 
 		-r	the filename/identifier of the RDF database stocked in the folder '/ktbs/data/'  (default: db_demo). 
 	
-usage: 	tconnect-setup 	rollback <trans_id>		Rollback an transaction
+Usage: 	tconnect-setup 	rollback <trans_id>		
+Description: Rollback an transaction
 	Options:	
-	trans_id	The ID of transaction.			
-			
-
-
-
-
+	trans_id	The ID of transaction.
 ";
 }
 
