@@ -512,7 +512,7 @@ then
 fi
 
 #	run ktbs 
-if [[ "$1" = "ktbs" ]]
+if [[ "$1" = "ktbs" && "$2" = "start" ]]
 then	
 	host="localhost"
 	port="8001"
