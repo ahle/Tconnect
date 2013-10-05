@@ -9,6 +9,8 @@
 webroot="/var/www"
 mode="app"
 tconnect_dir=$(dirname "$( cd "$( dirname "$0" )" && pwd )")
+yellow='\e[0,33m'
+endColor='\e[0m'
 
 # functions
 
@@ -410,7 +412,7 @@ then
 	trans_id=$(date "+%s")
 	trans_dir="$tconnect_dir/scripts/$trans_id"
 	mkdir $trans_dir
-	echo "Transaction Id: $trans_id. If an error occurs, use the command 'tconnect_setup rollback' for rollback the transaction !!! " 
+	echo -e "${yellow}Transaction Id: $trans_id. If an error occurs, use the command 'tconnect_setup rollback' for rollback the transaction !!! ${endColor}" 
 
 	add_hostname $hostname $trans_dir
 	
@@ -502,7 +504,7 @@ then
 	trans_id=$(date "+%s")
 	trans_dir="$tconnect_dir/scripts/$trans_id"
 	mkdir $trans_dir
-	echo "Transaction Id: $trans_id. If an error occurs, use the command 'tconnect_setup rollback' for rollback the transaction !!! " 
+	echo -e "${yellow}Transaction Id: $trans_id. If an error occurs, use the command 'tconnect_setup rollback' for rollback the transaction !!! ${endColor}" 
 
 	add_hostname $hostname $trans_dir
 	
