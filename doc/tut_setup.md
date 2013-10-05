@@ -45,6 +45,6 @@ $ ./tconnect-setup ktbs install
 Use ``tconnect-setup`` to launch an instance of kTBS.
 
 ~~~bash
-$ ./tconnect-setup ktbs -H $host_name -p $port
+$ ./tconnect-setup ktbs start -H $host_name -p $port
 ~~~
 
