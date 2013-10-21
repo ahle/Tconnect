@@ -630,7 +630,7 @@
 			        //render();
 			    });
 			    // add TouchEvents
-			    /*rect.addEventListener('touchstart', function(e){
+			    rect.addEventListener('touchstart', function(e){
 			    	if(!e) var e = window.event;
 			    	e.preventDefault();
 			    	
@@ -701,7 +701,7 @@
 			        
 			        
 			        //render();
-			    });*/
+			    });
 			}
 		});		
 	}
