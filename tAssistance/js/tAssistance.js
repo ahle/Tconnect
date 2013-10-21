@@ -254,8 +254,8 @@
 			myCircle.setAttributeNS(null,"cx",position.x);
 			myCircle.setAttributeNS(null,"cy",position.y);
 			myCircle.setAttributeNS(null,"r",8);
-			myCircle.setAttributeNS(null,"fill",color);
-			myCircle.setAttributeNS(null,"stroke","black");
+			myCircle.setAttributeNS(null,"style","fill: "+color+"; stroke: black");
+			//myCircle.setAttributeNS(null,"stroke","black");
 			
 			g.appendChild(myCircle);
 
@@ -279,7 +279,7 @@
 		// calculate the positions of obsels based on x0,y0
 		var result = [];
 		$.each(obsels, function(index, obsel){
-			item = new Object();
+			var item = new Object();
 			item.x = index*x_unit+x0;
 			item.y = y0;
 			item.source_obsel = obsel;
@@ -296,38 +296,75 @@
     var rightArrow = 39;
     var downArrow  = 40;
     var panRate    = 10;	// Number of pixels to pan per key press.
-	
+	var zoomRate   = 0.25;
 	tAssistance.processKeyPress = function(g,evt){
-      var transform = g.getAttribute('transform');	// Grab the object representing the SVG element's viewBox attribute.
-      var translate = transform.split(' ')[0];
-      var translateValues = translate.replace("translate(","").slice(0,-1).split(',');// Create an array and insert each individual view box attribute value (assume they're seperated by a single whitespace character).
-      var scale = transform.split(' ')[1];
-      var scaleValues = scale.replace("scale(","").slice(0,-1).split(',');
+	  
+	 
+	function parse_transform(transform){
+		// parse the transform property
+		  var charTransformSplit = ' ';
+		  var charNumberSplit = ' ';
+	      
+	      var translate = transform.split(')'+charTransformSplit)[0]+')';
+	      var translateValues = translate.replace("translate(","").slice(0,-1).split(charNumberSplit);
+	      var scale = transform.split(')'+charTransformSplit)[1];
+	      var scaleValues = scale.replace("scale(","").slice(0,-1).split(charNumberSplit);
+	      var translate_x = 0;
+	      var translate_y = 0;
+	      var scale_x = 0;
+	      var scale_y = 0;
+	      
+	      translate_x = parseFloat(translateValues[0]);	// Represent the x-coordinate on the transform attribute.
+	      if(translateValues.length>1){
+	    	  translate_y = parseFloat(translateValues[1]);	// Represent the y coordinate on the transform attribute.
+		  }
+	      else{// IE
+	    	  translate_y = translate_x;
+	      }
+	      
+	      scale_x = parseFloat(scaleValues[0]); // Represent the x-scale on the transform attribute.
+	      if(scaleValues.length>1){
+	    	  scale_y = parseFloat(scaleValues[1]);	// Represent the y scale on the transform attribute.
+		  }
+	      else{// IE
+	    	  scale_y = scale_x;
+	      }	      
+	      
+	      ret = {
+	          "translate.x": translate_x,
+	          "translate.y": translate_y,
+	          "scale.x": scale_x,
+	          "scale.y": scale_y
+	      };
+	      return ret;	      
+	 }
+	function make_transform_str(transform_obj){
+		var charTransformSplit = ' ';
+		var charNumberSplit = ' ';
+		
+		return "translate("+transform_obj["translate.x"]+charNumberSplit+transform_obj["translate.y"]+") scale("+transform_obj["scale.x"]+charNumberSplit+transform_obj["scale.y"]+")";		
+	}
+	var transform_str = g.getAttribute('transform');
+	var transform_obj = parse_transform(transform_str);
       
-      /* The array is filled with strings, convert the first two viewBox values to floats: */
-      translateValues[0] = parseFloat(translateValues[0]);	// Represent the x-coordinate on the viewBox attribute.
-      translateValues[1] = parseFloat(translateValues[1]);	// Represent the y coordinate on the viewBox attribute.
-      
-      scaleValues[0] = parseFloat(scaleValues[0]);
-      scaleValues[1] = parseFloat(scaleValues[1]);
       
       switch (evt.keyCode)
       {
         case leftArrow:
-        	translateValues[0] += panRate;	// Increase the x-coordinate value of the viewBox attribute by the amount given by panRate.
+        	transform_obj["translate.x"] -= panRate;	// Increase the x-coordinate value of the transform attribute by the amount given by panRate.
           break;
         case rightArrow:
-        	translateValues[0] -= panRate;	// Decrease the x-coordinate value of the viewBox attribute by the amount given by panRate.
+        	transform_obj["translate.x"] += panRate;	// Decrease the x-coordinate value of the transform attribute by the amount given by panRate.
           break;
         case upArrow:
-        	scaleValues[0] += 0.25;	// Increase the y-coordinate value of the viewBox attribute by the amount given by panRate.          break;          
+        	transform_obj["scale.x"] += zoomRate;	    // Increase the x-scale value of the transform attribute by the amount given by zoomRate.        
           break;
         case downArrow:
-        	scaleValues[0] -= 0.25;	// Decrease the y-coordinate value of the viewBox attribute by the amount given by panRate.          break;          
+        	transform_obj["scale.x"] -= zoomRate;	// Decrease the x-scale value of the transform attribute by the amount given by zoomRate. 
           break;               
       } // switch
       
-      g.setAttribute('transform', "translate("+translateValues.join(',')+") scale("+scaleValues.join(',')+")");	// Convert the viewBoxValues array into a string with a white space character between the given values.
+      g.setAttribute('transform', make_transform_str(transform_obj));	// Convert the viewBoxValues array into a string with a white space character between the given values.
     }
 	
 	var isDown = false;
@@ -392,7 +429,7 @@
 
 				var svg = document.createElementNS(svgNS,"svg");
 				svg.setAttribute("version","1.2");
-				svg.setAttribute("style","overflow: auto");
+				svg.setAttribute("style","overflow: hidden");// issue #1: obsels overflows the svg element in IE 
 				svg.setAttribute("viewBox","0 0 1000 300");
 				svg.setAttribute("draggable","false");
 				svg.setAttribute("width","1000px");
@@ -402,14 +439,14 @@
 				
 				var rect = document.createElementNS(svgNS,"rect");
 				//rect.setAttribute("style","background-color: yellow");
-				rect.setAttribute("fill","yellow");
+				rect.setAttribute("style","fill: yellow");
 				rect.setAttribute("width","100%");
 				rect.setAttribute("height","100%");
 				
 				svg.appendChild(rect);
 				
 				var g = document.createElementNS(svgNS,"g");				
-				g.setAttribute("transform","translate(0,0) scale(1,1)");
+				g.setAttribute("transform","translate(0 0) scale(1 1)");
 				svg.appendChild(g);
 				
 				
@@ -427,33 +464,85 @@
 			    
 			    $(rect).mousedown(function(e) {
 			        isDown = true;
+			        var posx = 0;
+			        var posy = 0;
+			        if(!e) var e = window.event;
+			        if (e.pageX || e.pageY) {
+				        posx = e.pageX;
+				        posy = e.pageY;
+			        }
+			        else if (e.clientX || e.clientY) {
+				        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+				        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+			        }
 			        e.preventDefault();
 			        
-			        var transform = g.getAttribute('transform');	// Grab the object representing the SVG element's viewBox attribute.
-			        var translate = transform.split(' ')[0];
-			        var translateValues = translate.replace("translate(","").slice(0,-1).split(',');// Create an array and insert each individual view box attribute value (assume they're seperated by a single whitespace character).
-			        var scale = transform.split(' ')[1];
-			        var scaleValues = scale.replace("scale(","").slice(0,-1).split(',');	
-			        
-			        /* The array is filled with strings, convert the first two viewBox values to floats: */
-			        translateValues[0] = parseFloat(translateValues[0]);	// Represent the x-coordinate on the viewBox attribute.
-			        translateValues[1] = parseFloat(translateValues[1]);	// Represent the y coordinate on the viewBox attribute.
-			        
-			        scaleValues[0] = parseFloat(scaleValues[0]);
-			        scaleValues[1] = parseFloat(scaleValues[1]);
+			        function parse_transform(transform){
+			    		// parse the transform property
+			    		  var charTransformSplit = ' ';
+			    		  var charNumberSplit = ' ';
+			    	      
+			    	      var translate = transform.split(')'+charTransformSplit)[0]+')';
+			    	      var translateValues = translate.replace("translate(","").slice(0,-1).split(charNumberSplit);
+			    	      var scale = transform.split(')'+charTransformSplit)[1];
+			    	      var scaleValues = scale.replace("scale(","").slice(0,-1).split(charNumberSplit);
+			    	      var translate_x = 0;
+			    	      var translate_y = 0;
+			    	      var scale_x = 0;
+			    	      var scale_y = 0;
+			    	      
+			    	      translate_x = parseFloat(translateValues[0]);	// Represent the x-coordinate on the transform attribute.
+			    	      if(translateValues.length>1){
+			    	    	  translate_y = parseFloat(translateValues[1]);	// Represent the y coordinate on the transform attribute.
+			    		  }
+			    	      else{// IE
+			    	    	  translate_y = translate_x;
+			    	      }
+			    	      
+			    	      scale_x = parseFloat(scaleValues[0]); // Represent the x-scale on the transform attribute.
+			    	      if(scaleValues.length>1){
+			    	    	  scale_y = parseFloat(scaleValues[1]);	// Represent the y scale on the transform attribute.
+			    		  }
+			    	      else{// IE
+			    	    	  scale_y = scale_x;
+			    	      }	      
+			    	      
+			    	      ret = {
+			    	          "translate.x": translate_x,
+			    	          "translate.y": translate_y,
+			    	          "scale.x": scale_x,
+			    	          "scale.y": scale_y
+			    	      };
+			    	      return ret;	      
+			    	 }
+			    	function make_transform_str(transform_obj){
+			    		var charTransformSplit = ' ';
+			    		var charNumberSplit = ' ';
+			    		
+			    		return "translate("+transform_obj["translate.x"]+charNumberSplit+transform_obj["translate.y"]+") scale("+transform_obj["scale.x"]+charNumberSplit+transform_obj["scale.y"]+")";		
+			    	}
+			    	var transform_str = g.getAttribute('transform');
+			    	var transform_obj = parse_transform(transform_str);
 			        
 			        //console.log(startCoords);
 			        startCoords = {
-			            "mouseDown.x": e.offsetX,
-			            "mouseDown.y": e.offsetY,
+			            "mouseDown.x": posx,
+			            "mouseDown.y": posy,
 			            //e.offsetY - last[1]
-			            "group.x": translateValues[0],
-			            "group.y": translateValues[1]
+			            "group.x": transform_obj["translate.x"],
+			            "group.y": transform_obj["translate.y"]
 			        	};
+			        
+			        g.setAttribute("mouseDown.x",posx);
+			        g.setAttribute("mouseDown.y",posy);
+			        g.setAttribute("group.x",transform_obj["translate.x"]);
+			        g.setAttribute("group.y",transform_obj["translate.y"]);
+			        
 			    });
 			    
 			    $(rect).mouseup(function(e) {
 			        isDown = false;
+			        if(!e) var e = window.event;
 			        e.preventDefault();
 			        //console.log("mouse up");
 			       /* last = [
@@ -464,36 +553,86 @@
 			    });
 
 			    $(rect).mousemove(function(e){
+			    	if(!e) var e = window.event;
 			    	e.preventDefault();
+			    	//return;
+			    	
 			        if(!isDown) return;
 			        //console.log("panning");
-			        var x = e.offsetX;
-			        var y = e.offsetY;
-			        //var _x = 
-			        	
-			        var transform = g.getAttribute('transform');	// Grab the object representing the SVG element's viewBox attribute.
-			        var translate = transform.split(' ')[0];
-			        var translateValues = translate.replace("translate(","").slice(0,-1).split(',');// Create an array and insert each individual view box attribute value (assume they're seperated by a single whitespace character).
-			        var scale = transform.split(' ')[1];
-			        var scaleValues = scale.replace("scale(","").slice(0,-1).split(',');	
+			        var posx = 0;
+			        var posy = 0;
+			        if (e.pageX || e.pageY) {
+				        posx = e.pageX;
+				        posy = e.pageY;
+			        }
+			        else if (e.clientX || e.clientY) {
+				        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+				        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+			        }
+			        function parse_transform(transform){
+			    		// parse the transform property
+			    		  var charTransformSplit = ' ';
+			    		  var charNumberSplit = ' ';
+			    	      
+			    	      var translate = transform.split(')'+charTransformSplit)[0]+')';
+			    	      var translateValues = translate.replace("translate(","").slice(0,-1).split(charNumberSplit);
+			    	      var scale = transform.split(')'+charTransformSplit)[1];
+			    	      var scaleValues = scale.replace("scale(","").slice(0,-1).split(charNumberSplit);
+			    	      var translate_x = 0;
+			    	      var translate_y = 0;
+			    	      var scale_x = 0;
+			    	      var scale_y = 0;
+			    	      
+			    	      translate_x = parseFloat(translateValues[0]);	// Represent the x-coordinate on the transform attribute.
+			    	      if(translateValues.length>1){
+			    	    	  translate_y = parseFloat(translateValues[1]);	// Represent the y coordinate on the transform attribute.
+			    		  }
+			    	      else{// IE
+			    	    	  translate_y = translate_x;
+			    	      }
+			    	      
+			    	      scale_x = parseFloat(scaleValues[0]); // Represent the x-scale on the transform attribute.
+			    	      if(scaleValues.length>1){
+			    	    	  scale_y = parseFloat(scaleValues[1]);	// Represent the y scale on the transform attribute.
+			    		  }
+			    	      else{// IE
+			    	    	  scale_y = scale_x;
+			    	      }	      
+			    	      
+			    	      ret = {
+			    	          "translate.x": translate_x,
+			    	          "translate.y": translate_y,
+			    	          "scale.x": scale_x,
+			    	          "scale.y": scale_y
+			    	      };
+			    	      return ret;	      
+			    	 }
+			    	function make_transform_str(transform_obj){
+			    		var charTransformSplit = ' ';
+			    		var charNumberSplit = ' ';
+			    		
+			    		return "translate("+transform_obj["translate.x"]+charNumberSplit+transform_obj["translate.y"]+") scale("+transform_obj["scale.x"]+charNumberSplit+transform_obj["scale.y"]+")";		
+			    	}
+			    	var transform_str = g.getAttribute('transform');
+			    	var transform_obj = parse_transform(transform_str);
 			        
-			        /* The array is filled with strings, convert the first two viewBox values to floats: */
-			        translateValues[0] = parseFloat(translateValues[0]);	// Represent the x-coordinate on the viewBox attribute.
-			        translateValues[1] = parseFloat(translateValues[1]);	// Represent the y coordinate on the viewBox attribute.
-			        
-			        scaleValues[0] = parseFloat(scaleValues[0]);
-			        scaleValues[1] = parseFloat(scaleValues[1]);
-			        
-			        // transform
-			        translateValues[0] = x - startCoords["mouseDown.x"] + startCoords["group.x"];
+			    	// read coordinations
+			    	var mousedown_x = parseFloat(g.getAttribute("mouseDown.x"));
+			    	var mousedown_y = parseFloat(g.getAttribute("mouseDown.y"));
+			        var group_x = parseFloat(g.getAttribute("group.x"));
+			        var group_y = parseFloat(g.getAttribute("group.y"));
+			    	
+			        // transform		    	
+			    	
+			    	transform_obj["translate.x"] = posx - mousedown_x + group_x;
 			        //translateValues[1] = y - startCoords["mouseDown.y"] + startCoords["group.y"];
-			        translateValues[1] = startCoords["group.y"];
+			    	transform_obj["translate.y"] = group_y;
 			        
 			        //console.log(startCoords);
 			        //this.(1, 0, 0, 1,
 			        //                 x - startCoords[0], y - startCoords[1]);
 			        //g.setAttributeNS(null,"transform", "translate("+ (x - startCoords[0]) +","+ (startCoords[1]) +")");
-			        g.setAttribute('transform', "translate("+translateValues.join(',')+") scale("+scaleValues.join(',')+")");	
+			        g.setAttribute('transform', make_transform_str(transform_obj));	
 			        
 			        
 			        //render();
