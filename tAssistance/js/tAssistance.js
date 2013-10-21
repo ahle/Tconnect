@@ -368,7 +368,7 @@
     }
 	
 	var isDown = false;
-	var startCoords = {};
+	//var startCoords = {};
 	//var last = [0, 0];
 	
 	/** 
@@ -462,8 +462,54 @@
 			    	tAssistance.processKeyPress(g,e);
 			    });
 			    
+			    var parse_transform = function (transform){
+		    		// parse the transform property
+		    		  var charTransformSplit = ' ';
+		    		  var charNumberSplit = ' ';
+		    	      
+		    	      var translate = transform.split(')'+charTransformSplit)[0]+')';
+		    	      var translateValues = translate.replace("translate(","").slice(0,-1).split(charNumberSplit);
+		    	      var scale = transform.split(')'+charTransformSplit)[1];
+		    	      var scaleValues = scale.replace("scale(","").slice(0,-1).split(charNumberSplit);
+		    	      var translate_x = 0;
+		    	      var translate_y = 0;
+		    	      var scale_x = 0;
+		    	      var scale_y = 0;
+		    	      
+		    	      translate_x = parseFloat(translateValues[0]);	// Represent the x-coordinate on the transform attribute.
+		    	      if(translateValues.length>1){
+		    	    	  translate_y = parseFloat(translateValues[1]);	// Represent the y coordinate on the transform attribute.
+		    		  }
+		    	      else{// IE
+		    	    	  translate_y = translate_x;
+		    	      }
+		    	      
+		    	      scale_x = parseFloat(scaleValues[0]); // Represent the x-scale on the transform attribute.
+		    	      if(scaleValues.length>1){
+		    	    	  scale_y = parseFloat(scaleValues[1]);	// Represent the y scale on the transform attribute.
+		    		  }
+		    	      else{// IE
+		    	    	  scale_y = scale_x;
+		    	      }	      
+		    	      
+		    	      ret = {
+		    	          "translate.x": translate_x,
+		    	          "translate.y": translate_y,
+		    	          "scale.x": scale_x,
+		    	          "scale.y": scale_y
+		    	      };
+		    	      return ret;	      
+		    	};
+		    	 
+		    	var make_transform_str = function(transform_obj){
+		    		var charTransformSplit = ' ';
+		    		var charNumberSplit = ' ';
+		    		
+		    		return "translate("+transform_obj["translate.x"]+charNumberSplit+transform_obj["translate.y"]+") scale("+transform_obj["scale.x"]+charNumberSplit+transform_obj["scale.y"]+")";		
+		    	};
+			    
 			    $(rect).mousedown(function(e) {
-			        isDown = true;
+			    	mouseDown = "true";
 			        var posx = 0;
 			        var posy = 0;
 			        if(!e) var e = window.event;
@@ -477,87 +523,33 @@
 			        }
 			        e.preventDefault();
 			        
-			        function parse_transform(transform){
-			    		// parse the transform property
-			    		  var charTransformSplit = ' ';
-			    		  var charNumberSplit = ' ';
-			    	      
-			    	      var translate = transform.split(')'+charTransformSplit)[0]+')';
-			    	      var translateValues = translate.replace("translate(","").slice(0,-1).split(charNumberSplit);
-			    	      var scale = transform.split(')'+charTransformSplit)[1];
-			    	      var scaleValues = scale.replace("scale(","").slice(0,-1).split(charNumberSplit);
-			    	      var translate_x = 0;
-			    	      var translate_y = 0;
-			    	      var scale_x = 0;
-			    	      var scale_y = 0;
-			    	      
-			    	      translate_x = parseFloat(translateValues[0]);	// Represent the x-coordinate on the transform attribute.
-			    	      if(translateValues.length>1){
-			    	    	  translate_y = parseFloat(translateValues[1]);	// Represent the y coordinate on the transform attribute.
-			    		  }
-			    	      else{// IE
-			    	    	  translate_y = translate_x;
-			    	      }
-			    	      
-			    	      scale_x = parseFloat(scaleValues[0]); // Represent the x-scale on the transform attribute.
-			    	      if(scaleValues.length>1){
-			    	    	  scale_y = parseFloat(scaleValues[1]);	// Represent the y scale on the transform attribute.
-			    		  }
-			    	      else{// IE
-			    	    	  scale_y = scale_x;
-			    	      }	      
-			    	      
-			    	      ret = {
-			    	          "translate.x": translate_x,
-			    	          "translate.y": translate_y,
-			    	          "scale.x": scale_x,
-			    	          "scale.y": scale_y
-			    	      };
-			    	      return ret;	      
-			    	 }
-			    	function make_transform_str(transform_obj){
-			    		var charTransformSplit = ' ';
-			    		var charNumberSplit = ' ';
-			    		
-			    		return "translate("+transform_obj["translate.x"]+charNumberSplit+transform_obj["translate.y"]+") scale("+transform_obj["scale.x"]+charNumberSplit+transform_obj["scale.y"]+")";		
-			    	}
+			        
 			    	var transform_str = g.getAttribute('transform');
 			    	var transform_obj = parse_transform(transform_str);
-			        
-			        //console.log(startCoords);
-			        startCoords = {
-			            "mouseDown.x": posx,
-			            "mouseDown.y": posy,
-			            //e.offsetY - last[1]
-			            "group.x": transform_obj["translate.x"],
-			            "group.y": transform_obj["translate.y"]
-			        	};
-			        
+			        			        			        
 			        g.setAttribute("mouseDown.x",posx);
 			        g.setAttribute("mouseDown.y",posy);
 			        g.setAttribute("group.x",transform_obj["translate.x"]);
 			        g.setAttribute("group.y",transform_obj["translate.y"]);
+			        g.setAttribute("mouseDown", mouseDown);
 			        
 			    });
 			    
 			    $(rect).mouseup(function(e) {
-			        isDown = false;
+			    	mouseDown = "";
+			    	g.setAttribute("mouseDown", mouseDown);
 			        if(!e) var e = window.event;
 			        e.preventDefault();
-			        //console.log("mouse up");
-			       /* last = [
-			            e.offsetX - startCoords[0], // set last coordinates
-			            //e.offsetY - startCoords[1]
-			            startCoords[1]
-			        ];*/
+			        
 			    });
 
 			    $(rect).mousemove(function(e){
 			    	if(!e) var e = window.event;
 			    	e.preventDefault();
 			    	//return;
+			    	var mouseDown = g.getAttribute("mouseDown");
 			    	
-			        if(!isDown) return;
+			        if(!mouseDown || mouseDown == "") return;
 			        //console.log("panning");
 			        var posx = 0;
 			        var posy = 0;
@@ -569,7 +561,7 @@
 				        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
 				        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
 			        }
-			        function parse_transform(transform){
+			        /*function parse_transform(transform){
 			    		// parse the transform property
 			    		  var charTransformSplit = ' ';
 			    		  var charNumberSplit = ' ';
@@ -612,7 +604,7 @@
 			    		var charNumberSplit = ' ';
 			    		
 			    		return "translate("+transform_obj["translate.x"]+charNumberSplit+transform_obj["translate.y"]+") scale("+transform_obj["scale.x"]+charNumberSplit+transform_obj["scale.y"]+")";		
-			    	}
+			    	}*/
 			    	var transform_str = g.getAttribute('transform');
 			    	var transform_obj = parse_transform(transform_str);
 			        
@@ -637,8 +629,79 @@
 			        
 			        //render();
 			    });
-
-				
+			    // add TouchEvents
+			    /*rect.addEventListener('touchstart', function(e){
+			    	if(!e) var e = window.event;
+			    	e.preventDefault();
+			    	
+			    	touchstart = "true";
+			        var posx = 0;
+			        var posy = 0;
+			        var touchobj = e.changedTouches[0];
+			        
+			        posx = touchobj.clientX;
+			        posy = touchobj.clientY;
+			        
+			        			        
+			    	var transform_str = g.getAttribute('transform');
+			    	var transform_obj = parse_transform(transform_str);
+			        			        			        
+			        g.setAttribute("touchstart.x",posx);
+			        g.setAttribute("touchstart.y",posy);
+			        g.setAttribute("group.x",transform_obj["translate.x"]);
+			        g.setAttribute("group.y",transform_obj["translate.y"]);
+			        g.setAttribute("touchstart", touchstart);			    	
+			    	
+			    }, false);
+			    
+			    rect.addEventListener('touchend', function(e){
+			    	touchstart = "";
+			    	g.setAttribute("touchstart", touchstart);
+			        if(!e) var e = window.event;
+			        e.preventDefault();	
+			    	
+			    }, false);
+			    
+			    rect.addEventListener('touchmove',function(e){
+			    	if(!e) var e = window.event;
+			    	e.preventDefault();
+			    	
+			    	var touchstart = g.getAttribute("touchstart");
+			    	
+			        if(!touchstart || touchstart == "") return;
+			        
+			        var posx = 0;
+			        var posy = 0;
+			       
+			        var touchobj = e.changedTouches[0];
+			        
+			        posx = touchobj.clientX;
+			        posy = touchobj.clientY;
+			        
+			    	var transform_str = g.getAttribute('transform');
+			    	var transform_obj = parse_transform(transform_str);
+			        
+			    	// read coordinations
+			    	var touchstart_x = parseFloat(g.getAttribute("touchstart.x"));
+			    	var touchstart_y = parseFloat(g.getAttribute("touchstart.y"));
+			        var group_x = parseFloat(g.getAttribute("group.x"));
+			        var group_y = parseFloat(g.getAttribute("group.y"));
+			    	
+			        // transform		    	
+			    	
+			    	transform_obj["translate.x"] = posx - touchstart_x + group_x;
+			        //translateValues[1] = y - startCoords["mouseDown.y"] + startCoords["group.y"];
+			    	transform_obj["translate.y"] = group_y;
+			        
+			        //console.log(startCoords);
+			        //this.(1, 0, 0, 1,
+			        //                 x - startCoords[0], y - startCoords[1]);
+			        //g.setAttributeNS(null,"transform", "translate("+ (x - startCoords[0]) +","+ (startCoords[1]) +")");
+			        g.setAttribute('transform', make_transform_str(transform_obj));	
+			        
+			        
+			        //render();
+			    });*/
 			}
 		});		
 	}
