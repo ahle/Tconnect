@@ -6,5 +6,7 @@ $db_user = "tuser";
 $db_pwd = "tuser";
 $db_name = "tassistance";
 $debug = false;
+$base_uri = "http://213.223.171.36/ktbs/ozalid_exp/";
 
 $root_dir = dirname(dirname(__FILE__));
+
