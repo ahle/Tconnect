@@ -7,10 +7,10 @@ header("Content-type: text/javascript");
 $debug = true;
 
 $files = array("../js/jquery.js"
-				,"../js/d3.v3.js"
-				,"../js/fisheye.js"
-				//,"../lib/tAssistantTraceWidget.js"
-				,"../js/tAssistance.js"	
+				//,"../js/d3.v3.js"
+				//,"../js/fisheye.js"				
+				,"../js/tAssistance.js"
+				,"../js/tAssistance-outil.js"
 				);
 
 $js = "";

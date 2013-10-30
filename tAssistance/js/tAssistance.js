@@ -6,6 +6,7 @@
 	tAssistance = {};
 	//jTBA.Version = '0.1';
 	tAssistance.location = "http://assist.com/";
+	tAssistance.debug = true;
 	
 	/** 
 	 * @function
@@ -25,12 +26,12 @@
 		});
 	};
 	
+	
 	/** 
 	 * @function
 	 * @memberof tAssistance
 	 * @name draw_obsels
-	 * @param options.obsels the obsels needed to be drawed in html
-	 * 
+	 * @param options.obsels the obsels needed to be drawed in html 
 	 * @desc format the obsels in html */
 	tAssistance.draw_obsels = function(options){
 		var obsels = options.obsels,
@@ -38,7 +39,7 @@
 		parentNode = options.parentNode,
 		source = options.source,
 		getx = function(d){
-			var date = new Date(d["begin"]);
+			var date = tAssistance.datetime.utc2LocalDate(d["begin"]);
 			return date;
 		},
 		gety = options.gety !== undefined ? options.gety : function(d){ 
@@ -231,9 +232,6 @@
 		myCircle.setAttributeNS(null,"stroke","black");
 		
 		svg.appendChild(myCircle);
-		
-		
-		
 	}
 	
 	tAssistance.draw_obsels2 = function(opts){
@@ -245,7 +243,9 @@
 
 		//var svg = document.createElementNS(svgNS,"svg");
 		//svg.setAttribute("version","1.2");
-				
+		if(tAssistance.debug){
+			window.drawedObsels = [];
+		}
 		//document.body.appendChild(svg);
 		$.each(positions, function(index, position){
 			color = '#'+Math.floor(Math.random()*16777215).toString(16);
@@ -255,28 +255,105 @@
 			myCircle.setAttributeNS(null,"cy",position.y);
 			myCircle.setAttributeNS(null,"r",8);
 			myCircle.setAttributeNS(null,"style","fill: "+color+"; stroke: black");
-			//myCircle.setAttributeNS(null,"stroke","black");
-			
+						
 			g.appendChild(myCircle);
-
+			myCircle.data = {};
+			myCircle.data["obsel"] = position.source_obsel;
+						
 			// attach the event
 			$(myCircle).click(function(e){
 				var obsel_in_html = tAssistance.obsel_property({
 		    		"obsel": position.source_obsel, 
 		    		"container": "#controlPanel"
 		    		});
+				if(tAssistance.debug){
+					if(!window.selectedObsels)
+						window.selectedObsels = [];
+					window.selectedObsels.push(this);
+				}
 			});
-					
-		});
-		
+			if(tAssistance.debug){				
+				window.drawedObsels.push(myCircle);
+			}			
+		});		
 	}
+	// draw obsels for 
+	tAssistance.draw_obsels3 = function(obsels, g, u){
+		//var g;
+		var y = tAssistance.svg.lines["line0"],
+		r = 8,
+		unit = u || 10000;
+			
+		// make a svg
+		var svgNS = tAssistance.svg.svgNS;
+
+		//var svg = document.createElementNS(svgNS,"svg");
+		//svg.setAttribute("version","1.2");
+		
+		var drawedObsels = [];
+		
+		//document.body.appendChild(svg);
+		var utcStart = obsels[0].begin;
+		//var localStartDate = tAssistance.datetime.utc2LocalDate(utcStart);
+		var start = utcStart;
+		g.setAttribute("unit",u);
+		g.setAttribute("timeoffset",start);
+				
+		for(i=0;i<obsels.length;i++){
+			var obsel = obsels[i];
+			var utcBegin = obsel.begin;
+			var localBegin = utcBegin;
+			var x = Math.round((localBegin - start)/unit);
+			
+			color = '#'+Math.floor(Math.random()*16777215).toString(16);
+		
+			myCircle = document.createElementNS(svgNS,"circle");
+			myCircle.setAttributeNS(null,"cx", x);
+			myCircle.setAttributeNS(null,"cy", y);
+			myCircle.setAttributeNS(null,"r", r);
+			myCircle.setAttributeNS(null,"class", "obsel");
+			myCircle.setAttributeNS(null,"style","fill: "+color+"; stroke: black");
+						
+			g.appendChild(myCircle);
+			myCircle.data = {};
+			myCircle.data["obsel"] = obsel;
+						
+			// attach the event
+			$(myCircle).click(function(e){
+				var obsel_in_html = tAssistance.obsel_property({
+		    		"obsel": this.data["obsel"], 
+		    		"container": "#controlPanel"
+		    		});
+				if(tAssistance.debug){
+					if(!window.selectedObsels)
+						window.selectedObsels = [];
+					window.selectedObsels.push(this);
+				}
+			});
+			drawedObsels.push(myCircle);
+		}
+		if(tAssistance.debug){				
+			window.drawedObsels = drawedObsels;
+		}
+		return drawedObsels;
+	}
+	// clear obsels
+	tAssistance.clear_obsels = function(){
+		var obsels = document.querySelectorAll(".obsel");
+		for(i=0;i<obsels.length;i++){
+			obsel = obsels[i];
+			obsel.parentNode.removeChild(obsel);
+		}
+	}
+	
+	
 	
 	tAssistance.position_obsels = function(obsels, opts){
 		var x_unit = opts.x_unit,
 		x0 = opts.x0,
 		y0 = opts.y0;
 		
-		// calculate the positions of obsels based on x0,y0
+		// calculate the positions of obsels based on x0, y0
 		var result = [];
 		$.each(obsels, function(index, obsel){
 			var item = new Object();
@@ -287,89 +364,664 @@
 			result.push(item);
 		});
 		
+		//debug
+		window.obsels = obsels;
+		
 		return result;		
 	}
 	
-	/* Constants: */
-    var leftArrow  = 37;	// Key code for the left arrow key.
-    var upArrow    = 38;
-    var rightArrow = 39;
-    var downArrow  = 40;
-    var panRate    = 10;	// Number of pixels to pan per key press.
-	var zoomRate   = 0.25;
-	tAssistance.processKeyPress = function(g,evt){
-	  
-	 
-	function parse_transform(transform){
-		// parse the transform property
-		  var charTransformSplit = ' ';
-		  var charNumberSplit = ' ';
-	      
-	      var translate = transform.split(')'+charTransformSplit)[0]+')';
-	      var translateValues = translate.replace("translate(","").slice(0,-1).split(charNumberSplit);
-	      var scale = transform.split(')'+charTransformSplit)[1];
-	      var scaleValues = scale.replace("scale(","").slice(0,-1).split(charNumberSplit);
-	      var translate_x = 0;
-	      var translate_y = 0;
-	      var scale_x = 0;
-	      var scale_y = 0;
-	      
-	      translate_x = parseFloat(translateValues[0]);	// Represent the x-coordinate on the transform attribute.
-	      if(translateValues.length>1){
-	    	  translate_y = parseFloat(translateValues[1]);	// Represent the y coordinate on the transform attribute.
-		  }
-	      else{// IE
-	    	  translate_y = translate_x;
-	      }
-	      
-	      scale_x = parseFloat(scaleValues[0]); // Represent the x-scale on the transform attribute.
-	      if(scaleValues.length>1){
-	    	  scale_y = parseFloat(scaleValues[1]);	// Represent the y scale on the transform attribute.
-		  }
-	      else{// IE
-	    	  scale_y = scale_x;
-	      }	      
-	      
-	      ret = {
-	          "translate.x": translate_x,
-	          "translate.y": translate_y,
-	          "scale.x": scale_x,
-	          "scale.y": scale_y
-	      };
-	      return ret;	      
-	 }
-	function make_transform_str(transform_obj){
-		var charTransformSplit = ' ';
-		var charNumberSplit = ' ';
+	tAssistance.getDates = function(obsels){
 		
-		return "translate("+transform_obj["translate.x"]+charNumberSplit+transform_obj["translate.y"]+") scale("+transform_obj["scale.x"]+charNumberSplit+transform_obj["scale.y"]+")";		
+		function in_array(array, value) {
+		    for(var i=0;i<array.length;i++) {
+		    	 if(array[i].getTime() === value.getTime()) 
+		    		 return true;		    	
+		    }
+		    return false;
+		}
+
+		var dates = [];
+		for(i=0;i<obsels.length;i++){
+			// get dateTime from begin
+			var date = new Date(obsels[i].begin);
+			// reset hour to zero 
+			date.setHours(0,0,0,0);
+			
+			if(!in_array(dates,date)){
+				dates.push(date);
+			}
+		}
+		return dates;
 	}
-	var transform_str = g.getAttribute('transform');
-	var transform_obj = parse_transform(transform_str);
-      
-      
+	
+	// attach months minors to drawed obsels 
+	tAssistance.drawMonths1 = function(drawedObsels){
+		
+		var months = tAssistance.outil.getMonths_svg(drawedObsels);
+		var svg = drawedObsels[0].ownerSVGElement;
+		var g = drawedObsels[0].parentNode;
+		
+		var width = 100,
+		height = 18,
+		x = 0,
+		y = tAssistance.svg.lines["minor"],
+		padding = 2;
+		var svgNS = tAssistance.svg.svgNS;
+		drawMonths = [];
+				
+		for(var i=0;i<drawedObsels.length;i++) {
+			var drawedObsel = drawedObsels[i];
+			var obsel = drawedObsel.data["obsel"];
+			var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);// convert UTC time to localdate
+			obsel_date.setDate(1);
+			obsel_date.setHours(0,0,0,0);
+			
+			var match = tAssistance.datetime.in_array(months,obsel_date);
+			if(match){
+				var pos = tAssistance.datetime.indexOf(months,obsel_date);
+				// get coordinates of the obsel
+								
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", 0);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","obsel lbl");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = obsel_date.toLocaleString().substr(4,3);
+				
+				//find svg				
+				svg.appendChild(text);
+				
+				tAssistance.svg.align_middle(text, drawedObsel);
+				
+				// remove	
+				months.splice(pos, 1);
+				// add to the group
+				g.appendChild(text);
+				// add tooltip for label	
+				tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+				
+				drawMonths.push(text);
+			}			
+		}
+		return drawMonths;
+	}
+	
+	// attach months minors to drawed obsels 
+	tAssistance.drawDates1 = function(drawedObsels){
+		
+		var dates = tAssistance.outil.getDates_svg(drawedObsels);
+		var svg = drawedObsels[0].ownerSVGElement;
+		var g = drawedObsels[0].parentNode;
+		
+		var width = 100,
+		height = 18,
+		x = 0,
+		y = tAssistance.svg.lines["minor"],
+		padding = 2;
+		
+		var svgNS = tAssistance.svg.svgNS;
+		drawDates = [];
+				
+		for(var i=0;i<drawedObsels.length;i++) {
+			var drawedObsel = drawedObsels[i];
+			var obsel = drawedObsel.data["obsel"];
+			var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);
+			// reset hours in a date
+			obsel_date.setHours(0,0,0,0);
+			
+			var match = tAssistance.datetime.in_array(dates,obsel_date);
+			if(match){
+				var pos = tAssistance.datetime.indexOf(dates,obsel_date);
+				// get coordinates of the obsel								
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", 0);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","obsel lbl");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = obsel_date.getDate();
+				
+				//find svg				
+				svg.appendChild(text);
+				
+				tAssistance.svg.align_middle(text, drawedObsel);
+				
+				// remove	
+				dates.splice(pos, 1);
+				// add to the group
+				g.appendChild(text);
+				// add tooltip for label	
+				tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+				
+				drawDates.push(text);
+			}			
+		}
+		return drawDates;
+	}
+	
+	// attach hour annotations to drawed obsels 
+	tAssistance.drawHours1 = function(drawedObsels){
+			
+		var hours = tAssistance.outil.getHours_svg(drawedObsels);
+		var svg = drawedObsels[0].ownerSVGElement;
+		var g = drawedObsels[0].parentNode;
+		
+		var width = 100,
+		height = 11,
+		x = 0,
+		y = tAssistance.svg.lines["minor"],
+		padding = 2;
+		var svgNS = "http://www.w3.org/2000/svg";
+		drawedHours = [];
+				
+		for(var i=0;i<drawedObsels.length;i++) {
+			var drawedObsel = drawedObsels[i];
+			var obsel = drawedObsel.data["obsel"];
+			var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);
+			obsel_date.setMinutes(0,0,0);
+			
+			var match = tAssistance.datetime.in_array(hours,obsel_date);
+			if(match){
+				var pos = tAssistance.datetime.indexOf(hours,obsel_date);
+				// get coordinates of the obsel
+								
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", 0);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","obsel lbl");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = hours[pos].getHours()+"h";
+				
+				//find svg				
+				svg.appendChild(text);
+				
+				tAssistance.svg.align_middle(text, drawedObsel);
+				
+				// remove	
+				hours.splice(pos, 1);
+				// add to the group
+				g.appendChild(text);
+				// add tooltip for label	
+				tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+				
+				drawedHours.push(text);
+			}			
+		}
+		return drawedHours;
+	}
+	// attach minute minors to drawed obsels 
+	tAssistance.drawMinutes1 = function(drawedObsels){
+		
+		var minutes = tAssistance.outil.getMinutes_svg(drawedObsels);
+		var svg = drawedObsels[0].ownerSVGElement;
+		var g = drawedObsels[0].parentNode;
+		
+		var width = 100,
+		height = 18,
+		x = 0,
+		y = tAssistance.svg.lines["minor"],
+		padding = 2;
+		var svgNS = tAssistance.svg.svgNS;
+		drawedminutes = [];
+				
+		for(var i=0;i<drawedObsels.length;i++) {
+			var drawedObsel = drawedObsels[i];
+			var obsel = drawedObsel.data["obsel"];
+			var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);
+			obsel_date.setSeconds(0,0);
+			
+			var match = tAssistance.datetime.in_array(minutes,obsel_date);
+			if(match){
+				var pos = tAssistance.datetime.indexOf(minutes,obsel_date);
+				// get coordinates of the obsel
+								
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", 0);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","obsel lbl");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = minutes[pos].getMinutes();
+				
+				//find svg				
+				svg.appendChild(text);
+				
+				tAssistance.svg.align_middle(text, drawedObsel);
+				
+				// remove	
+				minutes.splice(pos, 1);
+				// add to the group
+				g.appendChild(text);
+				// add tooltip for label	
+				tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+				
+				drawedminutes.push(text);
+			}			
+		}
+		return drawedminutes;
+	}
+	
+	// attach minute minors to drawed obsels 
+	tAssistance.drawSeconds1 = function(drawedObsels){
+		
+		var seconds = tAssistance.outil.getSeconds_svg(drawedObsels);
+		var svg = drawedObsels[0].ownerSVGElement;
+		var g = drawedObsels[0].parentNode;
+		
+		var width = 100,
+		height = 18,
+		x = 0,
+		y = tAssistance.svg.lines["minor"],
+		padding = 2;
+		var svgNS = tAssistance.svg.svgNS;
+		drawSeconds = [];
+				
+		for(var i=0;i<drawedObsels.length;i++) {
+			var drawedObsel = drawedObsels[i];
+			var obsel = drawedObsel.data["obsel"];
+			var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);
+			obsel_date.setMilliseconds(0);
+			
+			var match = tAssistance.datetime.in_array(seconds,obsel_date);
+			if(match){
+				var pos = tAssistance.datetime.indexOf(seconds,obsel_date);
+				// get coordinates of the obsel
+								
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", 0);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","obsel lbl");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = seconds[pos].getSeconds();
+				
+				//find svg				
+				svg.appendChild(text);
+				
+				tAssistance.svg.align_middle(text, drawedObsel);
+				
+				// remove	
+				seconds.splice(pos, 1);
+				// add to the group
+				g.appendChild(text);
+				// add tooltip for label	
+				tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+				
+				drawSeconds.push(text);
+			}			
+		}
+		return drawSeconds;
+	}
+	// draw years based on the group
+	tAssistance.drawYears = function(drawObsels){
+		var svgNS = tAssistance.svg.svgNS;
+		var firstSvgObsel = drawObsels[0];
+		var endSvgObsel = drawObsels[drawObsels.length-1];
+		var firstObsel = firstSvgObsel.data["obsel"];
+		var endObsel = endSvgObsel.data["obsel"];
+		var firstDTInt = firstObsel.begin;
+		var firstDT = tAssistance.datetime.utc2LocalDate(firstDTInt);
+		var endDTInt = endObsel.begin;
+		var endDT = tAssistance.datetime.utc2LocalDate(endObsel.begin);
+		var g = firstSvgObsel.parentNode;
+		var unit = parseInt(g.getAttribute("unit"));
+		var offset = parseInt(g.getAttribute("timeoffset"));
+		var y = tAssistance.svg.lines["major"];
+		var height = 10;
+		// reset all thing in a year to zeros
+		firstDT.setMonth(0);
+		firstDT.setDate(1);
+		firstDT.setHours(0, 0, 0, 0);
+		var startX = tAssistance.svg.getCenter(firstSvgObsel);
+		
+		var drawedYears = [];
+		var iDateInt = firstDT.getTime();
+		while(iDateInt<=endDTInt){
+			var iDate = new Date(iDateInt);// copy don't need to convert
+			var x = parseFloat((iDateInt - offset)/unit);
+			
+			text = document.createElementNS(svgNS,"text");
+			text.setAttributeNS(null,"x", x);
+			text.setAttributeNS(null,"y", y);
+			text.setAttributeNS(null,"class","obsel lbl");
+			text.setAttributeNS(null,"font-family","arial");
+			text.setAttributeNS(null,"font-size","10");
+			text.setAttributeNS(null,"fill","blue");
+			text.setAttributeNS(null,"style","text-anchor:middle;");
+			text.textContent = iDate.toLocaleString().substr(11, 4);
+			
+			// add to the group
+			g.appendChild(text);
+			// add tooltip for label	
+			//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+			
+			drawedYears.push(text);
+			
+			// increment a month
+			iDate = new Date(iDateInt);
+			iDateInt = iDate.setYear(iDate.getYear()+1);
+		}
+		
+		return drawedYears;
+	}
+	
+	// draw months based on the group
+	tAssistance.drawMonths = function(drawObsels){
+		var svgNS = tAssistance.svg.svgNS;
+		var firstSvgObsel = drawObsels[0];
+		var endSvgObsel = drawObsels[drawObsels.length-1];
+		var firstObsel = firstSvgObsel.data["obsel"];
+		var endObsel = endSvgObsel.data["obsel"];
+		var firstDTInt = firstObsel.begin;
+		var firstDT = tAssistance.datetime.utc2LocalDate(firstDTInt);
+		var endDTInt = endObsel.begin;
+		var endDT = tAssistance.datetime.utc2LocalDate(endObsel.begin);
+		var g = firstSvgObsel.parentNode;
+		var unit = parseInt(g.getAttribute("unit"));
+		var offset = parseInt(g.getAttribute("timeoffset"));
+		var y = tAssistance.svg.lines["major"];
+		var height = 10;
+		// reset all thing in a month to zeros
+		firstDT.setDate(1);
+		firstDT.setHours(0, 0, 0, 0);
+		var startX = tAssistance.svg.getCenter(firstSvgObsel);
+		
+		var drawedMonths = [];
+		var iDateInt = firstDT.getTime();
+		while(iDateInt<=endDTInt){
+			var iMonth = new Date(iDateInt);
+			var x = parseFloat((iDateInt - offset)/unit);
+			
+			text = document.createElementNS(svgNS,"text");
+			text.setAttributeNS(null,"x", x);
+			text.setAttributeNS(null,"y", y);
+			text.setAttributeNS(null,"class","obsel lbl");
+			text.setAttributeNS(null,"font-family","arial");
+			text.setAttributeNS(null,"font-size","10");
+			text.setAttributeNS(null,"fill","blue");
+			text.setAttributeNS(null,"style","text-anchor:middle;");
+			text.textContent = iMonth.toLocaleString().substr(4, 3)+" "+iMonth.toLocaleString().substr(11, 4);
+			
+			// add to the group
+			g.appendChild(text);
+			// add tooltip for label	
+			//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+			
+			drawedMonths.push(text);
+			
+			// increment a month
+			iDate = new Date(iDateInt);
+			iDateInt = iDate.setMonth(iDate.getMonth()+1);
+		}
+		
+		return drawedMonths;
+	}
+	// draw weeks based on the group
+	tAssistance.drawWeeks = function(drawObsels){
+		var svgNS = tAssistance.svg.svgNS;
+		var firstSvgObsel = drawObsels[0];
+		var endSvgObsel = drawObsels[drawObsels.length-1];
+		var firstObsel = firstSvgObsel.data["obsel"];
+		var endObsel = endSvgObsel.data["obsel"];
+		var firstDTInt = firstObsel.begin;
+		var firstDT = tAssistance.datetime.utc2LocalDate(firstDTInt);
+		var endDTInt = endObsel.begin;
+		var endDT = tAssistance.datetime.utc2LocalDate(endObsel.begin);
+		var g = firstSvgObsel.parentNode;
+		var unit = parseInt(g.getAttribute("unit"));
+		var offset = parseInt(g.getAttribute("timeoffset"));
+		var y = tAssistance.svg.lines["major"];
+		var height = 10;
+		
+		firstDT.setHours(0, 0, 0, 0);
+		var day = firstDT.getDay();
+		firstDT.setDate(firstDT.getDate()-day+1);
+		
+		var startX = tAssistance.svg.getCenter(firstSvgObsel);
+		
+		var drawedDates = [];
+		var iDateInt = firstDT.getTime();
+		while(iDateInt<=endDTInt){
+			var beginWeek = new Date(iDateInt);
+			var tmpDate = new Date(iDateInt);
+			tmpDate.setDate(tmpDate.getDate()+6);
+			var endWeek = tmpDate;
+			
+			var x = parseFloat((iDateInt - offset)/unit);
+			
+			text = document.createElementNS(svgNS,"text");
+			text.setAttributeNS(null,"x", x);
+			text.setAttributeNS(null,"y", y);
+			text.setAttributeNS(null,"class","obsel lbl");
+			text.setAttributeNS(null,"font-family","arial");
+			text.setAttributeNS(null,"font-size","10");
+			text.setAttributeNS(null,"fill","blue");
+			text.setAttributeNS(null,"style","text-anchor:middle;");
+			text.textContent = beginWeek.toLocaleString().substr(4, 11);
+			
+			// add to the group
+			g.appendChild(text);
+			// add tooltip for label	
+			//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+			
+			drawedDates.push(text);
+			
+			// increment date
+			iDate = new Date(iDateInt);
+			iDateInt = iDate.setDate(iDate.getDate()+7);
+		}
+		
+		return drawedDates;
+	}
+	
+	// draw dates based on the group
+	tAssistance.drawDates = function(drawObsels){
+		var svgNS = tAssistance.svg.svgNS;
+		var firstSvgObsel = drawObsels[0];
+		var endSvgObsel = drawObsels[drawObsels.length-1];
+		var firstObsel = firstSvgObsel.data["obsel"];
+		var endObsel = endSvgObsel.data["obsel"];
+		var firstDTInt = firstObsel.begin;
+		var firstDT = tAssistance.datetime.utc2LocalDate(firstDTInt);
+		var endDTInt = endObsel.begin;
+		var endDT = tAssistance.datetime.utc2LocalDate(endDTInt);
+		var g = firstSvgObsel.parentNode;
+		var unit = parseInt(g.getAttribute("unit"));
+		var offset = parseInt(g.getAttribute("timeoffset"));
+		var y = tAssistance.svg.lines["major"];
+		var height = 10;
+		
+		firstDT.setHours(0, 0, 0, 0);
+		var startX = tAssistance.svg.getCenter(firstSvgObsel);
+		
+		var drawedDates = [];
+		var iDateInt = firstDT.getTime();
+		while(iDateInt<=endDTInt){
+			var iDate = new Date(iDateInt); 
+			var x = parseFloat((iDateInt - offset)/unit);
+			
+			text = document.createElementNS(svgNS,"text");
+			text.setAttributeNS(null,"x", x);
+			text.setAttributeNS(null,"y", y);
+			text.setAttributeNS(null,"class","obsel lbl");
+			text.setAttributeNS(null,"font-family","arial");
+			text.setAttributeNS(null,"font-size","10");
+			text.setAttributeNS(null,"fill","blue");
+			text.setAttributeNS(null,"style","text-anchor:middle;");
+			text.textContent = iDate.toLocaleString().substr(4, 11);
+			
+			// add to the group
+			g.appendChild(text);
+			// add tooltip for label	
+			//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+			
+			drawedDates.push(text);
+			
+			// increment date			
+			iDateInt = iDate.setDate(iDate.getDate()+1);
+		}
+		
+		return drawedDates;
+	}
+	
+	tAssistance.drawHours = function(drawObsels){
+		var svgNS = tAssistance.svg.svgNS;
+		var firstSvgObsel = drawObsels[0];
+		var endSvgObsel = drawObsels[drawObsels.length-1];
+		var firstObsel = firstSvgObsel.data["obsel"];
+		var endObsel = endSvgObsel.data["obsel"];
+		var firstDTInt = firstObsel.begin;
+		var firstDT = tAssistance.datetime.utc2LocalDate(firstDTInt);
+		var endDTInt = endObsel.begin;
+		var endDT = tAssistance.datetime.utc2LocalDate(endDTInt);
+		var g = firstSvgObsel.parentNode;
+		var unit = parseInt(g.getAttribute("unit"));
+		var offset = parseInt(g.getAttribute("timeoffset"));
+		var y = tAssistance.svg.lines["major"];
+		var height = 10;
+		
+		firstDT.setMinutes(0, 0, 0);
+		var startX = tAssistance.svg.getCenter(firstSvgObsel);
+		
+		var drawedDates = [];
+		var iDateInt = firstDT.getTime();
+		while(iDateInt<=endDTInt){
+			var iDate = new Date(iDateInt);
+			var x = parseFloat((iDateInt - offset)/unit);
+			
+			text = document.createElementNS(svgNS,"text");
+			text.setAttributeNS(null,"x", x);
+			text.setAttributeNS(null,"y", y);
+			text.setAttributeNS(null,"class","obsel lbl");
+			text.setAttributeNS(null,"font-family","arial");
+			text.setAttributeNS(null,"font-size","10");
+			text.setAttributeNS(null,"fill","blue");
+			text.setAttributeNS(null,"style","text-anchor:middle;");
+			text.textContent = iDate.toLocaleString().substr(0, 21);
+			
+			// add to the group
+			g.appendChild(text);
+			// add tooltip for label	
+			//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+			
+			drawedDates.push(text);
+			
+			// increment date			
+			iDateInt = iDate.setHours(iDate.getHours()+1);
+		}
+		
+		return drawedDates;
+	}
+	
+	tAssistance.drawMinutes = function(drawObsels){
+		var svgNS = tAssistance.svg.svgNS;
+		var firstSvgObsel = drawObsels[0];
+		var endSvgObsel = drawObsels[drawObsels.length-1];
+		var firstObsel = firstSvgObsel.data["obsel"];
+		var endObsel = endSvgObsel.data["obsel"];
+		var firstDTInt = firstObsel.begin;
+		var firstDT = tAssistance.datetime.utc2LocalDate(firstDTInt);
+		var endDTInt = endObsel.begin;
+		var endDT = tAssistance.datetime.utc2LocalDate(endObsel.begin);
+		var g = firstSvgObsel.parentNode;
+		var unit = parseInt(g.getAttribute("unit"));
+		var offset = parseInt(g.getAttribute("timeoffset"));
+		var y = tAssistance.svg.lines["major"];
+		var height = 10;
+		
+		firstDT.setSeconds(0, 0);
+		var startX = tAssistance.svg.getCenter(firstSvgObsel);
+		
+		var drawedDates = [];
+		var iDateInt = firstDT.getTime();
+		while(iDateInt<=endDTInt){
+			var iDate = new Date(iDateInt);
+			var x = parseFloat((iDateInt - offset)/unit);
+			
+			text = document.createElementNS(svgNS,"text");
+			text.setAttributeNS(null,"x", x);
+			text.setAttributeNS(null,"y", y);
+			text.setAttributeNS(null,"class","obsel lbl");
+			text.setAttributeNS(null,"font-family","arial");
+			text.setAttributeNS(null,"font-size","10");
+			text.setAttributeNS(null,"fill","blue");
+			text.setAttributeNS(null,"style","text-anchor:middle;");
+			text.textContent = iDate.toLocaleString().substr(0, 21);
+			
+			// add to the group
+			g.appendChild(text);
+			// add tooltip for label	
+			//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+			
+			drawedDates.push(text);
+			
+			// increment date
+			
+			iDateInt = iDate.setMinutes(iDate.getMinutes()+1);
+		}
+		
+		return drawedDates;
+	}
+	
+	tAssistance.move = function(g, newOffset){
+		var unit = parseInt(g.getAttribute("unit"));
+		var oldOffset = parseInt(g.getAttribute("timeoffset"));
+		var translate_x = - parseFloat((newOffset - oldOffset)/unit);
+		var childNodes = g.childNodes;
+		
+		for(i=0;i<childNodes.length;i++){
+    		childNode = childNodes[i];
+    		var x = 0;
+    		if(childNode.getAttribute("cx")){
+    			x = parseFloat(childNode.getAttribute("cx"));
+    			childNode.setAttribute("cx", x + translate_x);		    	
+    		}
+    		else{
+    			x = parseFloat(childNode.getAttribute("x"));
+    			childNode.setAttribute("x", x + translate_x);		    	
+    		}		
+    	}
+		g.setAttribute("timeoffset",newOffset);
+		return childNodes;
+	}	
+	
+tAssistance.processKeyPress = function(g,evt){
+	var ta = tAssistance;
+	
+	var transform_obj = tAssistance.svg.group.parse_transform(g);
+            
       switch (evt.keyCode)
       {
-        case leftArrow:
-        	transform_obj["translate.x"] -= panRate;	// Increase the x-coordinate value of the transform attribute by the amount given by panRate.
+        case ta.key.leftArrow:
+        	transform_obj["translate.x"] -= ta.config.panRate;	// Increase the x-coordinate value of the transform attribute by the amount given by panRate.
           break;
-        case rightArrow:
-        	transform_obj["translate.x"] += panRate;	// Decrease the x-coordinate value of the transform attribute by the amount given by panRate.
+        case ta.key.rightArrow:
+        	transform_obj["translate.x"] += ta.config.panRate;	// Decrease the x-coordinate value of the transform attribute by the amount given by panRate.
           break;
-        case upArrow:
-        	transform_obj["scale.x"] += zoomRate;	    // Increase the x-scale value of the transform attribute by the amount given by zoomRate.        
+        case ta.key.upArrow:
+        	transform_obj["scale.x"] += ta.config.zoomRate;	    // Increase the x-scale value of the transform attribute by the amount given by zoomRate.        
           break;
-        case downArrow:
-        	transform_obj["scale.x"] -= zoomRate;	// Decrease the x-scale value of the transform attribute by the amount given by zoomRate. 
+        case ta.key.downArrow:
+        	transform_obj["scale.x"] -= ta.config.zoomRate;	// Decrease the x-scale value of the transform attribute by the amount given by zoomRate. 
           break;               
       } // switch
       
-      g.setAttribute('transform', make_transform_str(transform_obj));	// Convert the viewBoxValues array into a string with a white space character between the given values.
-    }
+      g.setAttribute('transform', tAssistance.svg.group.make_transform_str(transform_obj));	// Convert the viewBoxValues array into a string with a white space character between the given values.
+}
 	
 	var isDown = false;
-	//var startCoords = {};
-	//var last = [0, 0];
 	
 	/** 
 	 * @function
@@ -421,7 +1073,7 @@
 				opts = {
 						x_unit: 20,
 						x0: 0,
-						y0: 10
+						y0: 40
 				};
 				
 				// make a svg
@@ -435,11 +1087,11 @@
 				svg.setAttribute("width","1000px");
 				svg.setAttribute("height","300px");
 				
-				$("#chart1").get(0).appendChild(svg);
+				$("#tracePanel").get(0).appendChild(svg);
 				
 				var rect = document.createElementNS(svgNS,"rect");
 				//rect.setAttribute("style","background-color: yellow");
-				rect.setAttribute("style","fill: yellow");
+				rect.setAttribute("style","fill: #F9F9F9");
 				rect.setAttribute("width","100%");
 				rect.setAttribute("height","100%");
 				
@@ -449,260 +1101,44 @@
 				g.setAttribute("transform","translate(0 0) scale(1 1)");
 				svg.appendChild(g);
 				
+				// debug
+				window.svg = svg;
 				
-				
-				positions = tAssistance.position_obsels(obsels, opts);
+				//positions = tAssistance.position_obsels(obsels, opts);
 				//console.log(positions);
 				
-				positions = tAssistance.draw_obsels2({"g": g,"positions": positions});
+				drawedObsels = tAssistance.draw_obsels3(obsels, g, tAssistance.datetime.units[0]);
+				tAssistance.drawYears(drawedObsels);
+				tAssistance.drawMonths1(drawedObsels);
 				//console.log(positions);
 				
 				/* Add event listeners:  */
 			    $(document).keydown(function(e){
 			    	tAssistance.processKeyPress(g,e);
-			    });
-			    
-			    var parse_transform = function (transform){
-		    		// parse the transform property
-		    		  var charTransformSplit = ' ';
-		    		  var charNumberSplit = ' ';
-		    	      
-		    	      var translate = transform.split(')'+charTransformSplit)[0]+')';
-		    	      var translateValues = translate.replace("translate(","").slice(0,-1).split(charNumberSplit);
-		    	      var scale = transform.split(')'+charTransformSplit)[1];
-		    	      var scaleValues = scale.replace("scale(","").slice(0,-1).split(charNumberSplit);
-		    	      var translate_x = 0;
-		    	      var translate_y = 0;
-		    	      var scale_x = 0;
-		    	      var scale_y = 0;
-		    	      
-		    	      translate_x = parseFloat(translateValues[0]);	// Represent the x-coordinate on the transform attribute.
-		    	      if(translateValues.length>1){
-		    	    	  translate_y = parseFloat(translateValues[1]);	// Represent the y coordinate on the transform attribute.
-		    		  }
-		    	      else{// IE
-		    	    	  translate_y = translate_x;
-		    	      }
-		    	      
-		    	      scale_x = parseFloat(scaleValues[0]); // Represent the x-scale on the transform attribute.
-		    	      if(scaleValues.length>1){
-		    	    	  scale_y = parseFloat(scaleValues[1]);	// Represent the y scale on the transform attribute.
-		    		  }
-		    	      else{// IE
-		    	    	  scale_y = scale_x;
-		    	      }	      
-		    	      
-		    	      ret = {
-		    	          "translate.x": translate_x,
-		    	          "translate.y": translate_y,
-		    	          "scale.x": scale_x,
-		    	          "scale.y": scale_y
-		    	      };
-		    	      return ret;	      
-		    	};
-		    	 
-		    	var make_transform_str = function(transform_obj){
-		    		var charTransformSplit = ' ';
-		    		var charNumberSplit = ' ';
-		    		
-		    		return "translate("+transform_obj["translate.x"]+charNumberSplit+transform_obj["translate.y"]+") scale("+transform_obj["scale.x"]+charNumberSplit+transform_obj["scale.y"]+")";		
-		    	};
-			    
-			    $(rect).mousedown(function(e) {
-			    	mouseDown = "true";
-			        var posx = 0;
-			        var posy = 0;
-			        if(!e) var e = window.event;
-			        if (e.pageX || e.pageY) {
-				        posx = e.pageX;
-				        posy = e.pageY;
-			        }
-			        else if (e.clientX || e.clientY) {
-				        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-				        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-			        }
-			        e.preventDefault();
-			        
-			        
-			    	var transform_str = g.getAttribute('transform');
-			    	var transform_obj = parse_transform(transform_str);
-			        			        			        
-			        g.setAttribute("mouseDown.x",posx);
-			        g.setAttribute("mouseDown.y",posy);
-			        g.setAttribute("group.x",transform_obj["translate.x"]);
-			        g.setAttribute("group.y",transform_obj["translate.y"]);
-			        g.setAttribute("mouseDown", mouseDown);
-			        
-			    });
-			    
-			    $(rect).mouseup(function(e) {
-			    	mouseDown = "";
-			    	g.setAttribute("mouseDown", mouseDown);
-			        if(!e) var e = window.event;
-			        e.preventDefault();
-			        
-			    });
-
-			    $(rect).mousemove(function(e){
-			    	if(!e) var e = window.event;
-			    	e.preventDefault();
-			    	//return;
-			    	var mouseDown = g.getAttribute("mouseDown");
-			    	
-			        if(!mouseDown || mouseDown == "") return;
-			        //console.log("panning");
-			        var posx = 0;
-			        var posy = 0;
-			        if (e.pageX || e.pageY) {
-				        posx = e.pageX;
-				        posy = e.pageY;
-			        }
-			        else if (e.clientX || e.clientY) {
-				        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-				        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-			        }
-			        /*function parse_transform(transform){
-			    		// parse the transform property
-			    		  var charTransformSplit = ' ';
-			    		  var charNumberSplit = ' ';
-			    	      
-			    	      var translate = transform.split(')'+charTransformSplit)[0]+')';
-			    	      var translateValues = translate.replace("translate(","").slice(0,-1).split(charNumberSplit);
-			    	      var scale = transform.split(')'+charTransformSplit)[1];
-			    	      var scaleValues = scale.replace("scale(","").slice(0,-1).split(charNumberSplit);
-			    	      var translate_x = 0;
-			    	      var translate_y = 0;
-			    	      var scale_x = 0;
-			    	      var scale_y = 0;
-			    	      
-			    	      translate_x = parseFloat(translateValues[0]);	// Represent the x-coordinate on the transform attribute.
-			    	      if(translateValues.length>1){
-			    	    	  translate_y = parseFloat(translateValues[1]);	// Represent the y coordinate on the transform attribute.
-			    		  }
-			    	      else{// IE
-			    	    	  translate_y = translate_x;
-			    	      }
-			    	      
-			    	      scale_x = parseFloat(scaleValues[0]); // Represent the x-scale on the transform attribute.
-			    	      if(scaleValues.length>1){
-			    	    	  scale_y = parseFloat(scaleValues[1]);	// Represent the y scale on the transform attribute.
-			    		  }
-			    	      else{// IE
-			    	    	  scale_y = scale_x;
-			    	      }	      
-			    	      
-			    	      ret = {
-			    	          "translate.x": translate_x,
-			    	          "translate.y": translate_y,
-			    	          "scale.x": scale_x,
-			    	          "scale.y": scale_y
-			    	      };
-			    	      return ret;	      
-			    	 }
-			    	function make_transform_str(transform_obj){
-			    		var charTransformSplit = ' ';
-			    		var charNumberSplit = ' ';
-			    		
-			    		return "translate("+transform_obj["translate.x"]+charNumberSplit+transform_obj["translate.y"]+") scale("+transform_obj["scale.x"]+charNumberSplit+transform_obj["scale.y"]+")";		
-			    	}*/
-			    	var transform_str = g.getAttribute('transform');
-			    	var transform_obj = parse_transform(transform_str);
-			        
-			    	// read coordinations
-			    	var mousedown_x = parseFloat(g.getAttribute("mouseDown.x"));
-			    	var mousedown_y = parseFloat(g.getAttribute("mouseDown.y"));
-			        var group_x = parseFloat(g.getAttribute("group.x"));
-			        var group_y = parseFloat(g.getAttribute("group.y"));
-			    	
-			        // transform		    	
-			    	
-			    	transform_obj["translate.x"] = posx - mousedown_x + group_x;
-			        //translateValues[1] = y - startCoords["mouseDown.y"] + startCoords["group.y"];
-			    	transform_obj["translate.y"] = group_y;
-			        
-			        //console.log(startCoords);
-			        //this.(1, 0, 0, 1,
-			        //                 x - startCoords[0], y - startCoords[1]);
-			        //g.setAttributeNS(null,"transform", "translate("+ (x - startCoords[0]) +","+ (startCoords[1]) +")");
-			        g.setAttribute('transform', make_transform_str(transform_obj));	
-			        
-			        
-			        //render();
-			    });
+			    });		    
+		    	// add MouseEvents		    
+			    tAssistance.svg.mousepad(rect,g);
 			    // add TouchEvents
-			    rect.addEventListener('touchstart', function(e){
-			    	if(!e) var e = window.event;
-			    	e.preventDefault();
-			    	
-			    	touchstart = "true";
-			        var posx = 0;
-			        var posy = 0;
-			        var touchobj = e.changedTouches[0];
-			        
-			        posx = touchobj.clientX;
-			        posy = touchobj.clientY;
-			        
-			        			        
-			    	var transform_str = g.getAttribute('transform');
-			    	var transform_obj = parse_transform(transform_str);
-			        			        			        
-			        g.setAttribute("touchstart.x",posx);
-			        g.setAttribute("touchstart.y",posy);
-			        g.setAttribute("group.x",transform_obj["translate.x"]);
-			        g.setAttribute("group.y",transform_obj["translate.y"]);
-			        g.setAttribute("touchstart", touchstart);			    	
-			    	
-			    }, false);
-			    
-			    rect.addEventListener('touchend', function(e){
-			    	touchstart = "";
-			    	g.setAttribute("touchstart", touchstart);
-			        if(!e) var e = window.event;
-			        e.preventDefault();	
-			    	
-			    }, false);
-			    
-			    rect.addEventListener('touchmove',function(e){
-			    	if(!e) var e = window.event;
-			    	e.preventDefault();
-			    	
-			    	var touchstart = g.getAttribute("touchstart");
-			    	
-			        if(!touchstart || touchstart == "") return;
-			        
-			        var posx = 0;
-			        var posy = 0;
-			       
-			        var touchobj = e.changedTouches[0];
-			        
-			        posx = touchobj.clientX;
-			        posy = touchobj.clientY;
-			        
-			    	var transform_str = g.getAttribute('transform');
-			    	var transform_obj = parse_transform(transform_str);
-			        
-			    	// read coordinations
-			    	var touchstart_x = parseFloat(g.getAttribute("touchstart.x"));
-			    	var touchstart_y = parseFloat(g.getAttribute("touchstart.y"));
-			        var group_x = parseFloat(g.getAttribute("group.x"));
-			        var group_y = parseFloat(g.getAttribute("group.y"));
-			    	
-			        // transform		    	
-			    	
-			    	transform_obj["translate.x"] = posx - touchstart_x + group_x;
-			        //translateValues[1] = y - startCoords["mouseDown.y"] + startCoords["group.y"];
-			    	transform_obj["translate.y"] = group_y;
-			        
-			        //console.log(startCoords);
-			        //this.(1, 0, 0, 1,
-			        //                 x - startCoords[0], y - startCoords[1]);
-			        //g.setAttributeNS(null,"transform", "translate("+ (x - startCoords[0]) +","+ (startCoords[1]) +")");
-			        g.setAttribute('transform', make_transform_str(transform_obj));	
-			        
-			        
-			        //render();
-			    });
+			    tAssistance.svg.touchpad(rect,g);
 			}
 		});		
 	}
 	
+tAssistance.getObsels = function(base_uri, name, callback){
+	mgr = new tService.TraceManager({
+		"base_uri": base_uri,
+		async: true
+	});
+	trc = mgr.init_trace({
+		name: trace_name
+	});
+	trc.get_obsels({
+		success: function(obsels){
+			if(tAssistance.debug){
+				window.obsels = obsels;
+				console.log("ret = obsels");
+			}
+			callback(obsels);
+		}		
+	});	
+}
