@@ -19,7 +19,7 @@
 <div id="viewPanel" style="margin:5px">
 <div class="btn-group">
 <span class="label" style="vertical-align: middle; margin-right: 10px">Zoom </span>
-<input id="zoomInput" type="range" class="span2 slider" value="" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="0" data-slider-selection="none" data-slider-tooltip="show" onchange="updateTextInput(this);">
+<input id="zoomInput" type="range" class="span2 slider" value="0" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="0" data-slider-selection="none" data-slider-tooltip="show" >
 <!-- <input type="range" name="points" min="0" max="10" value="0" onchange=";">
 <output id="rangevalue" class="label" style="vertical-align: middle">year</output> -->
 </div>
@@ -32,7 +32,7 @@
     Action <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="#" onclick="editStyle()")>Edit style</a></li>
+    <li><a href="#" onclick="editStyle()">Edit style</a></li>
   </ul>
 </div>
 </div>
@@ -47,38 +47,11 @@
 	<script type="text/javascript">
 	
 	function editStyle(){
-		$.get("index.php?page=UserPreference&userid="+encodeURIComponent("$user_id"),function(data){			
+		$.get("index.php?page=UserPreference&userid="+encodeURIComponent("$user_id"),function(data){
 			$("#userPanel").empty().append(data);
 		});
 	}
 	
-	function updateTextInput(obj) {
-		
-			var units = tAssistance.datetime.units;
-			var unitTexts = tAssistance.datetime.unitTexts;
-			var rangevalue = document.getElementById('rangevalue');
-			
-			iUnit = parseInt(obj.value);
-			
-			rangevalue.value = unitTexts[iUnit];		
-				
-			// create an event for update the trace
-			var event = new CustomEvent(
-					"changeSetting", 
-					{
-						detail: {
-							unit: Math.round(units[iUnit]),
-							unitText: unitTexts[iUnit],
-							time: new Date(),
-						},
-						bubbles: true,
-						cancelable: true
-					}
-			);
-			
-			obj.dispatchEvent(event);
-		}
-
 		$(window).on("hashchange", function() {
 			$('a[href="' + location.hash + '"]').tab('show');
 		});
@@ -127,46 +100,46 @@
 		    	tAssistance.move(document.querySelector("g"), ev.date.valueOf());
 		    });
 			
-		document.addEventListener("changeSetting", function(e){
-			console.log(e.detail.unit);
+		$(document).on("changeSetting", function(e, data){
+			console.log("detected");
 			
 			tAssistance.clear_obsels();
 			obsels = tAssistance.getObsels("http://213.223.171.36/ktbs/ozalid_exp/","trc_u1", function(){
-				var unit = e.detail.unit;
+				var unit = data.unit;
 				tAssistance.clear_obsels();
 				var scale_x_time = 1000/unit;
 				document.querySelector("g").setAttribute("scale_x_time", 1000/unit);
 				console.log("scale_x_time="+scale_x_time);
 				var drawedObsels = tAssistance.svg.drawObsels(obsels, document.querySelector("g"));
-				if(e.detail.unitText=="year"||e.detail.unitText=="6 months"||e.detail.unitText=="3 months"){
+				if(data.unitText=="year"||data.unitText=="6 months"||data.unitText=="3 months"){
 					tAssistance.svg.drawYears(drawedObsels);
 					tAssistance.svg.drawMonths1(drawedObsels);
 				}
-				else if(e.detail.unitText=="month"){
+				else if(data.unitText=="month"){
 					tAssistance.svg.drawMonths(drawedObsels);
 					tAssistance.svg.drawDates1(drawedObsels);
-				}else if(e.detail.unitText=="week"){
+				}else if(data.unitText=="week"){
 					tAssistance.svg.drawWeeks(drawedObsels);
 					tAssistance.svg.drawDates1(drawedObsels);
 				}
-				else if(e.detail.unitText=="day"||e.detail.unitText=="12 hours"){
+				else if(data.unitText=="day"||data.unitText=="12 hours"){
 					tAssistance.svg.drawDates(drawedObsels);
 					tAssistance.svg.drawHours1(drawedObsels);					
 				}
-				else if(e.detail.unitText=="hour"||e.detail.unitText=="30 minutes"){
+				else if(data.unitText=="hour"||data.unitText=="30 minutes"){
 					tAssistance.svg.drawHours(drawedObsels);
 					tAssistance.svg.drawMinutes1(drawedObsels);
 				}
-				else if(e.detail.unitText=="minute"){
+				else if(data.unitText=="minute"){
 					tAssistance.svg.drawMinutes(drawedObsels);
 					tAssistance.svg.drawSeconds1(drawedObsels);
 				}
-				else if(e.detail.unitText=="second"){
+				else if(data.unitText=="second"){
 					tAssistance.svg.drawSeconds(drawedObsels);
 					tAssistance.svg.draw01Seconds1(drawedObsels);
 				}
 			});			
-		}, false);
+		});
 		
 		document.getElementById("tracePanel").addEventListener("changeTimeOffset", function(e){
 			var timeoffsetDate = new Date(parseInt(e.detail.timeoffset));
@@ -178,32 +151,26 @@
 		$('.slider').slider({
 			formater: function(value){
 				return tAssistance.datetime.unitTexts[parseInt(value)];
-			}
-		}).on('slide', function(ev){
+			},
+			value: 0
+		}).on('slideStop', function(ev){
+			console.log(ev.value);
 			var units = tAssistance.datetime.units;
 			var unitTexts = tAssistance.datetime.unitTexts;
-			var rangevalue = document.getElementById('rangevalue');
+			//var rangevalue = document.getElementById('rangevalue');
 			
 			iUnit = parseInt(ev.value);
 			
-			rangevalue.value = unitTexts[iUnit];		
+			//rangevalue.value = unitTexts[iUnit];		
 				
 			// create an event for update the trace
-			var event = new CustomEvent(
-					"changeSetting", 
-					{
-						detail: {
-							unit: Math.round(units[iUnit]),
-							unitText: unitTexts[iUnit],
-							time: new Date(),
-						},
-						bubbles: true,
-						cancelable: true
-					}
-			);
 			
-			document.getElementById("zoomInput").dispatchEvent(event);
-			
+			$(document).trigger("changeSetting",{
+				unit: Math.round(units[iUnit]),
+				unitText: unitTexts[iUnit],
+				time: new Date(),
+				sender: document.getElementById("zoomInput"),
+			});
 		});
 	</script>
 </body>

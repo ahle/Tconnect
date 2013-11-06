@@ -288,6 +288,7 @@
 				this.hideTooltip();
 			}
 			this.element;
+			this.layout();
 			var val = this.calculateValue();
 			this.element
 				.trigger({
