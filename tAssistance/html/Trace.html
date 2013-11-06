@@ -6,22 +6,25 @@
 <link href="css/trace.css" rel="stylesheet" >
 <link href="css/bootstrap.css" rel="stylesheet" >
 <link href="css/bootstrap-datetimepicker.css" rel="stylesheet" >
+<link href="css/slider.css" rel="stylesheet" >
 <script type="text/javascript" src="tService/js/js.php"></script>
 <script type="text/javascript" src="js/js.php"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
 <script type="text/javascript" src="js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="js/bootstrap-slider.js"></script>
 </head>
 <body>
 <span class="label">user: $user_id</span>
 <div id="viewPanel" style="margin:5px">
 <div class="btn-group">
-<span class="label" style="vertical-align: middle">Zoom</span>
-<input type="range" name="points" min="0" max="9" value="0" onchange="updateTextInput(this);">
-<output id="rangevalue" class="label" style="vertical-align: middle">year</output>
+<span class="label" style="vertical-align: middle; margin-right: 10px">Zoom </span>
+<input id="zoomInput" type="range" class="span2 slider" value="" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="0" data-slider-selection="none" data-slider-tooltip="show" onchange="updateTextInput(this);">
+<!-- <input type="range" name="points" min="0" max="10" value="0" onchange=";">
+<output id="rangevalue" class="label" style="vertical-align: middle">year</output> -->
 </div>
-<div class="input-append date " id="dp3" data-date="2013-10-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" style="margin: 0">
-				<input class="span3" size="16" type="text" value="" readonly="" >
+<div class="input-append date " id="dpTimeOffset" data-date="2013-10-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" style="margin: 0">
+				<input id="timeoffset" class="span3" size="16" type="text" value="" readonly="">
 				<span class="add-on"><i class="icon-calendar"></i></span>
 </div>
 <div class="btn-group">
@@ -35,8 +38,8 @@
 </div>
 <div class="container-fluid">
 <div id="tracePanel" style="width: 1000px; border: solid 1px black" class="span8"></div>
-<div id="controlPanel" class="span5" style=""></div>
-<div id="userPanel" class="span5" style=""></div>
+<div id="controlPanel" style=""></div>
+<div id="userPanel" style=""></div>
 </div>
 
 
@@ -64,7 +67,7 @@
 					"changeSetting", 
 					{
 						detail: {
-							unit: Math.round(units[iUnit]/1000),
+							unit: Math.round(units[iUnit]),
 							unitText: unitTexts[iUnit],
 							time: new Date(),
 						},
@@ -107,15 +110,17 @@
 			}
 
 		});
-			$('#dp3').datetimepicker({
-		        //language:  'fr',
+			$('#dpTimeOffset').datetimepicker({
+		        language:  'fr',
 		        weekStart: 1,
 		        todayBtn:  1,
 				autoclose: 1,
 				todayHighlight: 1,
 				startView: 2,
 				forceParse: 0,
-		        showMeridian: 1
+		        showMeridian: 1,
+		        format: 'dd MM yyyy hh:ii',
+		        minuteStep: 1
 		    }).on('changeDate', function(ev){
 		    	console.log(ev.date.valueOf());
 		    	
@@ -128,33 +133,78 @@
 			tAssistance.clear_obsels();
 			obsels = tAssistance.getObsels("http://213.223.171.36/ktbs/ozalid_exp/","trc_u1", function(){
 				var unit = e.detail.unit;
-				var drawedObsels = tAssistance.draw_obsels3(obsels, document.querySelector("g"), e.detail.unit);
+				tAssistance.clear_obsels();
+				var scale_x_time = 1000/unit;
+				document.querySelector("g").setAttribute("scale_x_time", 1000/unit);
+				console.log("scale_x_time="+scale_x_time);
+				var drawedObsels = tAssistance.svg.drawObsels(obsels, document.querySelector("g"));
 				if(e.detail.unitText=="year"||e.detail.unitText=="6 months"||e.detail.unitText=="3 months"){
-					tAssistance.drawYears(drawedObsels);
-					tAssistance.drawMonths1(drawedObsels);
+					tAssistance.svg.drawYears(drawedObsels);
+					tAssistance.svg.drawMonths1(drawedObsels);
 				}
 				else if(e.detail.unitText=="month"){
-					tAssistance.drawMonths(drawedObsels);
-					tAssistance.drawDates1(drawedObsels);
+					tAssistance.svg.drawMonths(drawedObsels);
+					tAssistance.svg.drawDates1(drawedObsels);
 				}else if(e.detail.unitText=="week"){
-					tAssistance.drawWeeks(drawedObsels);
-					tAssistance.drawDates1(drawedObsels);
+					tAssistance.svg.drawWeeks(drawedObsels);
+					tAssistance.svg.drawDates1(drawedObsels);
 				}
 				else if(e.detail.unitText=="day"||e.detail.unitText=="12 hours"){
-					tAssistance.drawDates(drawedObsels);
-					tAssistance.drawHours1(drawedObsels);					
+					tAssistance.svg.drawDates(drawedObsels);
+					tAssistance.svg.drawHours1(drawedObsels);					
 				}
 				else if(e.detail.unitText=="hour"||e.detail.unitText=="30 minutes"){
-					tAssistance.drawHours(drawedObsels);			
-					tAssistance.drawMinutes1(drawedObsels);
+					tAssistance.svg.drawHours(drawedObsels);
+					tAssistance.svg.drawMinutes1(drawedObsels);
 				}
 				else if(e.detail.unitText=="minute"){
-					tAssistance.drawMinutes(drawedObsels);	
-					tAssistance.drawSeconds1(drawedObsels);
+					tAssistance.svg.drawMinutes(drawedObsels);
+					tAssistance.svg.drawSeconds1(drawedObsels);
 				}
-			});
+				else if(e.detail.unitText=="second"){
+					tAssistance.svg.drawSeconds(drawedObsels);
+					tAssistance.svg.draw01Seconds1(drawedObsels);
+				}
+			});			
+		}, false);
+		
+		document.getElementById("tracePanel").addEventListener("changeTimeOffset", function(e){
+			var timeoffsetDate = new Date(parseInt(e.detail.timeoffset));
+			var timeoffset_str = timeoffsetDate.format("dd mmmm yyyy HH:MM");
+			$('#dpTimeOffset').data({date: timeoffsetDate}).datetimepicker('update').children("input").val(timeoffset_str);
 			
 		}, false);
+		
+		$('.slider').slider({
+			formater: function(value){
+				return tAssistance.datetime.unitTexts[parseInt(value)];
+			}
+		}).on('slide', function(ev){
+			var units = tAssistance.datetime.units;
+			var unitTexts = tAssistance.datetime.unitTexts;
+			var rangevalue = document.getElementById('rangevalue');
+			
+			iUnit = parseInt(ev.value);
+			
+			rangevalue.value = unitTexts[iUnit];		
+				
+			// create an event for update the trace
+			var event = new CustomEvent(
+					"changeSetting", 
+					{
+						detail: {
+							unit: Math.round(units[iUnit]),
+							unitText: unitTexts[iUnit],
+							time: new Date(),
+						},
+						bubbles: true,
+						cancelable: true
+					}
+			);
+			
+			document.getElementById("zoomInput").dispatchEvent(event);
+			
+		});
 	</script>
 </body>
 </html>

@@ -8,7 +8,7 @@ $debug = true;
 
 $files = array("../js/jquery.js"
 				//,"../js/d3.v3.js"
-				//,"../js/fisheye.js"				
+				,"../js/dateFormat.js"				
 				,"../js/tAssistance.js"
 				,"../js/tAssistance-outil.js"
 				);
