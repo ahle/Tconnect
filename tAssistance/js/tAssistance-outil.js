@@ -456,7 +456,7 @@
 					text.setAttributeNS(null,"font-size","10");
 					text.setAttributeNS(null,"fill","blue");
 					text.setAttributeNS(null,"style","text-anchor:middle;");
-					text.textContent = obsel_date.toLocaleString().substr(4,3);
+					text.textContent = obsel_date.format("mmmm");
 					
 					//find svg				
 					svg.appendChild(text);
