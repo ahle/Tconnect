@@ -298,16 +298,10 @@
 		    	var newTimeOffset = parseInt(oldTimeOffset - (translate_x/scale_x_time));
 		    	g.setAttribute("timeoffset", newTimeOffset);
 		    	// fire a "changeTimeOffset" event 		    	
-		    	var event = new CustomEvent("changeTimeOffset", {
-							detail: {
+		    	$(document).trigger("changeTimeOffset", {							
 								timeoffset: newTimeOffset,
-								time: new Date(),
-							},
-							bubbles: true,
-							cancelable: true
-						}
-				);
-		    	g.dispatchEvent(event);
+								time: new Date(),					
+		    	});
 		    	
 		    	var finish = new Date().getTime();// for debug
 		    	if(tAssistance.debug){
@@ -1123,6 +1117,20 @@
 			return parseInt(x);			
 		}
 	};
+	
+	tAssistance.obsels = {
+		filter: function(obsels, start, end){
+			
+			
+			
+			
+			
+			
+		}
+			
+			
+			
+	}
 		
 	tAssistance.outil = {
 

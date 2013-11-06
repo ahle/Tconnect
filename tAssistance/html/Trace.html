@@ -141,12 +141,12 @@
 			});			
 		});
 		
-		document.getElementById("tracePanel").addEventListener("changeTimeOffset", function(e){
-			var timeoffsetDate = new Date(parseInt(e.detail.timeoffset));
+		$(document).on("changeTimeOffset", function(type,data){
+			var timeoffsetDate = new Date(parseInt(data.timeoffset));
 			var timeoffset_str = timeoffsetDate.format("dd mmmm yyyy HH:MM");
 			$('#dpTimeOffset').data({date: timeoffsetDate}).datetimepicker('update').children("input").val(timeoffset_str);
 			
-		}, false);
+		});
 		
 		$('.slider').slider({
 			formater: function(value){
