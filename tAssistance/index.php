@@ -69,11 +69,12 @@ if($_GET["page"]=="Property"){
 	$page.= "<caption><div style='border-radius: 4px;background-color: #F9F9F9; padding: 3px'>Properties<button type='button' class='close' aria-hidden='true' onclick=\"document.getElementById('controlPanel').innerHTML='';\">&times;</button></div></caption>";
 	foreach($obsel as $p => $o){
 		if($p=="begin"||$p=="end"){
+			$o1 = $o;
 			$date=date_create();
 			//$time = date_timestamp_get($date);
 			date_timestamp_set($date,$o/1000);
-			$o = date_format($date,"Y-m-d H:i:s T");
-			
+			$milliseconds = fmod($o,1000);
+			$o = date_format($date,"Y-m-d H:i:s.".str_pad($milliseconds, 3, "0", STR_PAD_LEFT)." T");
 			//utc_to_local('M j Y g:i:s a T',$o,'America/New_York');
 			//$o = date_format($object, $format)
 		}

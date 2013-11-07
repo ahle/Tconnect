@@ -153,6 +153,69 @@
 			},
 			scale_x: function(time){
 				
+			},
+			// refresh the drawn obsels
+			changeTimeOffset: function(g, timeoffset){
+				var drawnObsels = [];
+				for(i=0;i<g.childNodes.length;i++){
+					var node = g.childNodes[i];
+					if(node.getAttribute("class")=="obsel"){
+						drawnObsels.push(node);
+					}
+				}
+		    	
+		    	var obsels = g.data["obsels"];
+		    	var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
+		    	var oldTimeOffset = parseFloat(g.getAttribute("timeoffset"));
+		    	var newTimeOffset = timeoffset;
+		    	
+		    	var translate_x = -(newTimeOffset - oldTimeOffset)*scale_x_time;
+		    	
+		    	var childNodes = g.childNodes;
+		    	
+		    	// reset group element
+		    	
+		    	for(i=0;i<childNodes.length;i++){
+		    		childNode = childNodes[i];
+		    		if(childNode.getAttribute("cx")){// for circle
+		    			x = parseFloat(childNode.getAttribute("cx"));
+		    			childNode.setAttribute("cx", x + translate_x);   	
+		    		}
+		    		else{// for x
+		    			x = parseFloat(childNode.getAttribute("x"));
+		    			childNode.setAttribute("x", x + translate_x);		    	
+		    		}		    			
+		    	}
+		    	
+		    	g.setAttribute("transform","translate(0 0) scale(1 1)");
+		    	g.setAttribute("timeoffset", newTimeOffset);
+		    	
+		    	// refresh drawn obsels
+		    	var start = timeoffset - 500/scale_x_time;
+		    	var end = timeoffset + 500/scale_x_time;
+		    	var filteredObsels = tAssistance.obsels.filter(obsels, start, end);
+		    	var diffs = tAssistance.obsels.diff(drawnObsels, filteredObsels);
+		    	
+			    	// remove obsels
+			    	for(i=0;i<diffs["-"].length;i++){
+			    		var node = diffs["-"][i];
+			    		node.parentNode.removeChild(node);
+			    	}
+			    	// draw new obsels
+			    	var drawObsels1 = tAssistance.svg.drawObsels(diffs["+"], g);
+			    	tAssistance.svg.drawObselLabels(drawObsels1);
+			    	
+			    	
+			    var log={
+			    	"start": tAssistance.datetime.utc2LocalDate(start),
+			    	"end": tAssistance.datetime.utc2LocalDate(end),
+			    };
+			    console.log(log);
+			},
+			clear_all: function(g){
+				while (g.hasChildNodes()) {
+				    g.removeChild(g.lastChild);
+				}
 			}
 		},
 		touchpad: function(touchpad, g){
@@ -175,6 +238,8 @@
 		        			        			        
 		        g.setAttribute("touchstart.x",posx);
 		        g.setAttribute("touchstart.y",posy);
+			 g.setAttribute("touchmove.x",posx);
+		        g.setAttribute("touchmove.y",posy);
 		        g.setAttribute("group.x",transform_obj["translate.x"]);
 		        g.setAttribute("group.y",transform_obj["translate.y"]);
 		        g.setAttribute("touchstart", touchstart);			    	
@@ -182,12 +247,61 @@
 		    }, false);
 		    
 			touchpad.addEventListener('touchend', function(e){
-				if(g==undefined) return;
-		    	touchstart = "";
-		    	g.setAttribute("touchstart", touchstart);
+			if(g==undefined) return;
+		    	var touchstart = g.getAttribute("touchstart");
+			if(!touchstart || touchstart == "") return;
+
 		        if(!e) var e = window.event;
 		        e.preventDefault();	
+					    	
+			var touchstart_x = parseFloat(g.getAttribute("touchstart.x"));
+		    	var touchstart_y = parseFloat(g.getAttribute("touchstart.y"));
+		        var touchmove_x = parseFloat(g.getAttribute("touchmove.x"));
+		        var touchmove_y = parseFloat(g.getAttribute("touchmove.y"));
+		        var translate_x = touchmove_x - touchstart_x;
+		        var translate_y = touchmove_y - touchstart_y;
+
+			g.removeAttribute("touchstart");
+		    	g.removeAttribute("touchstart.x");
+		    	g.removeAttribute("touchstart.y");
+		    	g.removeAttribute("touchmove.x");
+		    	g.removeAttribute("touchmove.y");
+
+			var childNodes = g.childNodes;
 		    	
+		    	// reset group element
+		    	var begin = new Date().getTime();// for debug
+		    	for(i=0;i<childNodes.length;i++){
+		    		childNode = childNodes[i];
+		    		var x = 0;
+		    		if(childNode.getAttribute("cx")){
+		    			x = parseFloat(childNode.getAttribute("cx"));
+		    			childNode.setAttribute("cx", x + translate_x);		    	
+		    		}
+		    		else{
+		    			x = parseFloat(childNode.getAttribute("x"));
+		    			childNode.setAttribute("x", x + translate_x);		    	
+		    		}		    			
+		    	}
+		    	var oldTimeOffset = parseInt(g.getAttribute("timeoffset"));
+		    	var xoffset = parseInt(g.getAttribute("xoffset"));
+		    	var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
+		    	g.setAttribute("transform","translate(0 0) scale(1 1)");
+		    	var newTimeOffset = parseInt(oldTimeOffset - (translate_x/scale_x_time));
+		    	g.setAttribute("timeoffset", newTimeOffset);
+		    	// fire a "changeTimeOffset" event 		    	
+		    	$(document).trigger("changeTimeOffset", {							
+								timeoffset: newTimeOffset,
+								time: new Date(),					
+		    	});
+		    	
+		    	var finish = new Date().getTime();// for debug
+		    	if(tAssistance.debug){
+		    		console.log("translate_x="+translate_x);
+		    		console.log("scale_x_time="+scale_x_time);
+		    		console.log("delta="+(newTimeOffset-oldTimeOffset));
+		    	}
+
 		    }, false);
 		    
 			touchpad.addEventListener('touchmove',function(e){
@@ -215,6 +329,11 @@
 		        var group_x = parseFloat(g.getAttribute("group.x"));
 		        var group_y = parseFloat(g.getAttribute("group.y"));
 		    	
+			// set coorinations
+		        g.setAttribute("touchmove.x",posx);
+		        g.setAttribute("touchmove.y",posy);
+
+
 		        // transform
 		    	
 		    	transform_obj["translate.x"] = posx - touchstart_x + group_x;		        
@@ -275,39 +394,33 @@
 		    	g.removeAttribute("mouseDown.x");
 		    	g.removeAttribute("mouseDown.y");
 		    	
-		    	var childNodes = g.childNodes;
-		    	
-		    	// reset group element
-		    	var begin = new Date().getTime();// for debug
-		    	for(i=0;i<childNodes.length;i++){
-		    		childNode = childNodes[i];
-		    		var x = 0;
-		    		if(childNode.getAttribute("cx")){
-		    			x = parseFloat(childNode.getAttribute("cx"));
-		    			childNode.setAttribute("cx", x + translate_x);		    	
-		    		}
-		    		else{
-		    			x = parseFloat(childNode.getAttribute("x"));
-		    			childNode.setAttribute("x", x + translate_x);		    	
-		    		}		    			
-		    	}
+		    	// calculate new timeoffset
 		    	var oldTimeOffset = parseInt(g.getAttribute("timeoffset"));
 		    	var xoffset = parseInt(g.getAttribute("xoffset"));
-		    	var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
-		    	g.setAttribute("transform","translate(0 0) scale(1 1)");
+		    	var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));		    	
 		    	var newTimeOffset = parseInt(oldTimeOffset - (translate_x/scale_x_time));
-		    	g.setAttribute("timeoffset", newTimeOffset);
+		    	
+		    	tAssistance.svg.group.changeTimeOffset(g, newTimeOffset);
+		    	
 		    	// fire a "changeTimeOffset" event 		    	
-		    	$(document).trigger("changeTimeOffset", {							
+		    	$(document).trigger("changeTimeOffset", {
 								timeoffset: newTimeOffset,
 								time: new Date(),					
 		    	});
 		    	
 		    	var finish = new Date().getTime();// for debug
 		    	if(tAssistance.debug){
-		    		console.log("translate_x="+translate_x);
-		    		console.log("scale_x_time="+scale_x_time);
-		    		console.log("delta="+(newTimeOffset-oldTimeOffset));
+		    		var ret = {
+		    				"newTimeOffset": newTimeOffset,
+		    				"oldTimeOffset": oldTimeOffset,
+		    				"newTimeOffsetDate": tAssistance.datetime.utc2LocalDate(newTimeOffset),
+		    				"oldTimeOffsetDate": tAssistance.datetime.utc2LocalDate(oldTimeOffset),
+		    				"scale_x_time": scale_x_time
+		    		}
+		    		//console.log("translate_x="+translate_x);
+		    		//console.log("scale_x_time="+scale_x_time);
+		    		//console.log("delta="+(newTimeOffset-oldTimeOffset));
+		    		console.log(ret);
 		    	}
 		    });
 
@@ -391,8 +504,10 @@
 				myCircle.setAttributeNS(null,"style","fill: "+color+"; stroke: black");
 							
 				g.appendChild(myCircle);
-				myCircle.data = {};
-				myCircle.data["obsel"] = obsel;
+				myCircle.data = {
+					"obsel": obsel,
+					"time": utcBegin
+				};
 							
 				// attach the event
 				$(myCircle).click(function(e){
@@ -421,6 +536,9 @@
 			var months = tAssistance.outil.getMonths_svg(drawedObsels);
 			var svg = drawedObsels[0].ownerSVGElement;
 			var g = drawedObsels[0].parentNode;
+			var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
+			var timeOffset = parseInt(g.getAttribute("timeoffset"));
+			var xOffset = parseInt(g.getAttribute("xoffset"));
 			
 			var width = 100,
 			height = 18,
@@ -430,43 +548,40 @@
 			var svgNS = tAssistance.svg.svgNS;
 			drawMonths = [];
 					
-			for(var i=0;i<drawedObsels.length;i++) {
-				var drawedObsel = drawedObsels[i];
-				var obsel = drawedObsel.data["obsel"];
-				var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);// convert UTC time to localdate
-				obsel_date.setDate(1);
-				obsel_date.setHours(0,0,0,0);
+			for(var i=0;i<months.length;i++){
+				var iDate = months[i];
+				var iDateInt = iDate.getTime();
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="minorLabel"){
+						matched = true;
+					}
+				}
+				if (matched) continue;// no duplicate
 				
-				var match = tAssistance.datetime.in_array(months,obsel_date);
-				if(match){
-					var pos = tAssistance.datetime.indexOf(months,obsel_date);
-					// get coordinates of the obsel
-									
-					text = document.createElementNS(svgNS,"text");
-					text.setAttributeNS(null,"x", 0);
-					text.setAttributeNS(null,"y", y);
-					text.setAttributeNS(null,"class","obsel lbl");
-					text.setAttributeNS(null,"font-family","arial");
-					text.setAttributeNS(null,"font-size","10");
-					text.setAttributeNS(null,"fill","blue");
-					text.setAttributeNS(null,"style","text-anchor:middle;");
-					text.textContent = obsel_date.format("mmmm");
-					
-					//find svg				
-					svg.appendChild(text);
-					
-					tAssistance.svg.align_middle(text, drawedObsel);
-					
-					// remove	
-					months.splice(pos, 1);
-					// add to the group
-					g.appendChild(text);
-					// add tooltip for label	
-					tAssistance.svg.addTooltip(text, obsel_date.toString());
-					
-					drawMonths.push(text);
-				}			
-			}
+				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+				
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", x);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","minor");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = iDate.format("mmmm");
+				
+				// add to the group	
+				g.appendChild(text);				
+				text.data = {
+						"type": "minorLabel",
+						"time": iDateInt,
+				};
+				tAssistance.svg.addTooltip(text, iDate.toString());
+				drawMonths.push(text);
+			}			
+			
 			return drawMonths;
 		},
 		// attach date minors to drawed obsels 
@@ -475,6 +590,9 @@
 			var dates = tAssistance.outil.getDates_svg(drawedObsels);
 			var svg = drawedObsels[0].ownerSVGElement;
 			var g = drawedObsels[0].parentNode;
+			var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
+			var timeOffset = parseInt(g.getAttribute("timeoffset"));
+			var xOffset = parseInt(g.getAttribute("xoffset"));
 			
 			var width = 100,
 			height = 18,
@@ -484,43 +602,42 @@
 			
 			var svgNS = tAssistance.svg.svgNS;
 			drawDates = [];
-					
-			for(var i=0;i<drawedObsels.length;i++) {
-				var drawedObsel = drawedObsels[i];
-				var obsel = drawedObsel.data["obsel"];
-				var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);
-				// reset hours in a date
-				obsel_date.setHours(0,0,0,0);
+		
+			for(var i=0;i<dates.length;i++){
+				var iDate = dates[i];
+				var iDateInt = iDate.getTime();
 				
-				var match = tAssistance.datetime.in_array(dates,obsel_date);
-				if(match){
-					var pos = tAssistance.datetime.indexOf(dates,obsel_date);
-					// get coordinates of the obsel								
-					text = document.createElementNS(svgNS,"text");
-					text.setAttributeNS(null,"x", 0);
-					text.setAttributeNS(null,"y", y);
-					text.setAttributeNS(null,"class","obsel lbl");
-					text.setAttributeNS(null,"font-family","arial");
-					text.setAttributeNS(null,"font-size","10");
-					text.setAttributeNS(null,"fill","blue");
-					text.setAttributeNS(null,"style","text-anchor:middle;");
-					text.textContent = obsel_date.getDate();
-					
-					//find svg				
-					svg.appendChild(text);
-					
-					tAssistance.svg.align_middle(text, drawedObsel);
-					
-					// remove	
-					dates.splice(pos, 1);
-					// add to the group
-					g.appendChild(text);
-					// add tooltip for label	
-					tAssistance.svg.addTooltip(text, obsel_date.toString());
-					
-					drawDates.push(text);
-				}			
-			}
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="minorLabel"){
+						matched = true;
+					}
+				}
+				if (matched) continue;// no duplicate
+				
+				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+				
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", x);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","minor");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = iDate.getDate();
+				
+				// add to the group	
+				g.appendChild(text);				
+				text.data = {
+						"type": "minorLabel",
+						"time": iDateInt,
+				};
+				tAssistance.svg.addTooltip(text, iDate.toString());
+				drawDates.push(text);
+			}			
+			
 			return drawDates;
 		},
 		// attach hour minors to drawed obsels 
@@ -529,6 +646,9 @@
 			var hours = tAssistance.outil.getHours_svg(drawedObsels);
 			var svg = drawedObsels[0].ownerSVGElement;
 			var g = drawedObsels[0].parentNode;
+			var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
+			var timeOffset = parseInt(g.getAttribute("timeoffset"));
+			var xOffset = parseInt(g.getAttribute("xoffset"));
 			
 			var width = 100,
 			height = 11,
@@ -537,42 +657,43 @@
 			padding = 2;
 			var svgNS = "http://www.w3.org/2000/svg";
 			drawedHours = [];
-					
-			for(var i=0;i<drawedObsels.length;i++) {
-				var drawedObsel = drawedObsels[i];
-				var obsel = drawedObsel.data["obsel"];
-				var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);
-				obsel_date.setMinutes(0,0,0);
+			
+			for(var i=0;i<hours.length;i++){
+				var iDate = hours[i];
+				var iDateInt = iDate.getTime();
 				
-				var match = tAssistance.datetime.in_array(hours,obsel_date);
-				if(match){
-					var pos = tAssistance.datetime.indexOf(hours,obsel_date);
-					// get coordinates of the obsel
-									
-					text = document.createElementNS(svgNS,"text");
-					text.setAttributeNS(null,"x", 0);
-					text.setAttributeNS(null,"y", y);
-					text.setAttributeNS(null,"class","obsel lbl");
-					text.setAttributeNS(null,"font-family","arial");
-					text.setAttributeNS(null,"font-size","10");
-					text.setAttributeNS(null,"fill","blue");
-					text.setAttributeNS(null,"style","text-anchor:middle;");
-					text.textContent = hours[pos].getHours()+"h";
-					
-					//find svg				
-					svg.appendChild(text);
-					
-					tAssistance.svg.align_middle(text, drawedObsel);
-					
-					// remove	
-					hours.splice(pos, 1);
-					// add to the group
-					g.appendChild(text);
-					// add tooltip for label	
-					tAssistance.svg.addTooltip(text, obsel_date.toString());
-					
-					drawedHours.push(text);
-				}			
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="minorLabel"){
+						matched = true;
+					}
+				}
+				if (matched) continue;// no duplicate
+				
+				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+				
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", x);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","minor");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = iDate.getHours()+"h";
+				
+				// add to the group	
+				g.appendChild(text);				
+				text.data = {
+						"type": "minorLabel",
+						"time": iDateInt,
+				};
+				tAssistance.svg.addTooltip(text, iDate.toString());
+				drawedHours.push(text);
+			}					
+			if(tAssistance.debug){
+				window.drawedHours = drawedHours;
 			}
 			return drawedHours;
 		},
@@ -582,6 +703,9 @@
 			var minutes = tAssistance.outil.getMinutes_svg(drawedObsels);
 			var svg = drawedObsels[0].ownerSVGElement;
 			var g = drawedObsels[0].parentNode;
+			var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
+			var timeOffset = parseInt(g.getAttribute("timeoffset"));
+			var xOffset = parseInt(g.getAttribute("xoffset"));
 			
 			var width = 100,
 			height = 18,
@@ -590,43 +714,43 @@
 			padding = 2;
 			var svgNS = tAssistance.svg.svgNS;
 			drawedminutes = [];
-					
-			for(var i=0;i<drawedObsels.length;i++) {
-				var drawedObsel = drawedObsels[i];
-				var obsel = drawedObsel.data["obsel"];
-				var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);
-				obsel_date.setSeconds(0,0);
+			
+			for(var i=0;i<minutes.length;i++){
+				var iDate = minutes[i];
+				var iDateInt = iDate.getTime();
 				
-				var match = tAssistance.datetime.in_array(minutes,obsel_date);
-				if(match){
-					var pos = tAssistance.datetime.indexOf(minutes,obsel_date);
-					// get coordinates of the obsel
-									
-					text = document.createElementNS(svgNS,"text");
-					text.setAttributeNS(null,"x", 0);
-					text.setAttributeNS(null,"y", y);
-					text.setAttributeNS(null,"class","obsel lbl");
-					text.setAttributeNS(null,"font-family","arial");
-					text.setAttributeNS(null,"font-size","10");
-					text.setAttributeNS(null,"fill","blue");
-					text.setAttributeNS(null,"style","text-anchor:middle;");
-					text.textContent = minutes[pos].getMinutes();
-					
-					//find svg				
-					svg.appendChild(text);
-					
-					tAssistance.svg.align_middle(text, drawedObsel);
-					
-					// remove	
-					minutes.splice(pos, 1);
-					// add to the group
-					g.appendChild(text);
-					// add tooltip for label	
-					tAssistance.svg.addTooltip(text, obsel_date.toString());
-					
-					drawedminutes.push(text);
-				}			
-			}
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="minorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (matched) continue;// no duplicate
+				
+				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+				
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", x);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","minor");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = iDate.getMinutes();
+				
+				// add to the group	
+				g.appendChild(text);				
+				text.data = {
+						"type": "minorLabel",
+						"time": iDateInt,
+				};
+				tAssistance.svg.addTooltip(text, iDate.toString());
+				drawedminutes.push(text);
+			}		
+			
 			return drawedminutes;
 		},
 		// attach second minors to drawed obsels 
@@ -635,6 +759,9 @@
 			var seconds = tAssistance.outil.getSeconds_svg(drawedObsels);
 			var svg = drawedObsels[0].ownerSVGElement;
 			var g = drawedObsels[0].parentNode;
+			var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
+			var timeOffset = parseInt(g.getAttribute("timeoffset"));
+			var xOffset = parseInt(g.getAttribute("xoffset"));
 			
 			var width = 100,
 			height = 18,
@@ -643,42 +770,41 @@
 			padding = 2;
 			var svgNS = tAssistance.svg.svgNS;
 			drawSeconds = [];
-					
-			for(var i=0;i<drawedObsels.length;i++) {
-				var drawedObsel = drawedObsels[i];
-				var obsel = drawedObsel.data["obsel"];
-				var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);
-				obsel_date.setMilliseconds(0);
+			
+			for(var i=0;i<seconds.length;i++){
+				var iDate = seconds[i];
+				var iDateInt = iDate.getTime();
 				
-				var match = tAssistance.datetime.in_array(seconds,obsel_date);
-				if(match){
-					var pos = tAssistance.datetime.indexOf(seconds,obsel_date);
-					// get coordinates of the obsel
-									
-					text = document.createElementNS(svgNS,"text");
-					text.setAttributeNS(null,"x", 0);
-					text.setAttributeNS(null,"y", y);
-					text.setAttributeNS(null,"class","obsel lbl");
-					text.setAttributeNS(null,"font-family","arial");
-					text.setAttributeNS(null,"font-size","10");
-					text.setAttributeNS(null,"fill","blue");
-					text.setAttributeNS(null,"style","text-anchor:middle;");
-					text.textContent = seconds[pos].getSeconds();
-					
-					//find svg				
-					svg.appendChild(text);
-					
-					tAssistance.svg.align_middle(text, drawedObsel);
-					
-					// remove	
-					seconds.splice(pos, 1);
-					// add to the group
-					g.appendChild(text);
-					// add tooltip for label	
-					tAssistance.svg.addTooltip(text, obsel_date.toString());
-					
-					drawSeconds.push(text);
-				}			
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="minorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (matched) continue;// no duplicate
+				
+				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+				
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", x);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","minor");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = iDate.getSeconds();
+				
+				// add to the group	
+				g.appendChild(text);				
+				text.data = {
+						"type": "minorLabel",
+						"time": iDateInt,
+				};
+				tAssistance.svg.addTooltip(text, iDate.toString());
+				drawSeconds.push(text);
 			}
 			return drawSeconds;
 		},
@@ -688,6 +814,9 @@
 			var _01seconds = tAssistance.outil.get01Seconds_svg(drawedObsels);
 			var svg = drawedObsels[0].ownerSVGElement;
 			var g = drawedObsels[0].parentNode;
+			var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
+			var timeOffset = parseInt(g.getAttribute("timeoffset"));
+			var xOffset = parseInt(g.getAttribute("xoffset"));
 			
 			var width = 100,
 			height = 18,
@@ -696,43 +825,43 @@
 			padding = 2;
 			var svgNS = tAssistance.svg.svgNS;
 			draw01Seconds = [];
-					
-			for(var i=0;i<drawedObsels.length;i++) {
-				var drawedObsel = drawedObsels[i];
-				var obsel = drawedObsel.data["obsel"];
-				var obsel_date = tAssistance.datetime.utc2LocalDate(obsel.begin);
-				obsel_date.setMilliseconds(Math.floor(obsel_date.getMilliseconds()/100)*100);
+			
+			for(var i=0;i<_01seconds.length;i++){
+				var iDate = _01seconds[i];
+				var iDateInt = iDate.getTime();
 				
-				var match = tAssistance.datetime.in_array(_01seconds,obsel_date);
-				if(match){
-					var pos = tAssistance.datetime.indexOf(_01seconds,obsel_date);
-					// get coordinates of the obsel
-									
-					text = document.createElementNS(svgNS,"text");
-					text.setAttributeNS(null,"x", 0);
-					text.setAttributeNS(null,"y", y);
-					text.setAttributeNS(null,"class","obsel lbl");
-					text.setAttributeNS(null,"font-family","arial");
-					text.setAttributeNS(null,"font-size","10");
-					text.setAttributeNS(null,"fill","blue");
-					text.setAttributeNS(null,"style","text-anchor:middle;");
-					text.textContent = "."+Math.floor(_01seconds[pos].getMilliseconds()/100);
-					
-					//find svg				
-					svg.appendChild(text);
-					
-					tAssistance.svg.align_middle(text, drawedObsel);
-					
-					// remove	
-					_01seconds.splice(pos, 1);
-					// add to the group
-					g.appendChild(text);
-					// add tooltip for label	
-					tAssistance.svg.addTooltip(text, obsel_date.toString());
-					
-					draw01Seconds.push(text);
-				}			
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="minorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (matched) continue;// no duplicate
+				
+				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+				
+				text = document.createElementNS(svgNS,"text");
+				text.setAttributeNS(null,"x", x);
+				text.setAttributeNS(null,"y", y);
+				text.setAttributeNS(null,"class","minor");
+				text.setAttributeNS(null,"font-family","arial");
+				text.setAttributeNS(null,"font-size","10");
+				text.setAttributeNS(null,"fill","blue");
+				text.setAttributeNS(null,"style","text-anchor:middle;");
+				text.textContent = "."+Math.floor(iDate.getMilliseconds()/100);
+				
+				// add to the group	
+				g.appendChild(text);				
+				text.data = {
+						"type": "minorLabel",
+						"time": iDateInt,
+				};
+				tAssistance.svg.addTooltip(text, iDate.toString());
+				draw01Seconds.push(text);
 			}
+			
 			if(tAssistance.debug){
 				window.draw01Seconds = draw01Seconds;
 			}
@@ -766,25 +895,40 @@
 			var iDateInt = firstDT.getTime();
 			while(iDateInt<=endDTInt){
 				var iDate = new Date(iDateInt);// copy don't need to convert
-				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
 				
-				text = document.createElementNS(svgNS,"text");
-				text.setAttributeNS(null,"x", x);
-				text.setAttributeNS(null,"y", y);
-				text.setAttributeNS(null,"class","obsel lbl");
-				text.setAttributeNS(null,"font-family","arial");
-				text.setAttributeNS(null,"font-size","10");
-				text.setAttributeNS(null,"fill","blue");
-				text.setAttributeNS(null,"style","text-anchor:middle;");
-				text.textContent = iDate.format("yyyy");
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="majorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (!matched) {// no duplicate
 				
-				// add to the group
-				g.appendChild(text);
-				// add tooltip for label	
-				//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
-				
-				drawedYears.push(text);
-				
+					var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+					
+					text = document.createElementNS(svgNS,"text");
+					text.setAttributeNS(null,"x", x);
+					text.setAttributeNS(null,"y", y);
+					text.setAttributeNS(null,"class","major");
+					text.setAttributeNS(null,"font-family","arial");
+					text.setAttributeNS(null,"font-size","10");
+					text.setAttributeNS(null,"fill","blue");
+					text.setAttributeNS(null,"style","text-anchor:middle;");
+					text.textContent = iDate.format("yyyy");
+					
+					// add to the group
+					g.appendChild(text);
+					text.data = {
+							"type": "majorLabel",
+							"time": iDateInt,
+					};
+					// add tooltip for label	
+					//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+					
+					drawedYears.push(text);
+				}
 				// increment a month
 				iDate = new Date(iDateInt);
 				iDateInt = iDate.setYear(iDate.getYear()+1);
@@ -818,25 +962,41 @@
 			var iDateInt = firstDT.getTime();
 			while(iDateInt<=endDTInt){
 				var iMonth = new Date(iDateInt);
-				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
 				
-				text = document.createElementNS(svgNS,"text");
-				text.setAttributeNS(null,"x", x);
-				text.setAttributeNS(null,"y", y);
-				text.setAttributeNS(null,"class","obsel lbl");
-				text.setAttributeNS(null,"font-family","arial");
-				text.setAttributeNS(null,"font-size","10");
-				text.setAttributeNS(null,"fill","blue");
-				text.setAttributeNS(null,"style","text-anchor:middle;");
-				text.textContent = iMonth.format("mmmm yyyy");
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="majorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (!matched){;// no duplicate
 				
-				// add to the group
-				g.appendChild(text);
-				// add tooltip for label	
-				//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
-				
-				drawedMonths.push(text);
-				
+					var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+					
+					text = document.createElementNS(svgNS,"text");
+					text.setAttributeNS(null,"x", x);
+					text.setAttributeNS(null,"y", y);
+					text.setAttributeNS(null,"class","major");
+					text.setAttributeNS(null,"font-family","arial");
+					text.setAttributeNS(null,"font-size","10");
+					text.setAttributeNS(null,"fill","blue");
+					text.setAttributeNS(null,"style","text-anchor:middle;");
+					text.textContent = iMonth.format("mmmm yyyy");
+					
+					// add to the group
+					g.appendChild(text);
+					text.data = {
+							"type": "majorLabel",
+							"time": iDateInt,
+					};
+					
+					// add tooltip for label	
+					//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+					
+					drawedMonths.push(text);
+				}
 				// increment a month
 				iDate = new Date(iDateInt);
 				iDateInt = iDate.setMonth(iDate.getMonth()+1);
@@ -876,25 +1036,39 @@
 				tmpDate.setDate(tmpDate.getDate()+6);
 				var endWeek = tmpDate;
 				
-				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="majorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (!matched) {// no duplicate
 				
-				text = document.createElementNS(svgNS,"text");
-				text.setAttributeNS(null,"x", x);
-				text.setAttributeNS(null,"y", y);
-				text.setAttributeNS(null,"class","obsel lbl");
-				text.setAttributeNS(null,"font-family","arial");
-				text.setAttributeNS(null,"font-size","10");
-				text.setAttributeNS(null,"fill","blue");
-				text.setAttributeNS(null,"style","text-anchor:middle;");
-				text.textContent = beginWeek.format("dd mmmm yyyy");
-				
-				// add to the group
-				g.appendChild(text);
-				// add tooltip for label	
-				//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
-				
-				drawedDates.push(text);
-				
+					var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+					
+					text = document.createElementNS(svgNS,"text");
+					text.setAttributeNS(null,"x", x);
+					text.setAttributeNS(null,"y", y);
+					text.setAttributeNS(null,"class","major");
+					text.setAttributeNS(null,"font-family","arial");
+					text.setAttributeNS(null,"font-size","10");
+					text.setAttributeNS(null,"fill","blue");
+					text.setAttributeNS(null,"style","text-anchor:middle;");
+					text.textContent = beginWeek.format("dd mmmm yyyy");
+					
+					// add to the group
+					g.appendChild(text);
+					text.data = {
+							"type": "majorLabel",
+							"time": iDateInt,
+					};
+					// add tooltip for label	
+					//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+					
+					drawedDates.push(text);
+				}
 				// increment date
 				iDate = new Date(iDateInt);
 				iDateInt = iDate.setDate(iDate.getDate()+7);
@@ -926,26 +1100,42 @@
 			var drawedDates = [];
 			var iDateInt = firstDT.getTime();
 			while(iDateInt<=endDTInt){
-				var iDate = new Date(iDateInt); 
-				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+				var iDate = new Date(iDateInt);
 				
-				text = document.createElementNS(svgNS,"text");
-				text.setAttributeNS(null,"x", x);
-				text.setAttributeNS(null,"y", y);
-				text.setAttributeNS(null,"class","obsel lbl");
-				text.setAttributeNS(null,"font-family","arial");
-				text.setAttributeNS(null,"font-size","10");
-				text.setAttributeNS(null,"fill","blue");
-				text.setAttributeNS(null,"style","text-anchor:middle;");
-				text.textContent = iDate.format("dd mmmm yyyy");
-				
-				// add to the group
-				g.appendChild(text);
-				// add tooltip for label	
-				//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
-				
-				drawedDates.push(text);
-				
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="majorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (!matched) {// no duplicate
+									
+					var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+					
+					text = document.createElementNS(svgNS,"text");
+					text.setAttributeNS(null,"x", x);
+					text.setAttributeNS(null,"y", y);
+					text.setAttributeNS(null,"class","major");
+					text.setAttributeNS(null,"font-family","arial");
+					text.setAttributeNS(null,"font-size","10");
+					text.setAttributeNS(null,"fill","blue");
+					text.setAttributeNS(null,"style","text-anchor:middle;");
+					text.textContent = iDate.format("dd mmmm yyyy");
+					
+					// add to the group
+					g.appendChild(text);
+					text.data = {
+							"type": "majorLabel",
+							"time": iDateInt,
+					};
+					
+					// add tooltip for label	
+					//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+					
+					drawedDates.push(text);
+				}
 				// increment date			
 				iDateInt = iDate.setDate(iDate.getDate()+1);
 			}
@@ -977,25 +1167,41 @@
 			var iDateInt = firstDT.getTime();
 			while(iDateInt<=endDTInt){
 				var iDate = new Date(iDateInt);
-				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
 				
-				text = document.createElementNS(svgNS,"text");
-				text.setAttributeNS(null,"x", x);
-				text.setAttributeNS(null,"y", y);
-				text.setAttributeNS(null,"class","obsel lbl");
-				text.setAttributeNS(null,"font-family","arial");
-				text.setAttributeNS(null,"font-size","10");
-				text.setAttributeNS(null,"fill","blue");
-				text.setAttributeNS(null,"style","text-anchor:middle;");
-				text.textContent = iDate.format("dd mmmm yyyy HH:MM");
-				
-				// add to the group
-				g.appendChild(text);
-				// add tooltip for label	
-				//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
-				
-				drawedDates.push(text);
-				
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="majorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (!matched) {// no duplicate
+									
+					var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+					
+					text = document.createElementNS(svgNS,"text");
+					text.setAttributeNS(null,"x", x);
+					text.setAttributeNS(null,"y", y);
+					text.setAttributeNS(null,"class","major");
+					text.setAttributeNS(null,"font-family","arial");
+					text.setAttributeNS(null,"font-size","10");
+					text.setAttributeNS(null,"fill","blue");
+					text.setAttributeNS(null,"style","text-anchor:middle;");
+					text.textContent = iDate.format("dd mmmm yyyy HH:MM");
+					
+					// add to the group
+					g.appendChild(text);
+					text.data = {
+							"type": "majorLabel",
+							"time": iDateInt,
+					};
+					
+					// add tooltip for label	
+					//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+					
+					drawedDates.push(text);
+				}
 				// increment date			
 				iDateInt = iDate.setHours(iDate.getHours()+1);
 			}
@@ -1027,27 +1233,41 @@
 			var iDateInt = firstDT.getTime();
 			while(iDateInt<=endDTInt){
 				var iDate = new Date(iDateInt);
-				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
 				
-				text = document.createElementNS(svgNS,"text");
-				text.setAttributeNS(null,"x", x);
-				text.setAttributeNS(null,"y", y);
-				text.setAttributeNS(null,"class","obsel lbl");
-				text.setAttributeNS(null,"font-family","arial");
-				text.setAttributeNS(null,"font-size","10");
-				text.setAttributeNS(null,"fill","blue");
-				text.setAttributeNS(null,"style","text-anchor:middle;");
-				text.textContent = iDate.format("dd mmmm yyyy HH:MM");
-				
-				// add to the group
-				g.appendChild(text);
-				// add tooltip for label	
-				//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
-				
-				drawedDates.push(text);
-				
-				// increment date
-				
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="majorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (!matched) {// no duplicate
+					var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+					
+					text = document.createElementNS(svgNS,"text");
+					text.setAttributeNS(null,"x", x);
+					text.setAttributeNS(null,"y", y);
+					text.setAttributeNS(null,"class","major");
+					text.setAttributeNS(null,"font-family","arial");
+					text.setAttributeNS(null,"font-size","10");
+					text.setAttributeNS(null,"fill","blue");
+					text.setAttributeNS(null,"style","text-anchor:middle;");
+					text.textContent = iDate.format("dd mmmm yyyy HH:MM");
+					
+					// add to the group
+					g.appendChild(text);
+					text.data = {
+							"type": "majorLabel",
+							"time": iDateInt,
+					};
+					
+					// add tooltip for label	
+					//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+					
+					drawedDates.push(text);
+				}
+				// increment date				
 				iDateInt = iDate.setMinutes(iDate.getMinutes()+1);
 			}
 			
@@ -1078,31 +1298,82 @@
 			var iDateInt = firstDT.getTime();
 			while(iDateInt<=endDTInt){
 				var iDate = new Date(iDateInt);
-				var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
 				
-				text = document.createElementNS(svgNS,"text");
-				text.setAttributeNS(null,"x", x);
-				text.setAttributeNS(null,"y", y);
-				text.setAttributeNS(null,"class","obsel lbl");
-				text.setAttributeNS(null,"font-family","arial");
-				text.setAttributeNS(null,"font-size","10");
-				text.setAttributeNS(null,"fill","blue");
-				text.setAttributeNS(null,"style","text-anchor:middle;");
-				text.textContent = iDate.format("dd mmmm yyyy HH:MM:ss");
+				var matched = false;
+				for(j=0;j<g.childNodes.length;j++){
+					var childNode = g.childNodes[j];
+					if(childNode.data["time"]==iDateInt && childNode.data["type"]=="majorLabel"){
+						matched = true;
+						break;
+					}
+				}
+				if (!matched) {// no duplicate
 				
-				// add to the group
-				g.appendChild(text);
-				// add tooltip for label	
-				//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
-				
-				drawedDates.push(text);
-				
+					var x = tAssistance.svg.getX(iDateInt, timeOffset, xOffset, scale_x_time);
+					
+					text = document.createElementNS(svgNS,"text");
+					text.setAttributeNS(null,"x", x);
+					text.setAttributeNS(null,"y", y);
+					text.setAttributeNS(null,"class","major");
+					text.setAttributeNS(null,"font-family","arial");
+					text.setAttributeNS(null,"font-size","10");
+					text.setAttributeNS(null,"fill","blue");
+					text.setAttributeNS(null,"style","text-anchor:middle;");
+					text.textContent = iDate.format("dd mmmm yyyy HH:MM:ss");
+					
+					// add to the group
+					g.appendChild(text);
+					text.data = {
+							"type": "majorLabel",
+							"time": iDateInt,
+					};
+					
+					// add tooltip for label	
+					//tAssistance.tooltip.setTooltip(text, obsel_date.toString());
+					
+					drawedDates.push(text);
+				}
 				// increment date
 				
 				iDateInt = iDate.setSeconds(iDate.getSeconds()+1);
 			}
 			
 			return drawedDates;
+		},
+		
+		drawObselLabels: function(drawedObsels){
+			if(drawedObsels.length==0) return;
+			var firstSvgObsel = drawedObsels[0];
+			var g = firstSvgObsel.parentNode;
+			var unit = g.data["unit"];
+			
+			if(unit==0||unit==1||unit==2){// year, 6 months, 3 months
+				tAssistance.svg.drawYears(drawedObsels);
+				tAssistance.svg.drawMonths1(drawedObsels);
+			}
+			else if(unit==3){// month
+				tAssistance.svg.drawMonths(drawedObsels);
+				tAssistance.svg.drawDates1(drawedObsels);
+			}else if(unit==4){// week
+				tAssistance.svg.drawWeeks(drawedObsels);
+				tAssistance.svg.drawDates1(drawedObsels);
+			}
+			else if(unit==5||unit==6){// day, 12 hours
+				tAssistance.svg.drawDates(drawedObsels);
+				tAssistance.svg.drawHours1(drawedObsels);					
+			}
+			else if(unit==7||unit==8){// hour, 30 minutes
+				tAssistance.svg.drawHours(drawedObsels);
+				tAssistance.svg.drawMinutes1(drawedObsels);
+			}
+			else if(unit==9){// minutes, 30 minutes
+				tAssistance.svg.drawMinutes(drawedObsels);
+				tAssistance.svg.drawSeconds1(drawedObsels);
+			}
+			else if(unit==10){// seconds
+				tAssistance.svg.drawSeconds(drawedObsels);
+				tAssistance.svg.draw01Seconds1(drawedObsels);
+			}
 		},
 		
 		addTooltip: function (svgelement, text){
@@ -1115,19 +1386,76 @@
 		getX: function (utcTime, timeoffset, xoffset, scale_x_time){
 			var x = (utcTime - timeoffset)*scale_x_time + xoffset;
 			return parseInt(x);			
-		}
+		},
+		
 	};
 	
 	tAssistance.obsels = {
 		filter: function(obsels, start, end){
+			var filteredObsels = [];
+			for(i=0;i<obsels.length;i++){
+				var obsel = obsels[i];
+				if(obsel.begin>=start && obsel.begin<=end){
+					filteredObsels.push(obsel);
+				}				
+			}
 			
+			if(tAssistance.debug){
+				console.log(filteredObsels.length);
+			}
 			
+			return filteredObsels;
+		},
+		filter1: function(svgElements, start, end){
+			var filteredSvgElements = [];
+			for(i=0;i<svgElements.length;i++){
+				var svgElement = svgElements[i];
+				if(svgElement.data["time"]>=start && svgElement.data["time"]<=end){
+					filteredSvgElements.push(svgElement);
+				}				
+			}
 			
+			if(tAssistance.debug){
+				console.log(filteredSvgElements.length);
+			}
 			
+			return filteredSvgElements;
+		},
+		diff: function(drawObsels, obsels){
+			var ret = {
+					"=": [],// drawn obsels exist
+					"-": [],// drawn obsels need to be removed
+					"+": [],// obsels need to be added
+			};
+			var matchedIds = [];
 			
+			for(i=0;i<obsels.length;i++){
+				var obsel = obsels[i];
+				var isMatched = false;
+				
+				for(j=0;j<drawObsels.length;j++){// need to be improved
+					var drawObsel = drawObsels[j];
+					if(obsel.begin == drawObsel.data["obsel"].begin){
+						isMatched = true;
+						matchedIds.push(j);
+						break;
+					}
+				}
+				if(isMatched){
+					ret["="].push(drawObsel);
+				}else{
+					ret["+"].push(obsel);
+				}
+			}
 			
-		}
-			
+			for(i=0;i<drawObsels.length;i++){
+				var drawObsel = drawObsels[i];
+				if(matchedIds.indexOf(i)==-1){
+					ret["-"].push(drawObsel);
+				}				
+			}
+			return ret;
+		},
 			
 			
 	}

@@ -359,6 +359,8 @@ tAssistance.processKeyPress = function(g,evt){
 		});
 		trc.get_obsels({			
 			success: function(obsels){
+				// save received obsels in the localStorage
+				localStorage["obsels"] = JSON.stringify(obsels);			
 				
 				console.log("test trace_read correctly");
 				
@@ -397,6 +399,9 @@ tAssistance.processKeyPress = function(g,evt){
 				g.setAttribute("transform","translate(0 0) scale(1 1)");
 				g.setAttribute("scale_x_time", 1000/tAssistance.datetime.units[0]);
 				svg.appendChild(g);
+				g.data = {
+					"obsels": obsels
+				};
 				
 				var center = document.createElementNS(svgNS,"line");				
 				center.setAttribute("x1", 500);
