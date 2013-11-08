@@ -267,28 +267,15 @@
 		    	g.removeAttribute("touchmove.x");
 		    	g.removeAttribute("touchmove.y");
 
-			var childNodes = g.childNodes;
-		    	
-		    	// reset group element
-		    	var begin = new Date().getTime();// for debug
-		    	for(i=0;i<childNodes.length;i++){
-		    		childNode = childNodes[i];
-		    		var x = 0;
-		    		if(childNode.getAttribute("cx")){
-		    			x = parseFloat(childNode.getAttribute("cx"));
-		    			childNode.setAttribute("cx", x + translate_x);		    	
-		    		}
-		    		else{
-		    			x = parseFloat(childNode.getAttribute("x"));
-		    			childNode.setAttribute("x", x + translate_x);		    	
-		    		}		    			
-		    	}
-		    	var oldTimeOffset = parseInt(g.getAttribute("timeoffset"));
+		    	// calculate newOffset
+			   	var oldTimeOffset = parseInt(g.getAttribute("timeoffset"));
 		    	var xoffset = parseInt(g.getAttribute("xoffset"));
 		    	var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
-		    	g.setAttribute("transform","translate(0 0) scale(1 1)");
+		    	
 		    	var newTimeOffset = parseInt(oldTimeOffset - (translate_x/scale_x_time));
-		    	g.setAttribute("timeoffset", newTimeOffset);
+		    	//g.setAttribute("transform","translate(0 0) scale(1 1)");
+		    	
+		    	tAssistance.svg.group.changeTimeOffset(g, newTimeOffset);
 		    	// fire a "changeTimeOffset" event 		    	
 		    	$(document).trigger("changeTimeOffset", {							
 								timeoffset: newTimeOffset,
