@@ -125,16 +125,20 @@
 
 		this.layout();
 
-		if (this.touchCapable) {
+		//if (this.touchCapable) {
 			// Touch: Bind touch events:
-			this.picker.on({
-				touchstart: $.proxy(this.mousedown, this)
-			});
-		} else {
+			//this.picker.on({
+			//	touchstart: $.proxy(this.touchstart, this)
+			//});
+			//this.touchstartHandler = $.proxy(this.touchstart,this);
+			this.picker[0].addEventListener("touchstart", $.proxy(this.touchstart,this));
+			
+		//} else {
 			this.picker.on({
 				mousedown: $.proxy(this.mousedown, this)
 			});
-		}
+			//this.picker[0].addEventListener("mousedown", $.proxy(this.mousedown,this));
+		//}
 
 		if (tooltip === 'show') {
 			this.picker.on({
@@ -192,12 +196,14 @@
 		},
 
 		mousedown: function(ev) {
-
+			
 			// Touch: Get the original event:
-			if (this.touchCapable && ev.type === 'touchstart') {
+			//if (this.touchCapable && ev.type === 'touchstart') {
 				ev = ev.originalEvent;
-			}
-
+			//}
+			console.log("mousedown");
+			//if(this.inDrag || (new Date()) - this.lastTouchStart < 500) return;
+			
 			this.offset = this.picker.offset();
 			this.size = this.picker[0][this.sizePos];
 
@@ -214,19 +220,75 @@
 			this.percentage[this.dragged] = percentage;
 			this.layout();
 
-			if (this.touchCapable) {
+			//if (this.touchCapable) {
 				// Touch: Bind touch events:
-				$(document).on({
-					touchmove: $.proxy(this.mousemove, this),
-					touchend: $.proxy(this.mouseup, this)
-				});
-			} else {
+				//$(document).on({
+				//	touchmove: $.proxy(this.mousemove, this),
+				//	touchend: $.proxy(this.mouseup, this)
+				//});
+			//} else {
+				//document.addEventListener()
 				$(document).on({
 					mousemove: $.proxy(this.mousemove, this),
 					mouseup: $.proxy(this.mouseup, this)
 				});
+			//}
+
+			this.inDrag = true;
+			
+			var val = this.calculateValue();
+			this.element.trigger({
+					type: 'slideStart',
+					value: val
+				}).trigger({
+					type: 'slide',
+					value: val
+				});
+			return false;
+		},
+		touchstart: function(ev) {
+			console.log("touchstart");
+			// Touch: get the original event:
+			//if (this.touchCapable && ev.type === 'touchstart') {
+				//ev = ev.originalEvent;
+			//}
+			ev.preventDefault();// stop firing the mousedown events by default
+			//ev.stopPropagation();
+			
+			this.offset = this.picker.offset();
+			this.size = this.picker[0][this.sizePos];
+
+			var percentage = this.getPercentage(ev);
+
+			if (this.range) {
+				var diff1 = Math.abs(this.percentage[0] - percentage);
+				var diff2 = Math.abs(this.percentage[1] - percentage);
+				this.dragged = (diff1 < diff2) ? 0 : 1;
+			} else {
+				this.dragged = 0;
 			}
 
+			this.percentage[this.dragged] = percentage;
+			this.layout();
+
+			//if (this.touchCapable) {
+				// Touch: Bind touch events:
+				//$(document).on({
+				//	touchmove: $.proxy(this.touchmove, this),
+				//	touchend: $.proxy(this.touchend, this)
+				//});
+				this.touchmoveHandler = $.proxy(this.touchmove, this);
+				this.touchendHandler = $.proxy(this.touchend, this);
+				document.addEventListener("touchmove", this.touchmoveHandler);
+				document.addEventListener("touchend", this.touchendHandler);			
+				
+			//} else {
+				//$(document).on({
+				//	mousemove: $.proxy(this.mousemove, this),
+				//	mouseup: $.proxy(this.mouseup, this)
+				//});
+			//}
+			this.lastTouchStart=new Date();
 			this.inDrag = true;
 			var val = this.calculateValue();
 			this.element.trigger({
@@ -239,12 +301,13 @@
 			return false;
 		},
 
+
 		mousemove: function(ev) {
-			
+			console.log("mousemove");
 			// Touch: Get the original event:
-			if (this.touchCapable && ev.type === 'touchmove') {
+			//if (this.touchCapable && ev.type === 'touchmove') {
 				ev = ev.originalEvent;
-			}
+			//}
 
 			var percentage = this.getPercentage(ev);
 			if (this.range) {
@@ -268,20 +331,49 @@
 				.prop('value', val);
 			return false;
 		},
+		touchmove: function(ev) {
+			console.log("touchmove");
+			// Touch: Get the original event:
+			//if (this.touchCapable && ev.type === 'touchmove') {
+				//ev = ev.originalEvent;
+			//}
 
+			var percentage = this.getPercentage(ev);
+			if (this.range) {
+				if (this.dragged === 0 && this.percentage[1] < percentage) {
+					this.percentage[0] = this.percentage[1];
+					this.dragged = 1;
+				} else if (this.dragged === 1 && this.percentage[0] > percentage) {
+					this.percentage[1] = this.percentage[0];
+					this.dragged = 0;
+				}
+			}
+			this.percentage[this.dragged] = percentage;
+			this.layout();
+			var val = this.calculateValue();
+			this.element
+				.trigger({
+					type: 'slide',
+					value: val
+				})
+				.data('value', val)
+				.prop('value', val);
+			return false;
+		},
 		mouseup: function(ev) {
-			if (this.touchCapable) {
+			console.log("mouseup");
+			//if (this.touchCapable) {
 				// Touch: Bind touch events:
-				$(document).off({
-					touchmove: this.mousemove,
-					touchend: this.mouseup
-				});
-			} else {
+				//$(document).off({
+				//	touchmove: this.mousemove,
+				//	touchend: this.mouseup
+				//});
+			//} else {
 				$(document).off({
 					mousemove: this.mousemove,
 					mouseup: this.mouseup
 				});
-			}
+			//}
 
 			this.inDrag = false;
 			if (this.over == false) {
@@ -297,6 +389,41 @@
 				})
 				.data('value', val)
 				.prop('value', val);
+			return false;
+		},
+		touchend: function(ev) {
+			console.log("touchend");
+			ev.preventDefault();
+			//if (this.touchCapable) {
+				// Touch: Bind touch events:
+				//$(document).off({
+				//	touchmove: this.touchmove,
+				//	touchend: this.touchend
+				//});
+				document.removeEventListener("touchmove", this.touchmoveHandler);
+				document.removeEventListener("touchend", this.touchendHandler);
+			//} else {
+				//$(document).off({
+				//	mousemove: this.mousemove,
+				//	mouseup: this.mouseup
+				//});
+			//}
+
+			this.inDrag = false;
+			if (this.over == false) {
+				this.hideTooltip();
+			}
+			this.element;
+			this.layout();
+			var val = this.calculateValue();
+			this.element
+				.trigger({
+					type: 'slideStop',
+					value: val
+				})
+				.data('value', val)
+				.prop('value', val);
+
 			return false;
 		},
 
@@ -316,7 +443,7 @@
 		},
 
 		getPercentage: function(ev) {
-			if (this.touchCapable) {
+			if(ev.type == "touchstart" || ev.type == "touchmove" || ev.type == "touchend" ){//if (this.touchCapable) {
 				ev = ev.touches[0];
 			}
 			var percentage = (ev[this.mousePos] - this.offset[this.stylePos])*100/this.size;

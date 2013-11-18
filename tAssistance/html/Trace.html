@@ -7,6 +7,8 @@
 <link href="css/bootstrap.css" rel="stylesheet" >
 <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" >
 <link href="css/slider.css" rel="stylesheet" >
+<link href="css/bootstrap-select.css" rel="stylesheet" >
+<link href="css/bootstrap-editable.css" rel="stylesheet">
 <script type="text/javascript" src="tService/js/js.php"></script>
 <script type="text/javascript" src="js/js.php"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
@@ -14,7 +16,24 @@
 <script type="text/javascript" src="js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="js/locales/bootstrap-datetimepicker.fr.js"></script>
 <script type="text/javascript" src="js/bootstrap-slider.js"></script>
-<script type="text/javascript" src="js/modernizr.js"></script>
+<script type="text/javascript" src="js/bootstrap-select.js"></script>
+<script type="text/javascript" src="js/bootstrap-editable.js"></script>
+
+<!--<script type="text/javascript" src="js/modernizr.js"></script>-->
+<style media="screen" type="text/css">
+.table-property {
+	padding: 3px;
+	word-wrap: break-word;
+	table-layout:fixed;
+}
+.window-caption {
+	border-radius: 4px;
+	background-color: #F9F9F9;
+	padding: 3px;
+}
+
+</style>
+
 </head>
 <body>
 <span class="label">user: $user_id</span>
@@ -25,16 +44,18 @@
 <!-- <input type="range" name="points" min="0" max="10" value="0" onchange=";">
 <output id="rangevalue" class="label" style="vertical-align: middle">year</output> -->
 </div>
-<div class="input-append date " id="dpTimeOffset" data-date="2013-10-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" style="margin: 0; margin-left: 10px">
+<div class="input-append date" id="dpTimeOffset" data-date="2013-10-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" style="margin: 0; margin-left: 10px">
 				<input id="timeoffset" class="span3" size="16" type="text" value="">
 				<span class="add-on"><i class="icon-calendar"></i></span>
 </div>
 <div class="btn-group">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    Action <span class="caret"></span>
+    <span class='icon-cog'></span> <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="#" onclick="editStyle()">Edit style</a></li>
+    <li><a href="#" onclick="editRules()">Rule</a></li>
+    <li><a href="#" onclick="editStyles()">Style</a></li>
+    <li><a href="#" onclick="editSelectors()">Selector</a></li>
   </ul>
 </div>
 </div>
@@ -42,6 +63,9 @@
 <div id="tracePanel" style="width: 1000px; border: solid 1px black" class="span8"></div>
 <div id="controlPanel" style=""></div>
 <div id="userPanel" style=""></div>
+<div id="selectorsPanel"></div>
+<div id="stylesPanel"></div>
+<div id="rulesPanel"></div>
 </div>
 
 
@@ -49,93 +73,56 @@
 	<script type="text/javascript">
 	
 	function editStyle(){
-		$.get("index.php?page=UserPreference&userid="+encodeURIComponent("$user_id"),function(data){
-			$("#userPanel").empty().append(data);
+		var styles_panel = document.querySelector("#stylesPanel");
+		tAssistance.style.renderEditor(styles_panel);		
+		
+	}
+	function editStyles(){
+		$.get("index.php?page=style&p1=all",function(data){
+			var styles_panel = document.querySelector("#stylesPanel");
+			tAssistance.style.renderList(styles_panel);		
 		});
+	}
+	
+	function editSelectors(){
+		$.get("index.php?page=selector&p1=all",function(data){
+			var selectors_panel = document.querySelector("#selectorsPanel");
+			tAssistance.selector.renderList(selectors_panel);
+		});
+	}
+	
+	function editRules(){
+		$.get("index.php?page=rule&p1=all",function(data){
+			var rules_panel = document.querySelector("#rulesPanel");
+			tAssistance.rule.renderList(rules_panel);
+		});
+	}
+	
+	function editRule(){
+		
 	}
 	
 		$(window).on("hashchange", function() {
 			$('a[href="' + location.hash + '"]').tab('show');
 		});
 
-		//console.log("hoang");
-
-		/*var a = new tService.Service({});
-		a.createTrace({
-			ktbs_base: "http://localhost:8001/ozalid/",
-			name: "t2", 
-			success: function(){console.log("success is callbacked");},
-			error: function(jqXHR,textStatus, errorThrown){console.log("error is callbacked.");}
-			});
-		 */
-		/*tService.trace_read({
-						
-			trace_uri: "http://localhost:8001/ozalid/t2/",			
-			success: function(){console.log("success is callbacked");},
-			error: function(jqXHR,textStatus, errorThrown){console.log("error is callbacked.");}
-			});*/
-
-		tAssistance.trace_view({
-			trace_uri : "$trace_uri",
-			success : function() {
-				console.log("success is callbacked");
-			},
-			error : function(jqXHR, textStatus, errorThrown) {
-				console.log("error is callbacked.");
-			}
-
-		});
-			$('#dpTimeOffset').datetimepicker({
-		        language:  'fr',		        
-		        format: 'dd/MM/yyyy hh:mm:ss',		       
-		    }).on('changeDate', function(e){
-		    	console.log(e.localDate);
-		    	var dateInt = e.localDate.getTime();
-		    	tAssistance.svg.group.changeTimeOffset(document.querySelector("g"), dateInt);
-		    });
+		
+		
+			
+		$('#dpTimeOffset').datetimepicker({
+	        language:  'fr',		        
+	        format: 'dd/MM/yyyy hh:mm:ss',		       
+	    }).on('changeDate', function(e){
+	    	console.log(e.localDate);
+	    	var dateInt = e.localDate.getTime();
+	    	tAssistance.svg.group.changeTimeOffset(document.querySelector("g"), dateInt);
+	    });
 			
 		$(document).on("changeSetting", function(e, data){
 			var g = document.querySelector("g");
 			console.log("detected");
 			
-			tAssistance.svg.group.clear_all(g);
-			
-			var obsels = [];
-			if(localStorage["obsels"]){// get obsels from cache
-				obsels = JSON.parse(localStorage["obsels"]);
-			}
-			else{
-				//obsels = tAssistance.getObsels("http://213.223.171.36/ktbs/ozalid_exp/","trc_u1");		
-			}
-			
-			var unit = data.unit;
-			//tAssistance.clear_obsels();
-			var scale_x_time = 1000/tAssistance.datetime.units[unit];
-			var g = document.querySelector("g");
-			var timeoffset = parseFloat(g.getAttribute("timeoffset"));
-			var start = timeoffset - 500/scale_x_time;
-			var end = timeoffset + 500/scale_x_time;
-			
-			g.setAttribute("scale_x_time", scale_x_time);
-			g.data["unit"] = unit;
-			console.log("scale_x_time="+scale_x_time);
-			
-			// filter obsels
-			obsels = tAssistance.obsels.filter(obsels, start, end);
-			var log = {
-					"start": start,
-					"end": end,
-					"startD": tAssistance.datetime.utc2LocalDate(start),
-					"endD": tAssistance.datetime.utc2LocalDate(end),
-			}
-			console.log(log);
-			// diff obsels
-			var diffs = tAssistance.obsels.diff(document.querySelectorAll(".obsel"), obsels);		
-			
-			// draw obsels
-			var drawnObsels = tAssistance.svg.drawObsels(diffs["+"], g);		
-			
-			tAssistance.svg.drawObselLabels(drawnObsels);
+			tAssistance.svg.group.changeScale(g,data.unit);
 		});
 		
 		$(document).on("changeTimeOffset", function(type,data){
@@ -145,28 +132,67 @@
 			picker.setLocalDate(timeoffsetDate);			
 		});
 		
-		$('.slider').slider({
-			formater: function(value){
-				return tAssistance.datetime.unitTexts[parseInt(value)];
-			},
-			value: 0
-		}).on('slideStop', function(ev){
-			console.log(ev.value);
-			var units = tAssistance.datetime.units;
-			var unitTexts = tAssistance.datetime.unitTexts;
-			//var rangevalue = document.getElementById('rangevalue');
+		$(document).ready(function(){
+			$('.slider').slider({
+				formater: function(value){
+					return tAssistance.datetime.unitTexts[parseInt(value)];
+				},
+				value: 0
+			}).on('slideStop', function(ev){
+				console.log(ev.value);
+				var units = tAssistance.datetime.units;
+				var unitTexts = tAssistance.datetime.unitTexts;
+				//var rangevalue = document.getElementById('rangevalue');
+				
+				iUnit = parseInt(ev.value);
+				
+				//rangevalue.value = unitTexts[iUnit];				
+				// create an event for update the trace
+				
+				$(document).trigger("changeSetting",{
+					unit: iUnit,
+					unitText: unitTexts[iUnit],
+					time: new Date(),
+					sender: document.getElementById("zoomInput"),
+				});
+			});	
+			// preload rules
+			tAssistance.rule.loadRules();
 			
-			iUnit = parseInt(ev.value);
-			
-			//rangevalue.value = unitTexts[iUnit];				
-			// create an event for update the trace
-			
-			$(document).trigger("changeSetting",{
-				unit: iUnit,
-				unitText: unitTexts[iUnit],
-				time: new Date(),
-				sender: document.getElementById("zoomInput"),
+			// view trace
+			document.addEventListener("loadedRules", function(){
+				tAssistance.trace_view({
+					trace_uri : "$trace_uri",
+					success : function() {
+						// synchronisation between slider & trace visualisation
+						var g = document.querySelector("g");
+						g.addEventListener("changedScale", function(e){
+							var scaleLevel = e.data.scaleLevel;				
+							$('#zoomInput').data("slider").setValue(scaleLevel);				
+						});		
+						
+						console.log("success is callbacked");
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						console.log("error is callbacked.");
+					}
+
+				});
 			});
+			// postMessage
+			window.addEventListener('message',function(event) {
+				// if(event.origin !== 'http://scriptandstyle.com') return;
+				console.log('received response:  '+JSON.stringify(event.data));
+				if(event.data["type"]=="trace"){
+					tAssistance.message.trace(event.data);
+				}
+				else if (event.data["type"]=="obsel"){
+					tAssistance.message.obsel(event.data);
+				}
+				
+				
+			},false);
+			
 		});
 	</script>
 </body>

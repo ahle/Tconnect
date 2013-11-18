@@ -3,253 +3,14 @@
 //echo json_encode($_SERVER[REQUEST_METHOD]);
 
 $dir = dirname(__FILE__);
-require_once $dir.'/includes/global_variable.php';
-
-	function get_style_by_id($style_id){
-		
-		$con =  mysqli_connect($db_server,$db_user,$db_pwd,$db_name);
-		// Check connection
-		if (mysqli_connect_errno())
-		{
-			if($debug){
-				echo "Failed to connect to MySQL: " . mysqli_connect_error();
-			}
-		}
-		
-		$sql = "select * from ta_style where id = ".$style_id. " ";
-		
-		$ret = array();
-		
-		if ($result = mysqli_query($con,$sql))
-		{
-			while ($row = mysqli_fetch_object($result)) {
-				$ret[] = $row;
-			}			
-		}
-		else{
-			if($debug){
-				die('Error: ' . mysqli_error($con));
-			}
-		}
-			
-		mysqli_close($con);
-		
-		return $ret;
-	}
-
-	function get_user($session_id){
-		$con = mysqli_connect($db_server,$db_user,$db_pwd,$db_name);
-		// Check connection
-		if (mysqli_connect_errno())
-		{
-			echo "Failed to connect to MySQL: ".mysqli_connect_error();
-			exit;
-		}
-		
-		$select_sql = "SELECT * FROM ta_session WHERE local_session = '".$session_id."'";
-		
-		if ($result = mysqli_query($con,$select_sql))
-		{
-			$row_num = mysqli_num_rows($result);
-		}
-		
-	}
-	
-	function create_style($style){
-		global $db_server,$db_user,$db_pwd,$db_name;
-		
-		$con = mysqli_connect($db_server,$db_user,$db_pwd,$db_name);
-		// Check connection
-		if (mysqli_connect_errno())
-		{
-			echo "Failed to connect to MySQL: " . mysqli_connect_error();
-			exit;
-		}
-		
-		$sql="INSERT INTO ta_style (user, style) VALUES	('".$style->user."','".$style->style."')";
-		
-		if (!mysqli_query($con,$sql))
-		{
-			die('Error: ' . mysqli_error($con));
-		}		
-		
-		mysqli_close($con);
-	}
-	
-	function remove_style($style_id){
-		global $db_server,$db_user,$db_pwd,$db_name;
-		
-		$con = mysqli_connect($db_server,$db_user,$db_pwd,$db_name);
-		// Check connection
-		if (mysqli_connect_errno())
-		{
-			echo "Failed to connect to MySQL: " . mysqli_connect_error();
-		}
-		
-		$sql="DELETE FROM ta_style WHERE id=".$style_id;
-		
-		if (!mysqli_query($con,$sql))
-		{
-			die('Error: ' . mysqli_error($con));
-		}		
-		
-		mysqli_close($con);
-	}
-	
-	function update_style($style){
-		global $db_server,$db_user,$db_pwd,$db_name;
-	
-		$con = mysqli_connect($db_server,$db_user,$db_pwd,$db_name);
-		// Check connection
-		if (mysqli_connect_errno())
-		{
-			echo "Failed to connect to MySQL: " . mysqli_connect_error();
-		}
-	
-		$sql="UPDATE ta_style SET user='".$style->user."', style='".$style->style."' WHERE id=".$style->id;
-	
-		if (!mysqli_query($con,$sql))
-		{
-			die('Error: ' . mysqli_error($con));
-		}		
-	
-		mysqli_close($con);
-	}
-	
-	function get_style_by_user($user){
-		global $db_server,$db_user,$db_pwd,$db_name;
-		
-		$con = mysqli_connect($db_server,$db_user,$db_pwd,$db_name);
-		// Check connection
-		if (mysqli_connect_errno())
-		{
-			echo "Failed to connect to MySQL: " . mysqli_connect_error();
-		}
-		
-		$sql = "select * from ta_style where user = '".user. "' ";
-		
-		$ret = array();
-		
-		if ($result = mysqli_query($con,$sql))
-		{
-			while ($row = mysqli_fetch_object($result)) {
-				$ret[] = $row;
-			}			
-		}
-		else{
-			die('Error: ' . mysqli_error($con));
-		}
-			
-		mysqli_close($con);
-		
-		return $ret;
-	}
-	
-	function get_new_key($app_id){
-		global $db_server,$db_user,$db_pwd,$db_name;
-		
-		$con = mysqli_connect($db_server,$db_user,$db_pwd,$db_name);
-		// Check connection
-		if (mysqli_connect_errno())
-		{
-			echo "Failed to connect to MySQL: ".mysqli_connect_error();
-			exit;
-		}
-		
-		$select_sql = "SELECT * FROM ta_key WHERE remote_app = '".$app_id."' ";
-		
-		if ($result = mysqli_query($con,$select_sql))
-		{
-			$row_num = mysqli_num_rows($result);
-			if($row_num==0){
-		
-				function generateRandomString($length = 10) {
-					$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-					$randomString = '';
-					for ($i = 0; $i < $length; $i++) {
-						$randomString .= $characters[rand(0, strlen($characters) - 1)];
-					}
-					return $randomString;
-				}
-		
-				$priv_key = generateRandomString();
-				$insert_sql = "INSERT INTO ta_key (remote_app, priv_key, modified_date) VALUES ('".$app_id."', '".$priv_key."', NOW()) ";
-					
-				if (!mysqli_query($con,$insert_sql))
-				{
-					echo 'Error: ' . mysqli_error($con);
-					exit;
-				}
-				$key = new stdClass();
-				$key->value =  $priv_key;
-				$ret = json_encode($key);
-				echo $ret;
-			}
-			else{
-				$row = mysqli_fetch_object($result);
-				$priv_key = $row->priv_key;
-				$key = new stdClass();
-				$key->value =  $priv_key;
-				$ret = json_encode($key);
-				echo $ret;
-			}
-				
-			exit;
-		}		
-	}
-	
-	function update_session($session){
-		global $db_server,$db_user,$db_pwd, $db_name;
-		
-		$user = $session["user_id"];
-		$remote_app= $session["app_id"];
-		$remote_session = $session["session_id"];
-		
-		$con = mysqli_connect($db_server,$db_user,$db_pwd,$db_name);
-		// Check connection
-		if (mysqli_connect_errno())
-		{
-			echo "Failed to connect to MySQL: ".mysqli_connect_error();
-			exit;
-		}
-		
-		$select_sql = "SELECT 1 FROM ta_session WHERE remote_app = '".$remote_app."' and remote_session = '".$remote_session."'";
-		
-		if ($result = mysqli_query($con,$select_sql))
-		{
-			$row_num = mysqli_num_rows($result);
-			if($row_num==0){
-				$insert_sql = "INSERT INTO ta_session (remote_app, remote_session, user) VALUES ('".$remote_app."', '".$remote_session."', '".$user."')";
-		
-				if (!mysqli_query($con,$insert_sql))
-				{
-					echo 'Error: ' . mysqli_error($con);
-					exit;
-				}
-			}
-			else{
-				$update_sql="UPDATE ta_session SET user = '".$user."', modified_date=NOW() WHERE remote_app = '".$remote_app."' and remote_session = '".$remote_session."'";
-		
-				if (!mysqli_query($con,$update_sql))
-				{
-					echo 'Error: ' . mysqli_error($con);
-					exit;
-				}
-			}
-		}
-		else{
-			die('Error: ' . mysqli_error($con));
-		}	
-		
-		mysqli_close($con);
-	}
+require_once $dir.'/php/global.php';
 	
 	if($_GET["o"]=="style" && $_SERVER[REQUEST_METHOD]=="POST"){
 		// read data input
 		
 		$style = $_POST;		
 		
-		create_style($style);
+		style_post($style);
 		
 		echo "1 record added";
 		exit;
@@ -260,7 +21,7 @@ require_once $dir.'/includes/global_variable.php';
 		
 		$style_id = $_GET["p1"];		
 		
-		remove_style($style_id);
+		style_delete($style_id);
 		echo "1 record deleted";
 		
 		exit;
@@ -268,11 +29,12 @@ require_once $dir.'/includes/global_variable.php';
 	
 	if($_GET["o"]=="style" && $_SERVER[REQUEST_METHOD]=="PUT"){
 		// read data input
-	
-		parse_str(file_get_contents("php://input"),$style);
-	
-		update_style($style);
-		echo "1 record updated";
+		$input = file_get_contents("php://input");
+		//parse_str($input,$style);
+		$style=json_decode($input);
+		echo "received";
+		$ok = style_post($style);
+		echo $ok;
 		
 		exit;
 	}
@@ -430,5 +192,98 @@ require_once $dir.'/includes/global_variable.php';
 		$app_id = $_GET["p1"];
 		
 		get_new_key($app_id);
+		exit;
+	}	
+// selector
+	if($_GET["o"]=="selector" && $_GET["p1"]=="all" && $_SERVER[REQUEST_METHOD]=="GET"){
+	
+		$selectors = selector_get_all();
+	
+		echo json_encode($selectors);
+		exit;
 	}
 	
+	if($_GET["o"]=="selector" && $_SERVER[REQUEST_METHOD]=="POST"){
+		// read data input
+	
+		$selector = $_POST;
+	
+		selector_post($selector);
+	
+		echo "1 record added";
+		exit;
+	}	
+
+	if($_GET["o"]=="selector" && $_SERVER[REQUEST_METHOD]=="PUT"){
+		// read data input
+		$input = file_get_contents("php://input");
+		//parse_str($input,$style);
+		$selector=json_decode($input);
+		echo "received";
+		$ok = selector_post($selector);
+		echo $ok;
+	
+		exit;
+	}
+	
+	if($_GET["o"]=="selector" && $_SERVER[REQUEST_METHOD]=="DELETE"){
+		// read data input
+	
+		$selector_id = $_GET["p1"];
+	
+		selector_delete($selector_id);
+		echo "1 record deleted";
+	
+		exit;
+	}
+	
+// rule
+if($_GET["o"]=="rule" && $_GET["p1"]=="full" && $_SERVER[REQUEST_METHOD]=="GET"){
+
+	$rules = rule_get_full();
+
+	echo json_encode($rules);
+	exit;
+}
+	
+if($_GET["o"]=="rule" && $_GET["p1"]=="all" && $_SERVER[REQUEST_METHOD]=="GET"){
+	
+	$rules = rule_get_all();
+
+	echo json_encode($rules);
+	exit;
+}
+	
+if($_GET["o"]=="rule" && $_SERVER[REQUEST_METHOD]=="POST"){
+	// read data input
+
+	$rule = $_POST;
+
+	rule_post($rule);
+
+	echo "1 record added";
+	exit;
+}	
+
+if($_GET["o"]=="rule" && $_SERVER[REQUEST_METHOD]=="PUT"){
+	// read data input
+	$input = file_get_contents("php://input");
+	//parse_str($input,$style);
+	$rule=json_decode($input);
+	echo "received";
+	$ok = rule_post($rule);
+	echo $ok;
+
+	exit;
+}
+
+if($_GET["o"]=="rule" && $_SERVER[REQUEST_METHOD]=="DELETE"){
+	// read data input
+
+	$rule_id = $_GET["p1"];
+
+	rule_delete($rule_id);
+	echo "1 record deleted";
+
+	exit;
+}

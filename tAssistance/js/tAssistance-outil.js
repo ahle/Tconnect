@@ -216,121 +216,237 @@
 				while (g.hasChildNodes()) {
 				    g.removeChild(g.lastChild);
 				}
+			},
+			changeScale: function(g, scaleLevel){
+				tAssistance.svg.group.clear_all(g);
+			
+				var obsels = [];
+				if(localStorage["tAssistance.obsels"]){// get obsels from cache
+					obsels = JSON.parse(localStorage["tAssistance.obsels"]);
+				}
+				else{
+					//obsels = tAssistance.getObsels("http://213.223.171.36/ktbs/ozalid_exp/","trc_u1");		
+				}
+				
+				var scaleLevel = scaleLevel;
+				var width = 1000;
+				//tAssistance.clear_obsels();
+				var scale_x_time = width/tAssistance.datetime.units[scaleLevel];
+				var g = document.querySelector("g");
+				var timeoffset = parseFloat(g.getAttribute("timeoffset"));
+				var start = timeoffset - width/2/scale_x_time;
+				var end = timeoffset + width/2/scale_x_time;
+				
+				g.setAttribute("scale_x_time", scale_x_time);
+				g.setAttribute("scaleLevel", scaleLevel);
+				console.log("scale_x_time="+scale_x_time);
+				
+				// filter obsels
+				obsels = tAssistance.obsels.filter(obsels, start, end);
+				var log = {
+						"start": start,
+						"end": end,
+						"startD": tAssistance.datetime.utc2LocalDate(start),
+						"endD": tAssistance.datetime.utc2LocalDate(end),
+				}
+				console.log(log);
+				// diff obsels
+				var diffs = tAssistance.obsels.diff(document.querySelectorAll(".obsel"), obsels);		
+				
+				// draw obsels
+				var drawnObsels = tAssistance.svg.drawObsels(diffs["+"], g);		
+				// draw obsel labels as majors & minors
+				tAssistance.svg.drawObselLabels(drawnObsels);
+				// fire the changedScale event
+				if(document.createEvent){
+					event = document.createEvent("CustomEvent");
+					event.initEvent("changedScale", true, true);
+					event.data = {
+						"scaleLevel": scaleLevel,
+						"scale_x_time": scale_x_time
+					};
+					g.dispatchEvent(event);
+				}
 			}
 		},
 		touchpad: function(touchpad, g){
 			
 			touchpad.addEventListener('touchstart', function(e){
+				console.log("touchstart");
 		    	if(g==undefined) return;
 				if(!e) var e = window.event;
 		    	e.preventDefault();
 		    	
 		    	touchstart = "true";
-		        var posx = 0;
-		        var posy = 0;
-		        var touchobj = e.changedTouches[0];
-		        
-		        posx = touchobj.clientX;
-		        posy = touchobj.clientY;
-		        
-		        			        
-		        var transform_obj = tAssistance.svg.group.parse_transform(g);
-		        			        			        
-		        g.setAttribute("touchstart.x",posx);
-		        g.setAttribute("touchstart.y",posy);
-			 g.setAttribute("touchmove.x",posx);
-		        g.setAttribute("touchmove.y",posy);
-		        g.setAttribute("group.x",transform_obj["translate.x"]);
-		        g.setAttribute("group.y",transform_obj["translate.y"]);
-		        g.setAttribute("touchstart", touchstart);			    	
+				
+				var panning = false;
+				var zooming = false;
+				// save the translate x,y
+				var transform_obj = tAssistance.svg.group.parse_transform(g);
+				g.setAttribute("group.x",transform_obj["translate.x"]);
+				g.setAttribute("group.y",transform_obj["translate.y"]);
+		        g.setAttribute("touchstart", touchstart);	
+				
+				if(e.touches.length==1){
+					panning = true;
+					g.setAttribute("action","pan");
+				
+					var x0 = e.touches[0].clientX;
+					var y0 = e.touches[0].clientY;									
+					
+					// save the coordinates of touchstart										
+					g.setAttribute("touchstart.x0",x0);
+					g.setAttribute("touchstart.y0",y0);
+				}
+				if(e.touches.length==2){
+					zooming = true;
+					g.setAttribute("action","zoom");
+				
+					var x0 = e.touches[0].clientX;
+					var y0 = e.touches[0].clientY;
+					var x1 = e.touches[1].clientX;
+					var y1 = e.touches[1].clientY;
+					var startDistanceBetweenTwoFingers = Math.sqrt(Math.pow(x1-x0,2) + Math.pow(y1-y0,2));
+								
+					// save the coordinates of touchstart										
+					g.setAttribute("touchstart.x0",x0);
+					g.setAttribute("touchstart.y0",y0);
+					g.setAttribute("touchstart.x0",x1);
+					g.setAttribute("touchstart.y0",y1);
+					g.setAttribute("touchstart.distance",startDistanceBetweenTwoFingers);
+				}	    	
 		    	
 		    }, false);
 		    
 			touchpad.addEventListener('touchend', function(e){
-			if(g==undefined) return;
+				console.log("touchend");
+				if(g==undefined) return;
 		    	var touchstart = g.getAttribute("touchstart");
-			if(!touchstart || touchstart == "") return;
+				if(!touchstart || touchstart == "") return;
 
 		        if(!e) var e = window.event;
 		        e.preventDefault();	
-					    	
-			var touchstart_x = parseFloat(g.getAttribute("touchstart.x"));
-		    	var touchstart_y = parseFloat(g.getAttribute("touchstart.y"));
-		        var touchmove_x = parseFloat(g.getAttribute("touchmove.x"));
-		        var touchmove_y = parseFloat(g.getAttribute("touchmove.y"));
-		        var translate_x = touchmove_x - touchstart_x;
-		        var translate_y = touchmove_y - touchstart_y;
-
-			g.removeAttribute("touchstart");
-		    	g.removeAttribute("touchstart.x");
-		    	g.removeAttribute("touchstart.y");
-		    	g.removeAttribute("touchmove.x");
-		    	g.removeAttribute("touchmove.y");
-
-		    	// calculate newOffset
-			   	var oldTimeOffset = parseInt(g.getAttribute("timeoffset"));
-		    	var xoffset = parseInt(g.getAttribute("xoffset"));
-		    	var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
-		    	
-		    	var newTimeOffset = parseInt(oldTimeOffset - (translate_x/scale_x_time));
-		    	//g.setAttribute("transform","translate(0 0) scale(1 1)");
-		    	
-		    	tAssistance.svg.group.changeTimeOffset(g, newTimeOffset);
-		    	// fire a "changeTimeOffset" event 		    	
-		    	$(document).trigger("changeTimeOffset", {							
-								timeoffset: newTimeOffset,
-								time: new Date(),					
-		    	});
-		    	
-		    	var finish = new Date().getTime();// for debug
-		    	if(tAssistance.debug){
-		    		console.log("translate_x="+translate_x);
-		    		console.log("scale_x_time="+scale_x_time);
-		    		console.log("delta="+(newTimeOffset-oldTimeOffset));
-		    	}
-
+				
+				var action = g.getAttribute("action");
+				if(!g.getAttribute("touchmove.x0")) return;
+				
+				if(action=="pan"){
+					var touchstart_x0 = parseFloat(g.getAttribute("touchstart.x0"));
+					var touchstart_y0 = parseFloat(g.getAttribute("touchstart.y0"));					
+					var touchmove_x0 = parseFloat(g.getAttribute("touchmove.x0"));
+					var touchmove_y0 = parseFloat(g.getAttribute("touchmove.y0"));
+					var translate_x = touchmove_x0 - touchstart_x0;
+					var translate_y = touchmove_y0 - touchstart_y0;
+				
+					g.removeAttribute("touchstart");
+					g.removeAttribute("touchstart.x0");
+					g.removeAttribute("touchstart.y0");
+					g.removeAttribute("touchmove.x0");
+					g.removeAttribute("touchmove.y0");
+				
+					// calculate newOffset
+					var oldTimeOffset = parseInt(g.getAttribute("timeoffset"));
+					var xoffset = parseInt(g.getAttribute("xoffset"));
+					var scale_x_time = parseFloat(g.getAttribute("scale_x_time"));
+					
+					var newTimeOffset = parseInt(oldTimeOffset - (translate_x/scale_x_time));
+					//g.setAttribute("transform","translate(0 0) scale(1 1)");
+					
+					tAssistance.svg.group.changeTimeOffset(g, newTimeOffset);
+					// fire a "changeTimeOffset" event 		    	
+					$(document).trigger("changeTimeOffset", {							
+									timeoffset: newTimeOffset,
+									time: new Date(),					
+					});
+					
+					var finish = new Date().getTime();// for debug
+					if(tAssistance.debug){
+						console.log("translate_x="+translate_x);
+						console.log("scale_x_time="+scale_x_time);
+						console.log("delta="+(newTimeOffset-oldTimeOffset));
+					}
+				}else if(action=="zoom"){
+					var touchstart_distance = parseFloat(g.getAttribute("touchstart.distance"));
+					var touchmove_distance = parseFloat(g.getAttribute("touchmove.distance"));
+					var scaleLevel = parseFloat(g.getAttribute("scaleLevel")); 
+					if(touchmove_distance>touchstart_distance*1.5 && scaleLevel<10){// zoom in
+						scaleLevel = scaleLevel + 1;
+						tAssistance.svg.group.changeScale(g,scaleLevel);
+						
+					}else if(touchmove_distance<touchstart_distance/1.5 && scaleLevel>0){// zoom out
+						scaleLevel = scaleLevel - 1;
+						tAssistance.svg.group.changeScale(g,scaleLevel);				
+					}
+					
+					g.removeAttribute("touchstart");
+					g.removeAttribute("action");
+					g.removeAttribute("touchstart.x0");
+					g.removeAttribute("touchstart.y0");
+					g.removeAttribute("touchstart.x1");
+					g.removeAttribute("touchstart.y1");
+					g.removeAttribute("touchstart.distance");
+					g.removeAttribute("touchmove.x0");
+					g.removeAttribute("touchmove.y0");
+					g.removeAttribute("touchmove.x1");
+					g.removeAttribute("touchmove.y1");
+					g.removeAttribute("touchmove.distance");
+					
+				}
 		    }, false);
 		    
 			touchpad.addEventListener('touchmove',function(e){
+				//console.log("touchmove");
 				if(g==undefined) return;
 		    	if(!e) var e = window.event;
-		    	e.preventDefault();
+		    	//e.preventDefault();
 		    	
 		    	var touchstart = g.getAttribute("touchstart");
 		    	
 		        if(!touchstart || touchstart == "") return;
 		        
-		        var posx = 0;
-		        var posy = 0;
-		       
-		        var touchobj = e.changedTouches[0];
-		        
-		        posx = touchobj.clientX;
-		        posy = touchobj.clientY;
-		        
-		        var transform_obj = tAssistance.svg.group.parse_transform(g);
-		        
-		    	// read coordinations
-		    	var touchstart_x = parseFloat(g.getAttribute("touchstart.x"));
-		    	var touchstart_y = parseFloat(g.getAttribute("touchstart.y"));
-		        var group_x = parseFloat(g.getAttribute("group.x"));
-		        var group_y = parseFloat(g.getAttribute("group.y"));
-		    	
-			// set coorinations
-		        g.setAttribute("touchmove.x",posx);
-		        g.setAttribute("touchmove.y",posy);
+				var action = g.getAttribute("action");
+				if(action == "pan"){
+				
+					var x = e.touches[0].clientX;
+					var y = e.touches[0].clientY;
+					
+					var transform_obj = tAssistance.svg.group.parse_transform(g);
+					
+					// read coordinations
+					var touchstart_x0 = parseFloat(g.getAttribute("touchstart.x0"));
+					var touchstart_y0 = parseFloat(g.getAttribute("touchstart.y0"));
+					var group_x = parseFloat(g.getAttribute("group.x"));
+					var group_y = parseFloat(g.getAttribute("group.y"));
+					var translate_x  = x - touchstart_x0 + group_x;
+					var translate_y = group_y;
+					
+					// save coorinations
+					g.setAttribute("touchmove.x0",x);
+					g.setAttribute("touchmove.y0",y);
 
-
-		        // transform
-		    	
-		    	transform_obj["translate.x"] = posx - touchstart_x + group_x;		        
-		    	transform_obj["translate.y"] = group_y;
-		        		        
-		        g.setAttribute('transform', tAssistance.svg.group.make_transform_str(transform_obj));
+					// save to the transform
+					transform_obj["translate.x"] = translate_x;		        
+					transform_obj["translate.y"] = translate_y;					
+					g.setAttribute('transform', tAssistance.svg.group.make_transform_str(transform_obj));
+				}else if(action == "zoom"){
+					var x0 = e.touches[0].clientX;
+					var y0 = e.touches[0].clientY;
+					var x1 = e.touches[1].clientX;
+					var y1 = e.touches[1].clientY;
+					var endDistanceBetweenTwoFingers = Math.sqrt(Math.pow(x1-x0,2) + Math.pow(y1-y0,2));
+					
+					// save coorinations
+					g.setAttribute("touchmove.x0",x0);
+					g.setAttribute("touchmove.y0",y0);
+					g.setAttribute("touchmove.x0",x1);
+					g.setAttribute("touchmove.y0",y1);
+					g.setAttribute("touchmove.distance",endDistanceBetweenTwoFingers);					
+				}
 		    });
 		},
 		mousepad: function(mousepad, g){
 			mousepad.addEventListener("mousedown",function(e) {
+				//console.log("mousedown");
 				if(g==undefined) return;
 				mouseDown = "true";
 		        var posx = 0;
@@ -359,7 +475,8 @@
 		        
 		    });
 		    
-		    document.body.addEventListener("mouseup", function(e) {
+		    mousepad.addEventListener("mouseup", function(e) {
+				//console.log("mouseup");
 		    	if(g==undefined) return;
 		    	var mouseDown = g.getAttribute("mouseDown");		    	
 		        if(!mouseDown || mouseDown == "") return;
@@ -412,6 +529,7 @@
 		    });
 
 		    mousepad.addEventListener("mousemove",function(e){
+				//console.log("mousemove");
 		    	if(g==undefined) return;
 		    	if(!e) var e = window.event;
 		    	e.preventDefault();
@@ -457,7 +575,14 @@
 			//var g;
 			var y = tAssistance.svg.lines["line0"],
 			r = 8;
-				
+//			var rules = [{selector: "function(obsel){return obsel['@type']=='m:oze_view';}",
+//			             style: "function(obsel,auto){myCircle = document.createElementNS('http://www.w3.org/2000/svg','circle');myCircle.setAttributeNS(null,'cx', auto.x);myCircle.setAttributeNS(null,'cy', auto.y);myCircle.setAttributeNS(null,'r', auto.r);myCircle.setAttributeNS(null,'class', 'obsel');myCircle.setAttributeNS(null,'style','fill: yellow; stroke: black');return myCircle;}"
+//			}];
+			rules_str = localStorage["tAssistance.rules"];
+			rules = JSON.parse(rules_str);
+			
+			tAssistance.rules.translateRules(rules);			
+			
 			// make a svg
 			var svgNS = tAssistance.svg.svgNS;
 			var drawedObsels = [];
@@ -475,42 +600,53 @@
 				g.setAttribute("xoffset", 500);
 			}
 			var xoffset = parseInt(g.getAttribute("xoffset"));
-			
-			for(i=0;i<obsels.length;i++){
+			begin = new Date().getTime();
+			//for(i=0;i<obsels.length;i++){
+			for(var i=0;i<obsels.length;i++){
 				var obsel = obsels[i];
 				var utcBegin = obsel.begin;
 				var x = tAssistance.svg.getX(utcBegin, timeoffset, xoffset, scale_x_time);
 				
-				color = '#'+Math.floor(Math.random()*16777215).toString(16);
-			
-				myCircle = document.createElementNS(svgNS,"circle");
-				myCircle.setAttributeNS(null,"cx", x);
-				myCircle.setAttributeNS(null,"cy", y);
-				myCircle.setAttributeNS(null,"r", r);
-				myCircle.setAttributeNS(null,"class", "obsel");
-				myCircle.setAttributeNS(null,"style","fill: "+color+"; stroke: black");
-							
-				g.appendChild(myCircle);
-				myCircle.data = {
-					"obsel": obsel,
-					"time": utcBegin
-				};
-							
-				// attach the event
-				$(myCircle).click(function(e){
-					var obsel_in_html = tAssistance.obsel_property({
-			    		"obsel": this.data["obsel"], 
-			    		"container": "#controlPanel"
-			    		});
-					if(tAssistance.debug){
-						if(!window.selectedObsels)
-							window.selectedObsels = [];
-						window.selectedObsels.push(this);
-					}
-				});
-				drawedObsels.push(myCircle);
+				var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+				
+				var base = {
+					"x": x, "y": y, "color": color, "r": '10'
+				}
+				
+				drawnobsel = tAssistance.rules.applyRules(obsel,rules,base);
+				//drawnobsel = document.createElementNS(svgNS,"circle");
+				//drawnobsel.setAttributeNS(null,"cx", x);
+				//drawnobsel.setAttributeNS(null,"cy", y);
+				//drawnobsel.setAttributeNS(null,"r", r);
+				//drawnobsel.setAttributeNS(null,"class", "obsel");
+				//drawnobsel.setAttributeNS(null,"style","fill: "+color+"; stroke: black");
+								
+				if(drawnobsel!=null){
+					g.appendChild(drawnobsel);
+					drawnobsel.data = {
+						"obsel": obsel,
+						"time": utcBegin
+					};
+								
+					// attach the event
+					$(drawnobsel).click(function(e){
+						var obsel_in_html = tAssistance.obsel_property({
+				    		"obsel": this.data["obsel"], 
+				    		"container": "#controlPanel"
+				    		});
+						if(tAssistance.debug){
+							if(!window.selectedObsels)
+								window.selectedObsels = [];
+							window.selectedObsels.push(this);
+						}
+					});
+					drawedObsels.push(drawnobsel);
+				}
 				//console.log("obsel: begin="+utcBegin+", x="+x);
 			}
+			end = new Date().getTime();
+			console.log("performance: "+(end-begin));
+			
 			if(tAssistance.debug){				
 				window.drawedObsels = drawedObsels;
 				
@@ -702,6 +838,7 @@
 			var svgNS = tAssistance.svg.svgNS;
 			drawedminutes = [];
 			
+
 			for(var i=0;i<minutes.length;i++){
 				var iDate = minutes[i];
 				var iDateInt = iDate.getTime();
@@ -1332,32 +1469,32 @@
 			if(drawedObsels.length==0) return;
 			var firstSvgObsel = drawedObsels[0];
 			var g = firstSvgObsel.parentNode;
-			var unit = g.data["unit"];
+			var scaleLevel = parseFloat(g.getAttribute("scaleLevel"));
 			
-			if(unit==0||unit==1||unit==2){// year, 6 months, 3 months
+			if(scaleLevel==0||scaleLevel==1||scaleLevel==2){// year, 6 months, 3 months
 				tAssistance.svg.drawYears(drawedObsels);
 				tAssistance.svg.drawMonths1(drawedObsels);
 			}
-			else if(unit==3){// month
+			else if(scaleLevel==3){// month
 				tAssistance.svg.drawMonths(drawedObsels);
 				tAssistance.svg.drawDates1(drawedObsels);
-			}else if(unit==4){// week
+			}else if(scaleLevel==4){// week
 				tAssistance.svg.drawWeeks(drawedObsels);
 				tAssistance.svg.drawDates1(drawedObsels);
 			}
-			else if(unit==5||unit==6){// day, 12 hours
+			else if(scaleLevel==5||scaleLevel==6){// day, 12 hours
 				tAssistance.svg.drawDates(drawedObsels);
 				tAssistance.svg.drawHours1(drawedObsels);					
 			}
-			else if(unit==7||unit==8){// hour, 30 minutes
+			else if(scaleLevel==7||scaleLevel==8){// hour, 30 minutes
 				tAssistance.svg.drawHours(drawedObsels);
 				tAssistance.svg.drawMinutes1(drawedObsels);
 			}
-			else if(unit==9){// minutes, 30 minutes
+			else if(scaleLevel==9){// minutes, 30 minutes
 				tAssistance.svg.drawMinutes(drawedObsels);
 				tAssistance.svg.drawSeconds1(drawedObsels);
 			}
-			else if(unit==10){// seconds
+			else if(scaleLevel==10){// seconds
 				tAssistance.svg.drawSeconds(drawedObsels);
 				tAssistance.svg.draw01Seconds1(drawedObsels);
 			}
@@ -1416,7 +1553,7 @@
 			};
 			var matchedIds = [];
 			
-			for(i=0;i<obsels.length;i++){
+			for(var i=0;i<obsels.length;i++){
 				var obsel = obsels[i];
 				var isMatched = false;
 				
@@ -1451,7 +1588,7 @@
 
 		getMonths_svg: function(svgObsels){
 			var months = [];
-			for(i=0;i<svgObsels.length;i++){
+			for(var i=0;i<svgObsels.length;i++){
 				var svgObsel = svgObsels[i];
 				// get dateTime from begin				
 				var obsel = svgObsel.data["obsel"];
@@ -1472,7 +1609,7 @@
 		},
 		getDates_svg: function(svgObsels){
 			var dates = [];
-			for(i=0;i<svgObsels.length;i++){
+			for(var i=0;i<svgObsels.length;i++){
 				var svgObsel = svgObsels[i];
 				// get dateTime from begin				
 				var obsel = svgObsel.data["obsel"];
@@ -1493,7 +1630,7 @@
 		getHours_svg: function(svgObsels){
 			
 			var hours = [];
-			for(i=0;i<svgObsels.length;i++){
+			for(var i=0;i<svgObsels.length;i++){
 				var svgObsel = svgObsels[i];
 				var obsel = svgObsel.data["obsel"];
 				// get dateTime from begin
@@ -1512,7 +1649,7 @@
 		},
 		getMinutes_svg: function(svgObsels){
 			var minutes = [];
-			for(i=0;i<svgObsels.length;i++){
+			for(var i=0;i<svgObsels.length;i++){
 				var svgObsel = svgObsels[i];
 				// get dateTime from begin				
 				var obsel = svgObsel.data["obsel"];
@@ -1532,7 +1669,7 @@
 		},
 		getSeconds_svg: function(svgObsels){
 			var seconds = [];
-			for(i=0;i<svgObsels.length;i++){
+			for(var i=0;i<svgObsels.length;i++){
 				var svgObsel = svgObsels[i];
 				// get dateTime from begin				
 				var obsel = svgObsel.data["obsel"];
@@ -1552,7 +1689,7 @@
 		},
 		get01Seconds_svg: function(svgObsels){
 			var _01seconds = [];
-			for(i=0;i<svgObsels.length;i++){
+			for(var i=0;i<svgObsels.length;i++){
 				var svgObsel = svgObsels[i];
 				// get dateTime from begin				
 				var obsel = svgObsel.data["obsel"];
@@ -1572,7 +1709,7 @@
 		},
 		getHours: function(obsels){
 			var hours = [];
-			for(i=0;i<obsels.length;i++){
+			for(var i=0;i<obsels.length;i++){
 				// get dateTime from begin				
 				var obsel = obsels[i];
 				// get dateTime from begin
@@ -1604,7 +1741,139 @@
 	};
 	
 	tAssistance.event = {
-					
+		
+	}
+	
+	tAssistance.rules = {
+		applyRules: function(obsel,rules,base){
+			var drawnObsel = null;
+			for(var i=0;i<rules.length;i++){
+				var rule = rules[i];
+												
+				var pass = rule.selectorFn(obsel);
+				
+				if(pass){
+					drawnObsel = rule.styleFn(obsel,base);
+					drawnObsel.setAttributeNS(null,'class', 'obsel');// attributes for system design
+					return drawnObsel;
+				}				
+			}
+			return drawnObsel;
+		},
+		translateRules: function(rules){			
+			for(var i=0;i<rules.length;i++){
+				var rule = rules[i];
+				var selector_script = rule.selector;
+				var style_script = rule.style;
+				
+				eval("rule.selectorFn = "+selector_script+";");
+				eval("rule.styleFn = "+style_script+";");								
+			}			
+		},
+		getNewRules: function(){
+			$.get("api.php?o=rule&fn=all",function(data){
+				localStorage["rules"]= JSON.parse(data);				
+			});			
+		},			
+			
+	}
+	
+	tAssistance.data = {// an another implementation like jQuery.data
+		"_data": [],
+		setData: function(node, data){
+			var pos = tAssistance.data.indexOf(node);
+			if(pos==-1){			
+				tAssistance.data["_data"].push([node, data]);
+			}
+			else{
+				tAssistance.data["_data"][pos] = [node, data];
+			}
+			
+		},
+		indexOf: function(node){
+			for(var i=0;i<tAssistance.data["_data"].length;i++){
+				var data = tAssistance.data["_data"][i];
+				if(node==data[0]) return i;
+			}
+			return -1;
+		},
+		getData: function(node){
+			var pos = tAssistance.data.indexOf(node);
+			if(pos!=-1){
+				return tAssistance.data["_data"][pos][1];
+			}
+			else{
+				return null;
+			}
+		},
+		
+	}
+	
+	tAssistance.message = {
+		obsel: function(event_data){
+			var user_id = event_data.user_id;
+			var base_uri = event_data.base_uri;
+			var trace_id = event_data.trace_uri;			
+			
+			console.log("a message type=obsel is received !");
+			var mgr = tService.TraceManager({
+				base_uri: base_uri,
+				async: true
+			});
+			var trc = mgr.initTrace({
+				name: trace_id
+			});
+			trc.getObsels({
+				success: function(obsels){
+					localStorage["tAssistance.obsels"] = JSON.stringify(obsels);				
+				}
+			});
+		},
+		trace: function(event_data){
+			var user_id = event_data.user_id;
+			var base_uri = event_data.base_uri;
+			var trace_id = event_data.trace_uri;		
+			
+			console.log("a message type=trace is received !");
+			var params = {
+				"user_id": user_id,
+				"base_uri": base_uri,
+				"trace_id": trace_uri
+			}
+			tAssistance.http.customReq("index.php?page=TraceView",params, "post");
+			
+		},			
+	}
+	tAssistance.http = {
+		customReq: function(url, params, method) {
+		    method = method || "post"; // Set method to post by default if not specified.
+
+		    // The rest of this code assumes you are not using a library.
+		    // It can be made less wordy if you use one.
+		    var form = document.createElement("form");
+		    form.setAttribute("method", method);
+		    form.setAttribute("action", url);
+
+		    for(var key in params) {
+		        if(params.hasOwnProperty(key)) {
+		            var hiddenField = document.createElement("input");
+		            hiddenField.setAttribute("type", "hidden");
+		            hiddenField.setAttribute("name", key);
+		            hiddenField.setAttribute("value", params[key]);
+
+		            form.appendChild(hiddenField);
+		         }
+		    }
+
+		    document.body.appendChild(form);
+		    form.submit();
+		}
+	}
+	
+	tAssistance.obsel = {
+		id: "@id",
+		type: "@type",
+		
 	}
 	
 	

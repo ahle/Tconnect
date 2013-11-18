@@ -328,6 +328,7 @@ tAssistance.processKeyPress = function(g,evt){
 	 * @desc format the obsels in html */
 	tAssistance.trace_view = function(options){
 		var trace_uri = options.trace_uri;
+		var fnSuccess = options.success;
 		
 		function parse_trace_uri(trace_uri){
 			var str = trace_uri;
@@ -360,7 +361,8 @@ tAssistance.processKeyPress = function(g,evt){
 		trc.get_obsels({			
 			success: function(obsels){
 				// save received obsels in the localStorage
-				localStorage["obsels"] = JSON.stringify(obsels);			
+				localStorage["tAssistance.obsels"] = JSON.stringify(obsels);
+				
 				
 				console.log("test trace_read correctly");
 				
@@ -398,6 +400,7 @@ tAssistance.processKeyPress = function(g,evt){
 				var g = document.createElementNS(svgNS,"g");				
 				g.setAttribute("transform","translate(0 0) scale(1 1)");
 				g.setAttribute("scale_x_time", 1000/tAssistance.datetime.units[0]);
+				g.setAttribute("scaleLevel", "0");
 				svg.appendChild(g);
 				g.data = {
 					"obsels": obsels
@@ -416,7 +419,7 @@ tAssistance.processKeyPress = function(g,evt){
 				tAssistance.svg.drawMonths1(drawedObsels);
 				
 				// add Keydown event
-			    $(document).keydown(function(e){
+			    $(svg).keydown(function(e){
 			    	tAssistance.processKeyPress(g,e);
 			    });		    
 		    	// add MouseEvents		    
@@ -424,7 +427,9 @@ tAssistance.processKeyPress = function(g,evt){
 			    
 			    // add TouchEvents
 			    tAssistance.svg.touchpad(rect,g);
-			    
+			    // fire events for loading traces
+				fnSuccess();
+				
 			    if(tAssistance.debug){// debug
 			    	window.svg = svg;
 			    }			    
@@ -449,4 +454,404 @@ tAssistance.getObsels = function(base_uri, name, callback){
 			callback(obsels);
 		}		
 	});	
+}
+
+tAssistance.loadUserPreference = function(){
+	// enable bootstrap-select
+	$('.selectpicker').selectpicker();
+	// 
+	
+	// save style
+	
+	// save rule
+};
+
+tAssistance.selector = {
+	renderEditor: function(parentNode){
+		$.get("index.php?page=selector&p1=new",function(data){
+			$(parentNode).empty().append(data);
+			
+			var btSave = parentNode.querySelector("button[name='save']");
+			btSave.addEventListener("click",function(){
+				var script = "";
+				
+				console.log("custom is logged");
+				var selector_id = parentNode.querySelector("input[name='id']").value;
+				var script = parentNode.querySelector("textarea[name='script']").value;						
+				
+				var selector = { "id": selector_id, "script": script };
+										
+				 $.ajax({
+					  type: "PUT",
+					  url: "api.php?o=selector",
+					 data: JSON.stringify(selector)
+					})
+					  .done(function( msg ) {
+						console.log( "The selector is posted!");
+					    tAssistance.selector.renderList(parentNode);
+					  });
+			});
+			var btClose = parentNode.querySelector("button.close");
+			btClose.addEventListener("click", function(){
+				parentNode.innerHTML='';					
+			});
+		});
+	},
+	renderList: function(parentNode){
+		$.get("index.php?page=selector&p1=all",function(data){
+			$(parentNode).empty().append(data);
+			
+			// add event listeners
+			var btNew = parentNode.querySelector("button[name='new']");
+			var btRemove = parentNode.querySelector("button[name='remove']");
+			btNew.addEventListener("click",function(){
+				tAssistance.selector.renderEditor(parentNode);
+			});
+			
+			btRemove.addEventListener("click",function(){
+				var checkboxes = parentNode.querySelectorAll("input[type='checkbox']");
+				for(var i=0;i<checkboxes.length;i++){
+					var checkbox = checkboxes[i];
+					if(checkbox.checked){
+						var selector_id = checkbox.name;
+						$.ajax({
+							  type: "DELETE",
+							  url: "api.php?o=selector&p1="+selector_id,
+							})
+							  .done(function( msg ) {
+							    console.log( "Delete selector !");
+							    tAssistance.selector.renderList(parentNode);
+							  });
+					}
+				}				
+			});
+			
+		});
+	},
+	renderType: function(parentNode){
+		
+	}
+};
+
+tAssistance.rule = {
+	renderEditor: function(parentNode){
+		$.get("index.php?page=rule&p1=new",function(data){
+			$(parentNode).empty().append(data);
+			
+			// add event listeners
+			var btSave = parentNode.querySelector("button[name='save']");
+			btSave.addEventListener("click",function(){
+				var script = "";
+				
+				var rule_id = parentNode.querySelector("input[name='id']").value;
+				var select_selector = parentNode.querySelector("select[name='selector']");
+				var selector_id = select_selector.value;
+				var select_style = parentNode.querySelector("select[name='style']");
+				var style_id = select_style.value;
+				var priority =  parentNode.querySelector("input[name='priority']").value;
+				
+				var rule = {
+					"id": rule_id,
+					"selector": selector_id,
+					"style": style_id,
+					"priority": priority
+				}
+				
+				$.ajax({
+					  type: "PUT",
+					  url: "api.php?o=rule",
+					 data: JSON.stringify(rule)
+					})
+					  .done(function( msg ) {
+						console.log( "The rule is posted!");
+					    tAssistance.rule.renderList(parentNode);
+					  });
+				
+			});
+			var btClose = parentNode.querySelector("button.close");
+			btClose.addEventListener("click", function(){
+				parentNode.innerHTML='';					
+			});
+		});
+	},
+	renderList: function(parentNode){
+		$.get("index.php?page=rule&p1=all",function(data){
+			$(parentNode).empty().append(data);
+			
+			// add event listeners
+			var btNew = parentNode.querySelector("button[name='new']");
+			var btRemove = parentNode.querySelector("button[name='remove']");
+			btNew.addEventListener("click",function(){
+				tAssistance.rule.renderEditor(parentNode);
+			});
+			
+			btRemove.addEventListener("click",function(){
+				var checkboxes = parentNode.querySelectorAll("input[type='checkbox']");
+				for(var i=0;i<checkboxes.length;i++){
+					var checkbox = checkboxes[i];
+					if(checkbox.checked){
+						var rule_id= checkbox.name;
+						$.ajax({
+							  type: "DELETE",
+							  url: "api.php?o=rule&p1="+rule_id,
+							})
+							  .done(function( msg ) {
+							    console.log( "Delete rule !");
+							    tAssistance.rule.renderList(parentNode);
+							  });
+					}
+				}
+				
+				
+			});
+		});
+	},
+	loadRules: function(){
+		$.get("api.php?o=rule&p1=full",function(data){
+			localStorage["tAssistance.rules"] = data;
+			if(document.createEvent){
+				event = document.createEvent("CustomEvent");
+				event.initEvent("loadedRules", true, true);
+				event.data = {};
+				document.dispatchEvent(event);
+			}
+		});
+	},
+}
+tAssistance.style = {
+	renderEditor: function(parentNode){
+			$.get("index.php?page=style&p1=new",function(data){
+				// render the html elements for editor
+				$(parentNode).empty().append(data);
+				// add event listeners
+				var btSave = parentNode.querySelector("button[name='save']");
+				btSave.addEventListener("click",function(){
+					var script = "";
+					if(parentNode.data_element=="circle"){
+						var style_id = parentNode.querySelector("input[name='style_id']").value;
+						var cx = parentNode.querySelector("input[name='cx']").value;
+						var cy = parentNode.querySelector("input[name='cy']").value;
+						var r =  parentNode.querySelector("input[name='r']").value;
+						var color =  parentNode.querySelector("input[name='color']").value || 'orange';
+						
+						var params = {"cx": cx, "cy": cy, "r": r, "color": color};
+						
+						var script_no_input = "function(obsel,auto){" +
+						"drawnObsel = document.createElementNS('http://www.w3.org/2000/svg','circle');" +
+						"drawnObsel.setAttributeNS(null,'cx', '%cx%' || auto.x );" +
+						"drawnObsel.setAttributeNS(null,'cy', '%cy%' || auto.y );" +
+						"drawnObsel.setAttributeNS(null,'r', '%r%' || auto.r );" +
+						"drawnObsel.setAttributeNS(null,'style','fill: %color%; stroke: black');" +
+						"return drawnObsel;" +
+						"}";
+						var script = script_no_input;
+						for(var name in params){
+							script = script.replace('%'+name+'%', params[name]);
+						}
+						
+						var style = { "id": style_id, "script": script };
+						
+						 $.ajax({
+							  type: "PUT",
+							  url: "api.php?o=style",
+							  data: JSON.stringify(style)
+							})
+							  .done(function( msg ) {
+							    console.log( "The style is posted!");
+							    tAssistance.style.renderList(parentNode);
+							  });
+						
+					}
+					else if(parentNode.data_element=="custom"){
+						console.log("custom is logged");
+						var style_id = parentNode.querySelector("input[name='style_id']").value;
+						var script = parentNode.querySelector("textarea[name='script']").value;						
+						
+						var style = { "id": style_id, "script": script };
+												
+						 $.ajax({
+							  type: "PUT",
+							  url: "api.php?o=style",
+							 data: JSON.stringify(style)
+							})
+							  .done(function( msg ) {
+								console.log( "The style is posted!");
+							    tAssistance.style.renderList(parentNode);
+							  });
+						
+					}
+					
+					
+					
+					var form = document.querySelector("#style_editor");
+					//tAssistance.style.post(form);
+				});
+				var btClose = parentNode.querySelector("button.close");
+				btClose.addEventListener("click", function(){
+					parentNode.innerHTML='';					
+				});
+				
+				var select_element = parentNode.querySelector("select[name='elements']");
+				// load element parameters
+				select_element.addEventListener("change", function(e){
+					console.log(e);
+					var value = null;
+					var options = select_element.getElementsByTagName("option");
+					for(var i=0;i<options.length;i++){
+						var option = options[i];
+						if(option.selected){
+							value=option.value;
+						}
+					}
+					tAssistance.style.renderElement(parentNode,value);
+					
+				},false);
+			});
+		},
+	renderList: function(parentNode){
+			$.get("index.php?page=style&p1=all",function(data){
+				$(parentNode).empty().append(data);
+				// add event listeners
+				var btNew = parentNode.querySelector("button[name='new']");
+				var btRemove = parentNode.querySelector("button[name='remove']");
+				btNew.addEventListener("click",function(){
+					tAssistance.style.renderEditor(parentNode);
+				});
+				
+				btRemove.addEventListener("click",function(){
+					var checkboxes = parentNode.querySelectorAll("input[type='checkbox']");
+					for(var i=0;i<checkboxes.length;i++){
+						var checkbox = checkboxes[i];
+						if(checkbox.checked){
+							var style_id= checkbox.name;
+							$.ajax({
+								  type: "DELETE",
+								  url: "api.php?o=style&p1="+style_id,
+								})
+								  .done(function( msg ) {
+								    console.log( "Delete style !");
+								    tAssistance.style.renderList(parentNode);
+								  });
+						}
+					}
+					
+					
+				});
+				
+			});
+		},
+	post: function(formNode){
+			
+			var style_id = formNode.querySelector("input[name='style_id']").value;
+			var style =	"function(obsel){" +
+				"myCircle = document.createElementNS(svgNS,'circle');" +
+				"myCircle.setAttributeNS(null,'cx', x);" +
+				"myCircle.setAttributeNS(null,'cy', y);" +
+				"myCircle.setAttributeNS(null,'r', r);" +
+				"myCircle.setAttributeNS(null,'class', 'obsel');" +
+				"myCircle.setAttributeNS(null,'style','fill: yellow; stroke: black');" +
+				"return myCircle;" +
+				"}";
+				
+			
+			 
+		},
+	renderElement: function(parentNode,element){
+		if(element=="circle"){
+			var element_div = parentNode.querySelector("div[name='element_config']");
+			
+			var html="";
+			html += "<div class='control-group'>";
+			html += "<label class='col-xs-2 control-label'>Cx<\/label>";
+			html += "  <div class='controls'>";
+			html += "    <input type='number' name='cx' placeholder='auto' class='span1'>";
+			html += "  <\/div>";
+			html += "<\/div>";
+			html += "<div class='control-group'>";
+			html += "<label class='col-xs-2 control-label'>Cy<\/label>";
+			html += "  <div class='controls'>";
+			html += "    <input type='number' name='cy' placeholder='auto' class='span1'>";
+			html += "  <\/div>";
+			html += "<\/div>";
+			html += "<div class='control-group'>";
+			html += "  <label class='col-xs-2 control-label'>Radius<\/label>";
+			html += "  <div class='controls'>";
+			html += "    <input type='number' name='r' placeholder='auto' class='span1'>";
+			html += "  <\/div>";	
+			html += "<\/div>";
+			html += "<div class='control-group'>";
+			html += "  <label class='col-xs-2 control-label'>Color<\/label>";
+			html += "  <div class='controls'>";
+			html += "    <input type='text' name='color' placeholder='auto' class='span1'>";
+			html += "  <\/div>";
+			html += "<\/div>";
+			html += "";
+
+			element_div.innerHTML = html;
+			parentNode.data_element = "circle";
+		}
+		else if(element=="rect"){
+			var element_div = parentNode.querySelector("div[name='element_config']");
+			
+			var html="";
+			html += "<div class='control-group'>";
+			html += "<label class='col-xs-2 control-label'>x<\/label>";
+			html += "  <div class='controls'>";
+			html += "    <input type='number' name='x' placeholder='auto' class='span1'>";
+			html += "  <\/div>";
+			html += "<\/div>";
+			html += "<div class='control-group'>";
+			html += "<label class='col-xs-2 control-label'>y<\/label>";
+			html += "  <div class='controls'>";
+			html += "    <input type='number' name='y' placeholder='auto' class='span1'>";
+			html += "  <\/div>";
+			html += "<\/div>";
+			html += "<div class='control-group'>";
+			html += "  <label class='col-xs-2 control-label'>width<\/label>";
+			html += "  <div class='controls'>";
+			html += "    <input type='number' name='width' placeholder='auto' class='span1'>";
+			html += "  <\/div>";
+			html += "<\/div>";
+			html += "<div class='control-group'>";
+			html += "  <label class='col-xs-2 control-label'>height<\/label>";
+			html += "  <div class='controls'>";
+			html += "    <input type='number' name='height' placeholder='auto' class='span1'>";
+			html += "  <\/div>";
+			html += "<\/div>";
+			
+			element_div.innerHTML = html;
+			parentNode.data_element = "rect";
+
+		}
+		else if(element=="custom"){
+			var element_div = parentNode.querySelector("div[name='element_config']");
+			
+			var html="";
+			html += "<div class=\"control-group\">";
+			html += "<label class=\"col-xs-2 control-label\">Script <\/label>";
+			html += "  <div class=\"controls\">";
+			html += "    <textarea name=\"script\" class=\"span3\" rows=\"10\" placeholder=\"The syntax used is Javascript. The defined variables can be used as x,y\">";
+			html += "function(obsel,base){\n" +
+					"drawnObsel = document.createElementNS('http:\/\/www.w3.org\/2000\/svg','circle');\n" +
+					"drawnObsel.setAttributeNS(null,'cx', '' || base.x );\n" +
+					"drawnObsel.setAttributeNS(null,'cy', '' || base.y );\n" +
+					"drawnObsel.setAttributeNS(null,'r', '' || base.r );\n" +
+					"drawnObsel.setAttributeNS(null,'style','fill: yellow; stroke: black');\n" +
+					"return drawnObsel;\n" +
+					"}";		
+			html += "<\/textarea>  ";
+			html += "  <\/div>";
+			html += "<\/div>";
+			
+			element_div.innerHTML = html;
+			parentNode.data_element = "custom";
+
+		}
+		
+		
+		
+		
+		
+		
+	}
 }

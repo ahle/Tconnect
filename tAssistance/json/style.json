@@ -1,0 +1,14 @@
+[
+    {
+        "id": "m:oze_view",
+        "script": "function(obsel,auto){drawnObsel = document.createElementNS('http://www.w3.org/2000/svg','circle');drawnObsel.setAttributeNS(null,'cx', '' || auto.x );drawnObsel.setAttributeNS(null,'cy', '' || auto.y );drawnObsel.setAttributeNS(null,'r', '' || auto.r );drawnObsel.setAttributeNS(null,'style','fill: yellow; stroke: black');return drawnObsel;}"
+    },
+    {
+        "id": "m:oze_idg",
+        "script": "function(obsel,auto){drawnObsel = document.createElementNS('http://www.w3.org/2000/svg','circle');drawnObsel.setAttributeNS(null,'cx', '' || auto.x );drawnObsel.setAttributeNS(null,'cy', '' || auto.y );drawnObsel.setAttributeNS(null,'r', '8' || auto.r );drawnObsel.setAttributeNS(null,'style','fill: green; stroke: black');return drawnObsel;}"
+    },
+    {
+        "id": "m:oze_cw",
+        "script": "function(obsel,auto){\ndrawnObsel = document.createElementNS('http://www.w3.org/2000/svg','circle');\ndrawnObsel.setAttributeNS(null,'cx', '' || auto.x );\ndrawnObsel.setAttributeNS(null,'cy', '60' || auto.y );\ndrawnObsel.setAttributeNS(null,'r', '' || auto.r );\ndrawnObsel.setAttributeNS(null,'style','fill: orange; stroke: black');\nreturn drawnObsel;\n}"
+    }
+]
