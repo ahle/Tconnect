@@ -5,7 +5,7 @@ require_once $dir.'/php/global.php';
 
 $session_id = session_id();
 #$user_id = get_user($session_id); // comment for debug
-$user_id = "isabelle_josse";// debug, need to be uncommented
+$user_id = "u1";// debug, need to be uncommented
 $application_server_url = "https://ozalid.orange-labs.fr/oz/ws/open/page/";
 
 if($_GET["page"]=="TraceView" && $_GET["mode"]=="admin"){
@@ -20,12 +20,21 @@ if($_GET["page"]=="TraceView" && $_GET["mode"]=="admin"){
 	exit;
 }
 
+if($_GET["page"]=="TraceView" && $_SERVER[REQUEST_METHOD]=="GET"){
+	
+	$page = file_get_contents($root_dir."/html/boot.html");
+
+	echo $page;
+	exit;
+}
+
 if($_GET["page"]=="TraceView" && $_SERVER[REQUEST_METHOD]=="POST"){
-	global $base_uri;
+	//global $base_uri;
+	
 	$message = $_POST;
-	$base_uri = $message->base_uri;
-	$trace_id = $message->trace_id;
-	$user_id = $message->user_id;
+	$base_uri = $message["base_uri"];
+	$trace_id = $message["trace_id"];
+	$user_id = $message["user_id"];
 	$trace_uri = $base_uri.$trace_id."/";
 
 	$page = file_get_contents($root_dir."/html/Trace.html");

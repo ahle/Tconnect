@@ -1,1 +1,30 @@
-[{"id":"Affiche d'une vue particuliere","script":"function(obsel){\n\tif(obsel[\"@type\"]==\"m:oze_view\"){\n\t\treturn true;\n\t}\n\treturn false;\n}\n    "},{"id":"Session utilisateur","script":"function(obsel){\n\tif(obsel['@type']=='m:oze_idg'){\n\t\treturn true;\n\t}\n\treturn false;\n}\n    "},{"id":"Correction d'un mot","script":"function(obsel){\n\tif(obsel['@type']=='m:ozec_w'){\n\t\treturn true;\n\t}\n\treturn false;\n}\n    "},{"id":"Afficher une sous-vue particuliere","script":"function(obsel){\tif(obsel['@type']=='m:oze_subview'){\t\treturn true;\t}\treturn false;}"},{"id":"autre \u00e9v\u00e8nement","script":"function(obsel){\tif(obsel['@type']=='m:ozem_fn'){\t\treturn true;\t}\treturn false;}"},{"id":"Valider un mot","script":"function(obsel){\tif(obsel['@type']=='m:ozev_w'){\t\treturn true;\t}\treturn false;}"}]
+[
+    {
+        "id": "Affiche d'une vue particuliere",
+        "script": "function(obsel){\n\tif(obsel[\"@type\"]==\"m:oze_view\"){\n\t\treturn true;\n\t}\n\treturn false;\n}\n    "
+    },
+    {
+        "id": "Session utilisateur",
+        "script": "function(obsel){\n\tif(obsel['@type']=='m:oze_idg'){\n\t\treturn true;\n\t}\n\treturn false;\n}\n    "
+    },
+    {
+        "id": "Correction d'un mot",
+        "script": "function(obsel){\n\tif(obsel['@type']=='m:ozec_w'){\n\t\treturn true;\n\t}\n\treturn false;\n}\n    "
+    },
+    {
+        "id": "Afficher une sous-vue particuliere",
+        "script": "function(obsel){\tif(obsel['@type']=='m:oze_subview'){\t\treturn true;\t}\treturn false;}"
+    },
+    {
+        "id": "autre évènement",
+        "script": "function(obsel){\tif(obsel['@type']=='m:ozem_fn'){\t\treturn true;\t}\treturn false;}"
+    },
+    {
+        "id": "Valider un mot",
+        "script": "function(obsel){\tif(obsel['@type']=='m:ozev_w'){\t\treturn true;\t}\treturn false;}"
+    },
+    {
+        "id": "click",
+        "script": "function(obsel){\tif(obsel['@type']=='m:click'){\t\treturn true;\t}\treturn false;}"
+    }
+]

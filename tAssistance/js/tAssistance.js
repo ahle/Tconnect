@@ -725,7 +725,45 @@ tAssistance.style = {
 							script = script.replace('%'+name+'%', params[name]);
 						}
 						
-						var style = { "id": style_id, "script": script, "icon": icon };
+						var style = { "id": style_id, "script": script, "icon": icon || "img/default.png"};
+						
+						 $.ajax({
+							  type: "PUT",
+							  url: "api.php?o=style",
+							  data: JSON.stringify(style)
+							})
+							  .done(function( msg ) {
+							    console.log( "The style is posted!");
+							    tAssistance.style.renderList(parentNode);
+							  });
+						
+					}
+					else if(parentNode.data_element=="image"){
+						var style_id = parentNode.querySelector("input[name='style_id']").value;
+						var icon = parentNode.querySelector("input[name='icon']").value;
+						var x = parentNode.querySelector("input[name='x']").value;
+						var y = parentNode.querySelector("input[name='y']").value;
+						var width =  parentNode.querySelector("input[name='width']").value;
+						var height =  parentNode.querySelector("input[name='height']").value;
+						var href =  parentNode.querySelector("input[name='href']").value;
+						
+						var params = {"x": x, "y": y, "width": width, "height": height,"href": href};
+						
+						var script_no_input = "function(obsel,auto){" +
+						"drawnObsel = document.createElementNS('http://www.w3.org/2000/svg','image');" +
+						"drawnObsel.setAttributeNS(null,'x', '%x%' || auto.x );" +
+						"drawnObsel.setAttributeNS(null,'y', '%y%' || auto.y );" +
+						"drawnObsel.setAttributeNS(null,'width', '%width%' || '20' );" +
+						"drawnObsel.setAttributeNS(null,'height', '%height%' || '20' );" +
+						"drawnObsel.setAttributeNS(null,'xlink:href', '%href%' || '' );" +
+						"return drawnObsel;" +
+						"}";
+						var script = script_no_input;
+						for(var name in params){
+							script = script.replace('%'+name+'%', params[name]);
+						}
+						
+						var style = { "id": style_id, "script": script, "icon": icon || "img/default.png" };
 						
 						 $.ajax({
 							  type: "PUT",
@@ -744,7 +782,7 @@ tAssistance.style = {
 						var icon = parentNode.querySelector("input[name='icon']").value;
 						var script = parentNode.querySelector("textarea[name='script']").value;						
 						
-						var style = { "id": style_id, "script": script, "icon": icon };
+						var style = { "id": style_id, "script": script, "icon": icon || "img/default.png"};
 												
 						 $.ajax({
 							  type: "PUT",
@@ -868,7 +906,7 @@ tAssistance.style = {
 			
 			parentNode.data_element = "circle";
 		}
-		else if(element=="rect"){
+		else if(element=="image"){
 			var element_div = parentNode.querySelector("div[name='element_config']");
 			
 			var html="";
@@ -896,9 +934,15 @@ tAssistance.style = {
 			html += "    <input type='number' name='height' placeholder='auto' class='span1'>";
 			html += "  <\/div>";
 			html += "<\/div>";
+			html += "<div class='control-group'>";
+			html += "  <label class='col-xs-2 control-label'>xlink:href<\/label>";
+			html += "  <div class='controls'>";
+			html += "    <input type='text' name='href' placeholder='auto' class='span1'>";
+			html += "  <\/div>";
+			html += "<\/div>";
 			
 			element_div.innerHTML = html;
-			parentNode.data_element = "rect";
+			parentNode.data_element = "image";
 
 		}
 		else if(element=="custom"){
@@ -923,14 +967,7 @@ tAssistance.style = {
 			
 			element_div.innerHTML = html;
 			parentNode.data_element = "custom";
-
 		}
-		
-		
-		
-		
-		
-		
 	}
 }
 

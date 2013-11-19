@@ -1,1 +1,44 @@
-[{"id":"Affiche d'une vue particuliere","selector":"Affiche d'une vue particuliere","style":"Affiche d'une vue particuliere","priority":""},{"id":"Session utilisateur","selector":"Session utilisateur","style":"Session utilisateur","priority":""},{"id":"Correction d'un mot","selector":"Correction d'un mot","style":"Correction d'un mot","priority":""},{"id":"Afficher une sous-vue particuliere","selector":"Afficher une sous-vue particuliere","style":"Affiche d'une sous-vue particuliere","priority":""},{"id":"autre \u00e9v\u00e8nement","selector":"autre \u00e9v\u00e8nement","style":"autre \u00e9v\u00e8nement","priority":""},{"id":"Valider un mot","selector":"Valider un mot","style":"Valider un mot","priority":""}]
+[
+    {
+        "id": "Affiche d'une vue particuliere",
+        "selector": "Affiche d'une vue particuliere",
+        "style": "Affiche d'une vue particuliere",
+        "priority": ""
+    },
+    {
+        "id": "Session utilisateur",
+        "selector": "Session utilisateur",
+        "style": "Session utilisateur",
+        "priority": ""
+    },
+    {
+        "id": "Correction d'un mot",
+        "selector": "Correction d'un mot",
+        "style": "Correction d'un mot",
+        "priority": ""
+    },
+    {
+        "id": "Afficher une sous-vue particuliere",
+        "selector": "Afficher une sous-vue particuliere",
+        "style": "Affiche d'une sous-vue particuliere",
+        "priority": ""
+    },
+    {
+        "id": "autre évènement",
+        "selector": "autre évènement",
+        "style": "autre évènement",
+        "priority": ""
+    },
+    {
+        "id": "Valider un mot",
+        "selector": "Valider un mot",
+        "style": "Valider un mot",
+        "priority": ""
+    },
+    {
+        "id": "Click",
+        "selector": "click",
+        "style": "click1",
+        "priority": ""
+    }
+]

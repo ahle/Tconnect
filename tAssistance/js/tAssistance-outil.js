@@ -267,7 +267,49 @@
 					};
 					g.dispatchEvent(event);
 				}
-			}
+			},
+			update: function(g){
+				tAssistance.svg.group.clear_all(g);
+			
+				var obsels = [];
+				if(localStorage["tAssistance.obsels"]){// get obsels from cache
+					obsels = tAssistance.obsels.getLocalObsels();
+				}
+				else{
+					//obsels = tAssistance.getObsels("http://213.223.171.36/ktbs/ozalid_exp/","trc_u1");		
+				}
+				console.log(obsels.length);
+				g.data["obsels"]=obsels;
+				scaleLevel = g.getAttribute("scaleLevel");
+				var width = 1000;
+				//tAssistance.clear_obsels();
+				var scale_x_time = g.getAttribute("scale_x_time");
+				var timeoffset = parseFloat(g.getAttribute("timeoffset"));
+				var start = timeoffset - width/2/scale_x_time;
+				var end = timeoffset + width/2/scale_x_time;
+				
+				//g.setAttribute("scale_x_time", scale_x_time);
+				
+				// filter obsels
+				obsels = tAssistance.obsels.filter(obsels, start, end);
+				
+				var log = {
+						"start": start,
+						"end": end,
+						"startD": tAssistance.datetime.utc2LocalDate(start),
+						"endD": tAssistance.datetime.utc2LocalDate(end),
+				}
+				console.log(log);
+				// diff obsels
+				//var diffs = tAssistance.obsels.diff(document.querySelectorAll(".obsel"), obsels);		
+				
+				// draw obsels
+				var drawnObsels = tAssistance.svg.drawObsels(obsels, g);		
+				// draw obsel labels as majors & minors
+				tAssistance.svg.drawObselLabels(drawnObsels);
+				// fire the updated event
+				
+			},
 		},
 		touchpad: function(touchpad, g){
 			
@@ -1829,33 +1871,36 @@
 		obsel: function(event_data){
 			var user_id = event_data.user_id;
 			var base_uri = event_data.base_uri;
-			var trace_id = event_data.trace_uri;			
+			var trace_id = event_data.trace_id;			
 			
 			console.log("a message type=obsel is received !");
-			var mgr = tService.TraceManager({
+			var mgr = new tService.TraceManager({
 				base_uri: base_uri,
 				async: true
 			});
-			var trc = mgr.initTrace({
+			var trc = mgr.init_trace({
 				name: trace_id
 			});
-			trc.getObsels({
+			trc.get_obsels({
+				nocache: true,
 				success: function(obsels){
+					console.log(obsels.length);
 					tAssistance.obsels.setLocalObsels(obsels);
-					//localStorage["tAssistance.obsels"] = JSON.stringify(obsels);				
+					var g = document.querySelector("g");
+					tAssistance.svg.group.update(g);
 				}
 			});
 		},
 		trace: function(event_data){
 			var user_id = event_data.user_id;
 			var base_uri = event_data.base_uri;
-			var trace_id = event_data.trace_uri;		
+			var trace_id = event_data.trace_id;
 			
 			console.log("a message type=trace is received !");
 			var params = {
 				"user_id": user_id,
 				"base_uri": base_uri,
-				"trace_id": trace_uri
+				"trace_id": trace_id,
 			}
 			tAssistance.http.customReq("index.php?page=TraceView",params, "post");
 			

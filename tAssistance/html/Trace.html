@@ -195,7 +195,12 @@
 				
 				
 			},false);
-			
+		});
+		window.addEventListener("unload", function() {
+			localStorage.removeItem("tAssistance.load");
+		});
+		window.addEventListener("load", function() {
+			localStorage["tAssistance.load"] = "1";
 		});
 	</script>
 </body>
