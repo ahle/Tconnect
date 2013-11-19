@@ -222,7 +222,7 @@
 			
 				var obsels = [];
 				if(localStorage["tAssistance.obsels"]){// get obsels from cache
-					obsels = JSON.parse(localStorage["tAssistance.obsels"]);
+					obsels = tAssistance.obsels.getLocalObsels();
 				}
 				else{
 					//obsels = tAssistance.getObsels("http://213.223.171.36/ktbs/ozalid_exp/","trc_u1");		
@@ -1580,8 +1580,24 @@
 			}
 			return ret;
 		},
+		getLocalObsels: function(){
+			var str_obsels = localStorage["tAssistance.obsels"];
+			return JSON.parse(str_obsels);
 			
-			
+		},
+		setLocalObsels: function(obsels){
+			localStorage["tAssistance.obsels"] = JSON.stringify(obsels);
+		},
+		selectObselTypes: function(obsels){
+			var obsel_types = [];
+			for(var i=0;i<obsels.length;i++){
+				var obsel = obsels[i];
+				if(obsel_types.indexOf(obsel[tAssistance.obsel.type])==-1){
+					obsel_types.push(obsel[tAssistance.obsel.type]);
+				}
+			}
+			return obsel_types;
+		}	
 	}
 		
 	tAssistance.outil = {
@@ -1825,7 +1841,8 @@
 			});
 			trc.getObsels({
 				success: function(obsels){
-					localStorage["tAssistance.obsels"] = JSON.stringify(obsels);				
+					tAssistance.obsels.setLocalObsels(obsels);
+					//localStorage["tAssistance.obsels"] = JSON.stringify(obsels);				
 				}
 			});
 		},

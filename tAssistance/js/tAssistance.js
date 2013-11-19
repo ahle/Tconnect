@@ -361,7 +361,7 @@ tAssistance.processKeyPress = function(g,evt){
 		trc.get_obsels({			
 			success: function(obsels){
 				// save received obsels in the localStorage
-				localStorage["tAssistance.obsels"] = JSON.stringify(obsels);
+				tAssistance.obsels.setLocalObsels(obsels);
 				
 				
 				console.log("test trace_read correctly");
@@ -475,25 +475,55 @@ tAssistance.selector = {
 			btSave.addEventListener("click",function(){
 				var script = "";
 				
-				console.log("custom is logged");
-				var selector_id = parentNode.querySelector("input[name='id']").value;
-				var script = parentNode.querySelector("textarea[name='script']").value;						
-				
-				var selector = { "id": selector_id, "script": script };
-										
-				 $.ajax({
-					  type: "PUT",
-					  url: "api.php?o=selector",
-					 data: JSON.stringify(selector)
-					})
-					  .done(function( msg ) {
-						console.log( "The selector is posted!");
-					    tAssistance.selector.renderList(parentNode);
-					  });
+				if(parentNode.data_mode=="custom"){
+					var selector_id = parentNode.querySelector("input[name='id']").value;
+					var script = parentNode.querySelector("textarea[name='script']").value;						
+					
+					var selector = { "id": selector_id, "script": script };
+											
+					 $.ajax({
+						  type: "PUT",
+						  url: "api.php?o=selector",
+						 data: JSON.stringify(selector)
+						})
+						  .done(function( msg ) {
+							console.log( "The selector is posted!");
+						    tAssistance.selector.renderList(parentNode);
+						  });
+				}
+				else if(parentNode.data_mode=="obsel_type"){
+					var selector_id = parentNode.querySelector("input[name='id']").value;
+					var obsel_type = parentNode.querySelector("select[name='obsel_type']").value;						
+					
+					var script = "function(obsel){";
+					script += "	if(obsel['"+tAssistance.obsel.type+"']=='"+obsel_type+"'){";
+					script += "		return true;";
+					script += "	}";
+					script += "	return false;";
+					script += "}";
+					
+					var selector = { "id": selector_id, "script": script };
+					
+					$.ajax({
+						  type: "PUT",
+						  url: "api.php?o=selector",
+						 data: JSON.stringify(selector)
+						})
+						  .done(function( msg ) {
+							console.log( "The selector is posted!");
+						    tAssistance.selector.renderList(parentNode);
+						  });
+				}
 			});
 			var btClose = parentNode.querySelector("button.close");
 			btClose.addEventListener("click", function(){
-				parentNode.innerHTML='';					
+				parentNode.innerHTML='';
+			});
+			
+			var select_type = parentNode.querySelector("select[name='type']");
+			select_type.addEventListener("change", function(){
+				var type = select_type.value;
+				tAssistance.selector.renderType(parentNode, type);
 			});
 		});
 	},
@@ -528,8 +558,53 @@ tAssistance.selector = {
 			
 		});
 	},
-	renderType: function(parentNode){
+	renderType: function(parentNode,type){
+		var selector_div = parentNode.querySelector("div[name='selector_config']");
 		
+		
+		if(type=="obsel_type"){
+			var obsels = tAssistance.obsels.getLocalObsels();
+			var obsel_types = tAssistance.obsels.selectObselTypes(obsels);
+			
+			var html="";
+			html += "<div class=\"control-group\">";
+			html += "<label class=\"col-xs-2 control-label\">Obsel Type <\/label>";
+			html += "<div class=\"controls\">";
+			html += "  <select name=\"obsel_type\" class=\"span2\">   ";
+			for(var i=0;i<obsel_types.length;i++){
+				var obsel_type = obsel_types[i];
+				html += "      <option value='"+obsel_type+"'>"+obsel_type+"<\/option>";
+			}
+			html += "  <\/select>";
+			html += "<\/div>";
+			html += "<\/div>";
+
+
+			selector_div.innerHTML = html;
+			parentNode.data_mode = "obsel_type";
+		}
+		else if(type=="custom"){
+			var html="";
+			html += "<div class=\"control-group\">";
+			html += "<label class=\"col-xs-2 control-label\">Script <\/label>";
+			html += "  <div class=\"controls\">";
+			html += "    <textarea name=\"script\" class=\"span3\" rows=\"10\" placeholder=\"The syntax used is Javascript.\">";
+			html += "function(obsel){";
+			html += "	if(obsel['@type']=='m:oze_cw'){";
+			html += "		return true;";
+			html += "	}";
+			html += "	return false;";
+			html += "}";
+			html += "    <\/textarea>  ";
+			html += "  <\/div>";
+			html += "<\/div>";
+
+			selector_div.innerHTML = html;
+			parentNode.data_mode = "custom";		
+		}
+			
+
+			
 	}
 };
 
@@ -629,6 +704,7 @@ tAssistance.style = {
 					var script = "";
 					if(parentNode.data_element=="circle"){
 						var style_id = parentNode.querySelector("input[name='style_id']").value;
+						var icon = parentNode.querySelector("input[name='icon']").value;
 						var cx = parentNode.querySelector("input[name='cx']").value;
 						var cy = parentNode.querySelector("input[name='cy']").value;
 						var r =  parentNode.querySelector("input[name='r']").value;
@@ -649,7 +725,7 @@ tAssistance.style = {
 							script = script.replace('%'+name+'%', params[name]);
 						}
 						
-						var style = { "id": style_id, "script": script };
+						var style = { "id": style_id, "script": script, "icon": icon };
 						
 						 $.ajax({
 							  type: "PUT",
@@ -665,9 +741,10 @@ tAssistance.style = {
 					else if(parentNode.data_element=="custom"){
 						console.log("custom is logged");
 						var style_id = parentNode.querySelector("input[name='style_id']").value;
+						var icon = parentNode.querySelector("input[name='icon']").value;
 						var script = parentNode.querySelector("textarea[name='script']").value;						
 						
-						var style = { "id": style_id, "script": script };
+						var style = { "id": style_id, "script": script, "icon": icon };
 												
 						 $.ajax({
 							  type: "PUT",
@@ -682,9 +759,6 @@ tAssistance.style = {
 					}
 					
 					
-					
-					var form = document.querySelector("#style_editor");
-					//tAssistance.style.post(form);
 				});
 				var btClose = parentNode.querySelector("button.close");
 				btClose.addEventListener("click", function(){
@@ -782,12 +856,16 @@ tAssistance.style = {
 			html += "<div class='control-group'>";
 			html += "  <label class='col-xs-2 control-label'>Color<\/label>";
 			html += "  <div class='controls'>";
-			html += "    <input type='text' name='color' placeholder='auto' class='span1'>";
+			html += "    <input type='text' name='color' placeholder='auto' class='span2'>";
 			html += "  <\/div>";
 			html += "<\/div>";
 			html += "";
 
 			element_div.innerHTML = html;
+			
+			var select_color =  parentNode.querySelector("input[name='color']");
+			$(select_color).colorpicker();
+			
 			parentNode.data_element = "circle";
 		}
 		else if(element=="rect"){
@@ -855,3 +933,8 @@ tAssistance.style = {
 		
 	}
 }
+
+
+
+
+

@@ -12,18 +12,16 @@
 </div>
 </div>
 <div class="control-group">
-<label class="col-xs-2 control-label">Script </label>
-  <div class="controls">
-    <textarea name="script" class="span3" rows="10" placeholder="The syntax used is Javascript.">
-function(obsel){
-	if(obsel['@type']=='m:oze_cw'){
-		return true;
-	}
-	return false;
-}
-    </textarea>  
-  </div>
+<label class="col-sm-2 control-label">Type</label>
+<div class="controls">
+  <select name="type" class="span2">
+  	  <option value=""></option>
+      <option value="obsel_type">Obsel type</option>
+      <option value="custom">Custom script</option>
+  </select>
 </div>
+</div>
+<div name='selector_config'></div>
 <div class="control-group">
 <div class="controls">
  	<button name="save" type="button" class="btn btn-default">Save</button>
