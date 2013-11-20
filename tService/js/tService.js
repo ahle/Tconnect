@@ -190,18 +190,25 @@ tService.Trace = function(options){
 	 * @function
 	 * @memberof Trace#
 	 * @name get_obsels
-	 * @param s_options.success the callback function if the save is successful
-	 * @param s_options.error the callback function if the save is failed
-	 * @param s_options.obsel an obsel
+	 * @param s_options.success 	the callback function if the save is successful
+	 * @param s_options.error	 	the callback function if the save is failed
+	 * @param s_options.nocache 	no use the cached result if nocache = true
 	 * @desc put obsels into the trace in the base de traces */	
 	this.get_obsels = function(s_options){
 		var trace_uri = this.trace_uri,
 		successCallback = s_options.success,
 		errorCallback = s_options.error,
+		nocache = s_options.nocache || false,
 		async = this.async;
 		
+		var url = trace_uri+"@obsels.json";
+		if(nocache){
+			begin = Math.floor(Math.random()*1000);
+			queryString = "minb="+begin;
+			url+="?"+queryString;
+		}
 		// post to ktbs
-		jQuery.getJSON(trace_uri+"@obsels.json",function(data){
+		jQuery.getJSON(url,function(data){
 			var obsels = data["obsels"];
 			
 			$.each(obsels, function(obsel){
@@ -211,9 +218,3 @@ tService.Trace = function(options){
 		});
 	}
 }
-
-
-	
-
-	
-
