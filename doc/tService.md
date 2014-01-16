@@ -1,6 +1,6 @@
 tService 
 ----
-##### Create une base with tService #####
+##### Create a base with tService #####
 Tconnect can be downloaded from this site.
 
 
