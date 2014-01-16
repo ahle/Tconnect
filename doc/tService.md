@@ -141,9 +141,3 @@ trace.putObsels({
 }});
 	
 ~~~
-##### Put the obsels into a trace with tService #####
-
-
-
-
-
