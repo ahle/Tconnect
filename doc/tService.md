@@ -61,6 +61,9 @@ trace.send({
 ~~~
 
 ##### Get the obsels of a trace with tService #####
+
+~~~php
+
 var root_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
 var user_id = "user1";
 var doc_id = "doc1";
