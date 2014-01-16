@@ -89,10 +89,4 @@ trace.getObsels({"callback": function(ret){
 		}
 }});
 	
-	
-	
-	
-
-
-
-
+~~~
