@@ -1,20 +1,30 @@
 tService 
 ----
-##### Create a base with tService #####
-Tconnect can be downloaded from this site.
+tService 
+----
+##### Create a base for a user with tService #####
 
+~~~php
+var root_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
 
+var mgr = new tService.TraceManager({
+		"root_uri": root_uri,
+		async: true
+	});
 
+var options = {
+	name: "user1",
+};
 
+var base = mgr.init_base(options);
+base.send({
+	"callback": function(ret, options){
+		if(ret=="success"){
+			console.log("done");
+		}
+	}
+});
 
-~~~bash
-$ unzip tconnect.zip -d $tconnect_dir
-$ cd $tconnect_dir/scripts
-~~~
-or use GIT for download:
-~~~bash
-$ git clone https://github.com/ahle/tconnect
-$ cd $tconnect_dir/scripts
 ~~~
 
 ##### Install a standalone assistance site #####
