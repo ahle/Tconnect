@@ -18,8 +18,8 @@ var options = {
 
 var base = mgr.init_base(options);
 base.send({
-	"callback": function(ret, options){
-		if(ret=="success"){
+	"callback": function(ret){
+		if(ret.status=="success"){
 			console.log("done");
 		}
 	}
@@ -51,11 +51,48 @@ var options = {
 
 var trace = base.init_trace(options);
 trace.send({
-	"callback": function(ret, options){
-		if(ret=="success"){
+	"callback": function(ret){
+		if(ret.status=="success"){
 			console.log("done");
 		}
 	}
 });
 
 ~~~
+
+##### Get the obsels of a trace with tService #####
+var root_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
+var user_id = "user1";
+var doc_id = "doc1";
+
+var mgr = new tService.TraceManager({
+		"root_uri": root_uri,
+		async: true
+});
+
+var options = {
+    "name": user_id,
+};
+
+var base = mgr.init_base(options);
+
+var options = {
+    "name": doc_id,
+};
+
+var trace = base.init_trace(options);
+
+trace.getObsels({"callback": function(ret){
+	if(ret.status=="success"){
+			var obsels = ret.obsels;
+			// process with the obsels
+		}
+}});
+	
+	
+	
+	
+
+
+
+
