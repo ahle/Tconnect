@@ -118,18 +118,16 @@ var options = {
 };
 
 var trace = base.init_trace(options);
+var begin = end = (new Date()).getTime();
 
 var obsels = {
-	{
-		
-	
-	
-	
-	
+	obsel: {
+		type: "click",
+		begin: begin,
+		end: end,
+		subject: "u1",
+		application: "ozalid"
 	},
-	
-
-
 };
 
 
@@ -143,8 +141,7 @@ trace.putObsels({
 }});
 	
 ~~~
-
-
+##### Put the obsels into a trace with tService #####
 
 
 
