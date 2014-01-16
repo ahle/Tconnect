@@ -93,3 +93,60 @@ trace.getObsels({"callback": function(ret){
 }});
 	
 ~~~
+
+##### Put the obsels into a trace with tService #####
+
+~~~php
+
+var root_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
+var user_id = "user1";
+var doc_id = "doc1";
+
+var mgr = new tService.TraceManager({
+		"root_uri": root_uri,
+		async: true
+});
+
+var options = {
+    "name": user_id,
+};
+
+var base = mgr.init_base(options);
+
+var options = {
+    "name": doc_id,
+};
+
+var trace = base.init_trace(options);
+
+var obsels = {
+	{
+		
+	
+	
+	
+	
+	},
+	
+
+
+};
+
+
+trace.putObsels({
+	"obsels": obsels,
+	"callback": function(ret){
+	if(ret.status=="success"){
+			var obsels = ret.obsels;
+			// process with the obsels
+		}
+}});
+	
+~~~
+
+
+
+
+
+
+
