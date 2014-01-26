@@ -6,7 +6,7 @@ require_once $dir.'/include/global.php';
 if($_SERVER[REQUEST_METHOD]=="GET"){
 	$file_content = file_get_contents("config/app.conf");
 	
-	$page = file_get_contents("config.html");
+	$page = file_get_contents("html/config.html");
 	
 	$page = str_replace("\$file_content", $file_content, $page);
 	

@@ -6,37 +6,18 @@ tApp = {};
 
 //tApp.AssistanceUri = "http://assist.com/service.php";
 //tApp.location = "http://app1.com/tApp/service.php";
-tApp.AssistanceUri = "$assistance_url";
+//tApp.AssistanceUri = "$assistance_url";
 tApp.location = "http://app1.com/";
 tApp.app_id = "$app_id";
+tApp.user_id = 'u1';
 tApp.trace_base = "http://213.223.171.36/ktbs/ozalid/";
 tApp.trace_id = "t4";
+tApp.visualisation_uri = "http://213.223.171.36/assist/index.php?page=TraceView";
 tApp.assistance_base = 'http://213.223.171.36/assist/';
 tApp.assistance_server =  'http://213.223.171.36';
-tApp.user_id = 'u1';
-tApp.visualisation_uri = "http://213.223.171.36/assist/index.php?page=TraceView";
 tApp.assistance_win = null;
 
 // TODO: remove AssistanceUri and app_id, put them on the response getTicket
-
-/** 
- * @function
- * @memberof tApp
- * @name active_btn_assistance
- * @desc active the correct link for enter the user assistance system */	
-tApp.active_btn_assistance = function() {
-// get ticket
-	
-	$(".assistance.btn").mouseover(function() {
-		bt_assistance = this; 
-		$.get("tApp/ticket/new", function(data){
-			var msg = data;
-			bt_assistance.href = tApp.AssistanceUri+"session/"+tApp.app_id+"?ticket="+encodeURIComponent(msg)+"&returnUrl="+encodeURIComponent(tApp.AssistanceUri+"index.php?page=TraceView");
-			bt_assistance.target = "_blank";
-		});
-	});
-	
-}
 
 tApp.changeUser = function(user){
 	$.post("tApp/api.php", {"user": user}, function(data){
@@ -74,9 +55,11 @@ tApp.ui = {
 		trc.put_obsels({
 			obsel: obsel,
 			success: function(){
-				console.log("postMessage to the assistance");
-				tApp.assistance_win.postMessage({"type":"obsel","trace_id":trace_id,"base_uri":base_uri,"user_id":user_id}, tApp.assistance_server);
-				},
+				if(tApp.assistance_win){
+					console.log("postMessage to the assistance");
+					tApp.assistance_win.postMessage({"type":"obsel","trace_id":trace_id,"base_uri":base_uri,"user_id":user_id}, tApp.assistance_server);
+				}
+			},
 			error: function(jqXHR,textStatus, errorThrown){
 				console.log("error is callbacked.");
 			}
@@ -84,7 +67,9 @@ tApp.ui = {
 	}		
 }
 // example
-/*document.addEventListener("click", function(){
+/*
+tApp.ui.renderTraceBtn();
+document.addEventListener("click", function(){
 	
 	var begin = end = (new Date()).getTime();
 	var obsel = {

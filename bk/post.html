@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Post obsels to kTBS</title>
+<script type="text/javascript" src="jquery.js"></script>
+</head>
+<body>
+<table>
+<tr>
+	<td><label for="trace_uri">Trace URI</label></td><td><input id="trace_uri" type="text" value="http://213.223.171.36/ktbs/ozalid_exp/trc_u1/" style="width:400px"/></td>
+</tr>
+<tr>
+	<td><label for="model_uri">Model URI</label></td><td><input id="model_uri" type="text" value="http://213.223.171.36/ktbs/ozalid_exp/model1/" style="width:400px"/></td>
+</tr>
+</table>
+<table>
+<tr>
+	<td>Input</td>
+	<td></td>
+	<td>Output</td>
+</tr>
+<tr>
+	<td><textarea id="input" rows="20" cols="50"></textarea></td>
+	<td><button onclick="post_obsel()">POST</button></td>
+	<td><textarea id="output" rows="20" cols="50"></textarea></td>
+</tr>
+</table>
+<script type="text/javascript">
+function post_obsel(){
+	input = $("#input").val();
+	trace_uri = $("#trace_uri").val();
+	model_uri = $("#model_uri").val();
+	//console.log(input);
+	
+	$.post("post.php",{"input":input, "trace_uri": trace_uri, "model_uri": model_uri}, function(data){
+		$("#output").text(data);		
+	});
+	
+}
+
+</script>
+
+</body>
+</html>

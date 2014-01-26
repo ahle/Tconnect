@@ -98,7 +98,7 @@ if($_GET["page"]=="rule" && $_GET["p1"]=="new"){
 	$styles= style_get_all();
 	$rules = rule_get_all();
 
-	$page="<div class=\"table-responsive span5\">
+	$page = "<div class=\"table-responsive span5\">
 <table class=\"table table-striped table-bordered\" style=\"padding: 3px;word-wrap: break-word;table-layout:fixed;\">
 <caption><div class=\"window-caption\">New rule<button type=\"button\" class=\"close\" aria-hidden=\"true\">×</button></div></caption>
 <tr>

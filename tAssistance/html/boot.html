@@ -1,0 +1,25 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Trace Assistance</title>
+<script type="text/javascript" src="js/js.php"></script>
+</head>
+<body>
+
+
+<script type="text/javascript">
+	// postMessage
+			window.addEventListener('message',function(event) {
+				// if(event.origin !== 'http://scriptandstyle.com') return;
+				//alert(JSON.stringify(event.data));
+				console.log('received response:  '+JSON.stringify(event.data));
+				if(event.data["type"]=="trace"){
+					tAssistance.message.trace(event.data);
+				}
+				else if (event.data["type"]=="obsel"){
+					tAssistance.message.obsel(event.data);
+				}				
+			},false);
+</script>
+</body>
+</html>

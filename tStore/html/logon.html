@@ -1,0 +1,25 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>LogOn</title>
+</head>
+<body>
+<h1>Login</h1>
+
+<form method="post" action="../api.php/logon">
+    <input type="hidden" name="goto" value="{$smarty.request.goto}" />
+
+    <label for="username">User name</label><br />
+    <input type="text" name="username" id="username" />
+    
+    <br /><br />
+
+    <label for="password">Password</label><br />
+    <input type="text" name="password" id="password" />
+
+    <br /><br />
+    
+    <input type="submit" value="Login" />
+</form>
+</body>
+</html>

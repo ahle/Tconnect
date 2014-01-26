@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# build js-tService
+cd /home/ktbs/git/jsdoc
+./jsdoc /var/www/tracestore/tService/lib/tService.js -d /var/www/tracestore/doc/js-tService

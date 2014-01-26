@@ -38,7 +38,7 @@
     {
         "id": "Click",
         "selector": "click",
-        "style": "click1",
+        "style": "click",
         "priority": ""
     }
 ]

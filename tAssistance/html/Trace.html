@@ -5,7 +5,7 @@
 <title>Trace Assistance</title>
 <link href="css/trace.css" rel="stylesheet" >
 <link href="css/bootstrap.css" rel="stylesheet" >
-<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" >
+<link href="lib/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 <link href="css/slider.css" rel="stylesheet" >
 <link href="css/bootstrap-select.css" rel="stylesheet" >
 <link href="css/bootstrap-editable.css" rel="stylesheet">
@@ -13,11 +13,10 @@
 <script type="text/javascript" src="js/js.php"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
-<script type="text/javascript" src="js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="js/locales/bootstrap-datetimepicker.fr.js"></script>
+<script type="text/javascript" src="lib/datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="lib/datetimepicker/js/locales/bootstrap-datetimepicker.fr.js"></script>
 <script type="text/javascript" src="js/bootstrap-slider.js"></script>
 <script type="text/javascript" src="js/bootstrap-select.js"></script>
-<script type="text/javascript" src="js/bootstrap-editable.js"></script>
 <link href="lib/colorpicker/css/colorpicker.css" rel="stylesheet">
 <script type="text/javascript" src="lib/colorpicker/js/bootstrap-colorpicker.js"></script>
 
@@ -118,14 +117,14 @@
 	    }).on('changeDate', function(e){
 	    	console.log(e.localDate);
 	    	var dateInt = e.localDate.getTime();
-	    	tAssistance.svg.group.changeTimeOffset(document.querySelector("g"), dateInt);
+	    	tAssistance.group.changeTimeOffset(document.querySelector("g"), dateInt);
 	    });
 			
 		$(document).on("changeSetting", function(e, data){
 			var g = document.querySelector("g");
 			console.log("detected");
 			
-			tAssistance.svg.group.changeScale(g,data.unit);
+			tAssistance.group.changeScale(g,data.unit);
 		});
 		
 		$(document).on("changeTimeOffset", function(type,data){

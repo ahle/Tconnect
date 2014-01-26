@@ -1,0 +1,61 @@
+Move three folders into the web root
+
+* Configuration closed server
+
+$ cd /var/www/
+
+$ ln -s /var/www/tconnect/tService /var/www/tapp1.com/tAssistance/tService
+
+$ mkdir tapp1.com 
+$ ln -s /var/www/tconnect/tApp /var/www/tapp1.com/tApp
+$ ln -s /var/www/tconnect/tService /var/www/tapp1.com/tService
+$ ln -s /var/www/tconnect/tAssistance /var/www/tapp1.com/tAssistance
+
+
+
+5. Lancer le ktbs
+$ ktbs -r repo -
+
+
+// configuration of servers: change the hostname of the test server
+$ sudo gedit /etc/hosts
+------------------------------
+127.0.0.1	localhost tassistance.com tapp1.com ktbs.com
+----------------------------------
+
+// configuration apache:
+$ cd /etc/apache2/sites-available/
+$ cp default tapp1.com
+$ cp gedit tapp1.com
+
+--------------------------------------------------
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost	
+	ServerName tapp1.com
+	DocumentRoot /var/www/tapp1.com 
+--------------------------------------------------
+$ cp default tassitance.com
+$ cp gedit tassitance.com
+--------------------------------------------------
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost	
+	ServerName tassitance.com
+	DocumentRoot /var/www/tassitance.com 
+--------------------------------------------------
+
+$ ln -s /etc/apache2/sites-available/tapp1.com /etc/apache2/sites-enabled/tapp1.com
+$ ln -s /etc/apache2/sites-available/tassistance.com /etc/apache2/sites-enabled/tassistance.com
+
+$ /etc/init.d/apache2 restart
+
+// TODO
+// create the folders virtuel
+
+
+// configuration de mysql
+$ mysql -uroot -padmin
+mysql> create database tassistant;
+#mysql> create user tassistantuser IDENTIFIED BY '123456';
+#mysql> GRANT ALL ON tassistant.* TO 'tassistantuser';
+mysql> GRANT ALL PRIVILEGES ON tassistant.* TO 'tassistantuser' IDENTIFIED BY '123456' WITH GRANT OPTION;
+

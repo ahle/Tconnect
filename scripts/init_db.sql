@@ -1,4 +1,3 @@
-create database tassistance;
-create user 'tuser'@'localhost' IDENTIFIED BY 'tuser';
-GRANT ALL PRIVILEGES ON *.* TO 'tuser'@'localhost' WITH GRANT OPTION;
+create database tassistance; #
+GRANT ALL PRIVILEGES ON tassistance.* TO 'tuser' IDENTIFIED BY 'tuser' WITH GRANT OPTION;
 
