@@ -25,6 +25,5 @@ tAssistance.data = {// an another implementation like jQuery.data
 		else{
 			return null;
 		}
-	},
-	
+	},	
 };

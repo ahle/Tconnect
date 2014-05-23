@@ -8,7 +8,7 @@ require_once $dir.'/php/global.php';
 	if($_GET["o"]=="style" && $_SERVER[REQUEST_METHOD]=="POST"){
 		// read data input
 		
-		$style = $_POST;		
+		$style = $_POST;
 		
 		style_post($style);
 		
@@ -40,8 +40,7 @@ require_once $dir.'/php/global.php';
 	}
 	
 	if($_GET["o"]=="style" && $_SERVER[REQUEST_METHOD]=="GET" && $_GET["p1"]=="id"){
-		// read data input
-		
+		// read data input	
 		
 		$style_id = $_GET["p2"];
 	
@@ -287,3 +286,28 @@ if($_GET["o"]=="rule" && $_SERVER[REQUEST_METHOD]=="DELETE"){
 
 	exit;
 }
+
+if($_SERVER['PATH_INFO']=="/widget/TraceSearch" && $_GET["search"]){
+	// read data input
+	require_once "/var/www/tconnect/project/Ozalid/TStore/OzaTStoreClient.php";
+	require_once "/var/www/tconnect/tAssistance/php/OzaTraceMenu.php";
+	require_once "/var/www/tconnect/tAssistance/php/TraceSearch.php";
+
+	$tstore = new OzaTStoreClient();
+
+	//$users = $tstore->getUsers();
+	
+	$traces = $tstore->getTraces();
+	
+	$search = $_GET["search"];	
+	
+	$traceSearch = new TraceSearch($traces);
+	$html = $traceSearch->search($search);
+	
+	echo $html;
+	
+	exit;
+}
+
+require_once "/var/www/tconnect/tAssistance/php/oza-api.php";
+

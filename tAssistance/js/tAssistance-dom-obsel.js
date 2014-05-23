@@ -1,18 +1,25 @@
-/** 
-	 * @function
-	 * @memberof tAssistance
-	 * @name obsel_serializeHtml
-	 * @param options.obsel the obsel needed to be serialized in html
-	 * @desc format the obsel in html */
-tAssistance.dom.obsel = {
-	renderProperty: function(options){
-		var obsel = options.obsel;
-		var obsel_container = options.container;
-		var obsel_str = JSON.stringify(obsel);
-		
-		$.get("index.php?page=Property&id=1&obsel="+encodeURIComponent(obsel_str),function(data){			
-			$(obsel_container).empty().append(data);
-			$(".trace_property").find("code").tooltip();
+tAssistance.dom.obsel = function(parent, obsel,rules){
+	var id = "obsel"+(new Date()).getTime()+Math.random()*1000;
+	this.id = id;
+	var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+	var y = tAssistance.svg.lines["line0"],
+	r = 8;
+	
+	var base = {
+		"x": obsel.x, "y": y, "color": color, "r": '10'
+	}
+	
+	dom_obsel = tAssistance.makeObsel(obsel.src_obsel, base.x);
+	if(dom_obsel){
+		dom_obsel.setAttribute("data-id",id);		
+		parent.appendChild(dom_obsel);		
+		// add the event
+		$(dom_obsel).click(function(e){
+			var obsel_in_html = obsel.renderProperty("#controlPanel");
 		});
-	},
-};	
+		
+		// save the bi-references
+		obsel.element = dom_obsel;
+		tAssistance.data[id] = obsel;
+	}	
+};

@@ -1,0 +1,14 @@
+<div id="$id" class="panel">
+	<div class="input-append">
+	<input class="span3" name="search" type="text" value="" placeholder="Tous les documents">
+	<button name="btnsearch" class="btn" type="button">Rechercher</button>
+	</div>
+	<br/>
+	<div name="traces">
+	$traces
+	</div>
+</div>
+<script>
+tAssistance.widget = new tAssistance.OzaTraceSearch(document.getElementById("$id"));
+
+</script>

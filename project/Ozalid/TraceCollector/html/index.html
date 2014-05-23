@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Trace Service</title>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+</head>
+<body>
+
+<button name="update">Update</button><button onclick="window.location='index.php/log'">Log</button>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	  $("button[name='update']").click(function(){
+		  $.get("api.php/update",function(data){
+			  console.log(data);
+			  window.location = "index.php/log";
+		  });
+	  });
+	});
+
+
+
+
+</script>
+
+
+</body>
+</html>

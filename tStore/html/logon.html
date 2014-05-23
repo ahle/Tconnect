@@ -7,7 +7,7 @@
 <h1>Login</h1>
 
 <form method="post" action="../api.php/logon">
-    <input type="hidden" name="goto" value="{$smarty.request.goto}" />
+    <input type="hidden" name="goto" value="$goto" />
 
     <label for="username">User name</label><br />
     <input type="text" name="username" id="username" />

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>tStore API</title>
+</head>
+<body>
+
+<label for="url">URL</label><input type="text" name="url" onchange="onchange_url(this)"/>
+
+<form method="post" action="../api.php">
+    <input type="hidden" name="goto" value="{$smarty.request.goto}" />
+
+    <label for="username">Content</label><br />
+    <textarea cols="30" rows="20" name="content"></textarea>
+            
+    <input type="submit" value="Send"  />
+</form>
+
+<script type="text/javascript">
+	function onchange_url(input){
+		 document.getElementsByTagName("form")[0].action = input.value;
+	}
+</script>
+
+
+</body>
+</html>

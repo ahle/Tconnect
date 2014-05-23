@@ -6,69 +6,11 @@ $db_user = "tuser";
 $db_pwd = "tuser";
 $db_name = "tassistance";
 $debug = false;
-$base_uri = "http://213.223.171.36/ktbs/ozalid_exp/";
+$base_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/ANONYMOUS/";
+$ktbs_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
+//$base_uri = "http://localhost:8001/ANONYMOUS/";
 
 $root_dir = dirname(dirname(__FILE__));
-
-$obsel_attr = array(
-	"type"=> "@type",
-);
-
-$str_obsel_attr = array(
-	"@id"=>"ID obsel",
-	"@type"=>"Type",
-	"m:idPage"=>"ID Page",
-	"m:idDoc" =>"ID Document",
-	"m:info_before" =>"Before",
-	"m:info_after" =>"After",
-	"m:user" =>"User",
-	"m:idSession" =>"ID Session",
-	"m:info_titleDoc" =>"Document Title",
-	"begin" => "Begin",
-	"end" => "End",
-	"m:info_author" =>"Author",
-	"m:info_idDoc" =>"Info ID Document",
-	"m:info_text" =>"Info Text",
-);
-
-$str_obsel_type = array(
-		"m:oze_idg"=>"Session utilisateur",
-		"m:ozec_w"=>"Corriger un mot",
-		"m:oze_view"=>"Afficher une vue particuliere",
-		"m:idDoc" =>"ID Document",
-		"m:info_before" =>"Before",
-		"m:info_after" =>"After",
-		"m:user" =>"User",
-		"m:idSession" =>"ID Session",
-		"begin" => "Begin",
-		"end" => "End",
-		"m:ozev_w" => "Valider un mot",
-		"m:oze_subview" => "Afficher une sous-vue particuliere",
-		"m:ozem_fn" => "autre evenement"
-);
-// text, labels
-function parse_obsel_attr($attr){
-	global $str_obsel_attr;
-	if($str_obsel_attr[$attr]){
-		return $str_obsel_attr[$attr];
-	}
-	return $attr;
-}
-
-function parse_obsel_value($attr,$value){
-	global $str_obsel_type,$obsel_attr;
-	
-	if($attr==$obsel_attr["type"]){
-		if($str_obsel_type[$value]!==null){
-			$value = $str_obsel_type[$value];
-		}		
-	}
-	else
-	{
-		$value = mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8');
-	}
-	return $value;
-}
 
 
 

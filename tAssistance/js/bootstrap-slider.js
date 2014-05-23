@@ -21,12 +21,14 @@
 
 	var Slider = function(element, options) {
 		this.element = $(element);
-		this.picker = $('<div class="slider">'+
+		this.picker = $('<div class="slider" style="left:5px">'+
+							//'<div class="zoom_out"/>'+
 							'<div class="slider-track">'+
 								'<div class="slider-selection"></div>'+
 								'<div class="slider-handle"></div>'+
 								'<div class="slider-handle"></div>'+
 							'</div>'+
+							//'<div class="zoom_in"/>'+
 							'<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'+
 						'</div>')
 							.insertBefore(this.element)
