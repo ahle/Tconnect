@@ -1,7 +1,7 @@
 <?php
-$dir = dirname(__FILE__);
-require_once $dir."/OzaEditorTrace.php";
-require_once $dir."/lib/Http.php";
+$correct_dir = dirname(__FILE__);
+require_once $correct_dir."/OzaEditorTrace.php";
+require_once $correct_dir."/lib/Http.php";
 
 class OzaTraceRepoClient {
 	public $uri = "http://rd.urbiloglabs.fr/oz_trace_repository/ws/";

@@ -1,7 +1,7 @@
 <?php
-$dir = dirname(__FILE__);
-require_once $dir."/OzaEditorTrace.php";
-require_once $dir."/lib/Http.php";
+$correct_dir = dirname(__FILE__);
+require_once $correct_dir."/OzaEditorTrace.php";
+require_once $correct_dir."/lib/Http.php";
 
 class OzaDBClient {
 	public $uri = "https://ozalid.orange-labs.fr/oz/ws/";

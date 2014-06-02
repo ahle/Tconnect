@@ -8,6 +8,7 @@ class OzaTraceSearch{
 	}
 	
 	function toHtml(){	
+		global $tassist_html_dir;
 		$id="TraceSearch".time();
 		
 		$html = file_get_contents($tassist_html_dir."/OzaTraceSearch.html");

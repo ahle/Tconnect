@@ -7,9 +7,8 @@
 
 $ozalid_dir = dirname(dirname(__FILE__));
 $collector_dir = dirname(__FILE__);
-//require_once $trace_dir."/lib/Http.php";
-//require_once $ozalid_dir."/KtbsObsels.php";
-require_once $ozalid_dir."/CorrectionServer/OzaTraceRepoClient.php";
+$correct_dir = $ozalid_dir."/CorrectionServer";
+require_once $correct_dir."/OzaTraceRepoClient.php";
 require_once $collector_dir."/php/OzaTCollector.php";
 require_once $collector_dir."/php/Console.php";
 
@@ -21,7 +20,7 @@ $model_uri = "http://liris.cnrs.fr/silex/2011/simple-trace-model/";
 //$base_uri = "http://localhost:8001/base1/";
 $ktbs_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
 
-$console = new Console("/var/www/tconnect/project/Ozalid/TraceServer/data/update.log");
+$console = new Console("$collector_dir/data/update.log");
 
 // api for updating the obsels in the Urbilog server
 

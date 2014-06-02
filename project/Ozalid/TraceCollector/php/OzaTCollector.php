@@ -1,16 +1,21 @@
 <?php
-
-$ktbsPhp_dir = "/var/www/tconnect/ktbs-php";
+$ozalid_collector = dirname(dirname(__FILE__));
+$ozalid_dir = dirname($ozalid_collector);
+$ozalid_tstore = $ozalid_dir."/TStore";
+$tconnect_dir = dirname(dirname($ozalid_dir));
+$ktbsPhp_dir = "$tconnect_dir/ktbs-php";
+$ozalid_correct = $ozalid_dir."/CorrectionServer";
+$ozalid_snet = $ozalid_dir."/SocialNetwork";
 require_once $ktbsPhp_dir."/KtbsClient.php";
 require_once $ktbsPhp_dir."/KtbsBase.php";
 require_once $ktbsPhp_dir."/KtbsStoredTrace.php";
 require_once $ktbsPhp_dir."/KtbsObsel.php";
-require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaTrace.php";
-require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaObsel.php";
-require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaTStore.php";
-require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaTraceProperties.php";
-require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaVWCounter.php";
-require_once "/var/www/tconnect/project/Ozalid/TStore/php/BasicCounter.php";
+require_once "$ozalid_tstore/php/OzaTrace.php";
+require_once "$ozalid_tstore/php/OzaObsel.php";
+require_once "$ozalid_tstore/php/OzaTStore.php";
+require_once "$ozalid_tstore/php/OzaTraceProperties.php";
+require_once "$ozalid_tstore/php/OzaVWCounter.php";
+require_once "$ozalid_tstore/php/BasicCounter.php";
 
 class OzaTCollector {
 	
@@ -79,7 +84,8 @@ class OzaTCollector {
 	
 	// api for manipulating the trace infos of an obsel from its attributes
 	function makeOzaTrace($obsel){
-		require_once "/var/www/tconnect/project/Ozalid/CorrectionServer/OzaDBClient.php";
+		global $ozalid_correct;
+		require_once "$ozalid_correct/OzaDBClient.php";
 		
 		$idDoc = "no_doc";
 		if(isset($obsel->idDoc)){
@@ -110,8 +116,9 @@ class OzaTCollector {
 	}
 	// api for building a user from his obsel
 	function makeOzaUser($obsel){
-		require_once '/var/www/tconnect/project/Ozalid/SocialNetwork/OzaNetClient.php';
-		require_once '/var/www/tconnect/project/Ozalid/TStore/php/OzaUser.php';
+		global $ozalid_tstore,$ozalid_snet;
+		require_once "$ozalid_snet/OzaNetClient.php";
+		require_once "$ozalid_tstore/php/OzaUser.php";
 		
 		$net = new OzaNetClient();
 		$userid = $net->getUser($obsel->user);

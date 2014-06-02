@@ -23,8 +23,8 @@ class OzaObselList{
 	
 	function toHtml(){
 		//require_once '/var/www/tconnect/tAssistance/php/TAssistantClient.php';
-		global $tassist_html_dir;
-		require_once '/var/www/tconnect/project/Ozalid/TStore/OzaTStoreClient.php';
+		global $tassist_html_dir,$ozalid_tstore;
+		require_once '$ozalid_tstore/OzaTStoreClient.php';
 	
 		$store_client = new OzaTStoreClient();
 	
