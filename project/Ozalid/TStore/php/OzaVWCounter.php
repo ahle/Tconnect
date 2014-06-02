@@ -7,7 +7,7 @@ class OzaVWCounter{
 	}
 	
 	function receiveObsel($new_obsel){
-		require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaTStore.php";
+		require_once "OzaTStore.php";
 		
 		$trace = $this->trace;
 		
