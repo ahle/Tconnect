@@ -299,4 +299,4 @@ if($_GET["page"]=="UserPreference"){
 	exit;
 }
 
-require_once "/var/www/tconnect/tAssistance/php/oza-index.php";
+require_once $tassist_php_dir."/oza-index.php";
