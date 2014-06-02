@@ -8,8 +8,8 @@ class OzaTraceMenu{
 	}
 	
 	function toHtml(){	
-		
-		$html = file_get_contents("/var/www/tconnect/tAssistance/html/OzaTraceMenu.html");
+		global $tassist_html_dir;
+		$html = file_get_contents($tassist_html_dir."/OzaTraceMenu.html");
 		
 		
 		

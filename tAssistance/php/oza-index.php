@@ -18,19 +18,19 @@ elseif($_GET["widget"]== "OzaTraceSearch" && !isset($_GET["search"])){
 	require_once "/var/www/tconnect/tAssistance/php/OzaTraceSearch.php";
 	
 	// data
-	$tstore = new OzaTStoreClient();
-	$traces = $tstore->getTraces();
+	//$tstore = new OzaTStoreClient();
+	//$traces = $tstore->getTraces();
 	
 	// presentation
-	$search = new OzaTraceSearch($traces);
+	$search = new OzaTraceSearch();
 	$html = $search->toHtml();
 
 	echo $html;
 	exit;
 }
-elseif($_GET["widget"]== "OzaTraceSearch" && isset($_GET["search"])){
+elseif($_GET["widget"]== "OzaTraceList" && !isset($_GET["search"])){
 	require_once "/var/www/tconnect/project/Ozalid/TStore/OzaTStoreClient.php";	
-	require_once "/var/www/tconnect/tAssistance/php/OzaTraceSearch.php";
+	require_once "/var/www/tconnect/tAssistance/php/OzaTraceList.php";
 
 	$tstore = new OzaTStoreClient();
 	
@@ -40,9 +40,28 @@ elseif($_GET["widget"]== "OzaTraceSearch" && isset($_GET["search"])){
 	
 	$search = $_GET["search"];
 	
-	$traceSearch = new OzaTraceSearch($traces);
-	$html = $traceSearch->search($search);
+	$list = new OzaTraceList($traces);
+	$html = $list->toHtml();
 	
+	echo $html;
+	exit;
+}
+elseif($_GET["widget"]== "OzaTraceList" && isset($_GET["search"])){
+	require_once "/var/www/tconnect/project/Ozalid/TStore/OzaTStoreClient.php";
+	require_once "/var/www/tconnect/tAssistance/php/OzaTraceList.php";
+
+	$tstore = new OzaTStoreClient();
+
+	//$users = $tstore->getUsers();
+
+	$traces = $tstore->getTraces();
+
+	$search = $_GET["search"];
+
+	$list = new OzaTraceList($traces);
+	$list->search($search);
+	$html = $list->toHtml();
+
 	echo $html;
 	exit;
 }

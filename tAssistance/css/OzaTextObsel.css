@@ -1,0 +1,10 @@
+.textobsel-attr {
+	color: red;
+}
+.textobsel {
+	background-color: #F0F0F0;
+}
+
+.textobsel.selected{
+	background-color: yellow;
+}

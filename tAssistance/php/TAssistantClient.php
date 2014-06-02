@@ -10,5 +10,4 @@ class TAssistantClient {
 		$uri = $this->uri."index.php?page=Trace&trace_uri=".$trace_uri;
 		return $uri;
 	}
-	
 }

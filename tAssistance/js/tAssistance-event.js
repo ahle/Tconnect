@@ -1,3 +1,0 @@
-tAssistance.event = {
-		
-}

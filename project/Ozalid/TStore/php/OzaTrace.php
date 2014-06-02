@@ -3,7 +3,7 @@
 class OzaTrace{
 	public $id;
 	public $properties;
-	public $stats = array();
+	public $stats;
 	
 	public $obsels;
 	

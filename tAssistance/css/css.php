@@ -4,7 +4,9 @@ header("Content-type: text/css");
 
 $debug = true;
 
-$files = array(	"TextObsel.css"
+$files = array(	"OzaTextObsel.css",
+				"OzaTraceList.css",
+				"OzaObselSearch.css"
 				);
 
 $css = "";

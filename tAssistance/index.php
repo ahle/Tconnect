@@ -1,8 +1,8 @@
 <?php
 $tAssistance_dir = dirname(__FILE__);
 require_once $tAssistance_dir.'/php/global.php';
-require_once $tAssistance_dir.'/php/TableObsel.php';
-require_once $tAssistance_dir.'/php/TextObsel.php';
+//require_once $tAssistance_dir.'/php/TableObsel.php';
+//require_once $tAssistance_dir.'/php/TextObsel.php';
 
 $session_id = session_id();
 #$user_id = get_user($session_id); // comment for debug

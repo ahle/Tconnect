@@ -22,7 +22,7 @@
 		parentNode = options.parentNode,
 		source = options.source,
 		getx = function(d){
-			var date = tAssistance.datetime.utc2LocalDate(d["begin"]);
+			var date = tAssistance.Datetime.utc2LocalDate(d["begin"]);
 			return date;
 		},
 		gety = options.gety !== undefined ? options.gety : function(d){ 

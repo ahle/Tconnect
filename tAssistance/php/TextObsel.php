@@ -1,6 +1,6 @@
 <?php
 
-require_once "/var/www/tconnect/project/Ozalid/CorrectionServer/OzaEditorClient.php";
+//require_once "/var/www/tconnect/project/Ozalid/CorrectionServer/OzaEditorClient.php";
 
 class TextObsel{
 	
@@ -71,11 +71,12 @@ class TextObsel{
 	}
 	
 	function toHtml(){
+		global $tassist_html_dir;
 		$str_obsel_attr = $this->str_obsel_attr;
 		
 		$obsel = $this->obsel;
 		
-		$html = file_get_contents("/var/www/tconnect/tAssistance/html/TextObsel.html");
+		$html = file_get_contents($tassist_html_dir."/TextObsel.html");
 		$idObsel = "";
 		$begin = "";
 		$end = "";

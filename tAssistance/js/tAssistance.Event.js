@@ -1,0 +1,7 @@
+tAssistance.Event = function(event){
+	
+	
+	
+	
+	
+};

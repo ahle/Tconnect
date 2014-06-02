@@ -13,8 +13,8 @@ class OzaVWCounter{
 		
 		$old_counter = -1;
 		$counter = 0;
-		if(isset($trace->stats["validCnt"])){
-			$old_counter = $trace->stats["validCnt"];
+		if(isset($trace->stats->validCnt)){
+			$old_counter = $trace->stats->validCnt;
 			$counter = $old_counter;
 		}
 		
@@ -22,7 +22,7 @@ class OzaVWCounter{
 			$counter++;
 		}
 		
-		$trace->stats["validCnt"] = $counter;
+		$trace->stats->validCnt = $counter;
 		// save the result to the tstore
 		if($counter!=$old_counter){
 			$store = new OzaTStore();

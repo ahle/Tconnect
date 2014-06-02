@@ -10,8 +10,28 @@ $base_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/ANONYMOUS/";
 $ktbs_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
 //$base_uri = "http://localhost:8001/ANONYMOUS/";
 
-$root_dir = dirname(dirname(__FILE__));
+$tassist_php_dir = dirname(__FILE__);
+$tassist_dir = dirname(dirname(__FILE__));
+$tconnect_dir = dirname(dirname(dirname(__FILE__)));
+$ozalid_dir = $tconnect_dir."/project/Ozalid";
+$ozalid_tstore = $ozalid_dir."/TStore";
+$ozalid_correct = $ozalid_dir."/CorrectionServer";
 
+require_once $tassist_php_dir."/OzaDoc.php";
+require_once $tassist_php_dir."/TAssistantClient.php";
+require_once $tassist_php_dir."/OzaObselList.php";
+require_once $tassist_php_dir."/OzaObselSearch.php";
+require_once $tassist_php_dir."/OzaTraceList.php";
+require_once $tassist_php_dir."/OzaTraceSearch.php";
+require_once $tassist_php_dir."/TAssistant.php";
+require_once $tassist_php_dir."/TAssistantClient.php";
+require_once $tassist_php_dir."/TextObsel.php";
+require_once $tassist_php_dir."/TraceList.php";
+require_once $tassist_php_dir."/TraceSearch.php";
+require_once $ozalid_tstore."/OzaTStoreClient.php";
+require_once $ozalid_correct."/OzaEditorClient.php";
+
+$tassist_html_dir = $tassist_dir."/html";
 
 
 // style
@@ -256,7 +276,6 @@ function rule_get_full(){
 	}
 	return $rules_full;
 }
-
 
 function rule_indexOf($rules, $rule_id){
 	//echo "data=".$data;

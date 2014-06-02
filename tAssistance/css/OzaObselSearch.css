@@ -1,0 +1,14 @@
+.obselsearch-form {
+	
+	display:block;
+	padding: 5px;
+	border: 1px #F0F0F0 solid;
+	border-radius: 3px;
+}
+
+.obselsearch-form label, .obselsearch-form .input-search, .obselsearch-form .btn{
+	display: inline-block;
+	vertical-align: middle;
+	margin-bottom: 0;
+	margin-left: 5px
+}

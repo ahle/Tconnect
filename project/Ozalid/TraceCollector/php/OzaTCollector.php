@@ -10,7 +10,7 @@ require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaObsel.php";
 require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaTStore.php";
 require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaTraceProperties.php";
 require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaVWCounter.php";
-
+require_once "/var/www/tconnect/project/Ozalid/TStore/php/BasicCounter.php";
 
 class OzaTCollector {
 	
@@ -51,10 +51,13 @@ class OzaTCollector {
 			$trace = $old_trace;
 		}
 		
-		$ok = $store->addObsel($trace,$obsel);
+		$ok = $store->addObsel($trace,$new_obsel);
 		// add counter
 		$counter = new OzaVWCounter($trace);
 		$counter->receiveObsel($obsel);
+		// add counter
+		$counter = new BasicCounter($trace);
+		$counter->receiveObsel($obsel);		
 		
 		return $ok;		
 	}
@@ -63,7 +66,7 @@ class OzaTCollector {
 	function makeOzaObsel($obsel){
 		
 		$oza_obsel = new OzaObsel();
-		$oza_obsel->id = "o".rand();
+		$oza_obsel->id = "o".time().mt_rand(1000,9999);
 		$oza_obsel->type = $obsel->type;		
 		$oza_obsel->user = $obsel->user;
 		
@@ -71,7 +74,7 @@ class OzaTCollector {
 			$oza_obsel->$p = $o;
 		}
 		
-		return $obsel;
+		return $oza_obsel;
 	}
 	
 	// api for manipulating the trace infos of an obsel from its attributes
@@ -97,6 +100,10 @@ class OzaTCollector {
 		$properties->document_title = $doc_title;
 		
 		$trace->properties = $properties;
+		
+		$stats = new stdClass();
+		$trace->stats = $stats;
+		
 		$trace->obsels = "obsels".$trace->id;
 		
 		return $trace;

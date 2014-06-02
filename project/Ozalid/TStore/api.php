@@ -64,9 +64,9 @@ if($_SERVER['PATH_INFO']=="/traces" && $_SERVER[REQUEST_METHOD]=="GET"){
 	
 	// get all
 
-	$ktbs = new OzaTStore();
+	$store = new OzaTStore();
 
-	$traces = $ktbs->getTraces();
+	$traces = $store->getTraces();
 
 	echo json_encode($traces);
 	

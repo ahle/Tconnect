@@ -1,5 +1,5 @@
 <?php
-require_once "/var/www/tconnect/tAssistance/php/TraceList.php";
+//require_once "/var/www/tconnect/tAssistance/php/TraceList.php";
 
 class TraceSearch{
 	
@@ -8,9 +8,10 @@ class TraceSearch{
 	}
 	
 	function toHtml(){	
+		global $tassist_html_dir;
 		$id="TraceSearch".time();
 		
-		$html = file_get_contents("/var/www/tconnect/tAssistance/html/TraceSearch.html");
+		$html = file_get_contents($tassist_html_dir."/TraceSearch.html");
 		
 		$list = new TraceList($this->traces);
 		$html_traces = $list->toHtml();
