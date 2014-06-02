@@ -1,10 +1,11 @@
 <?php
-$oza_tstore_dir = dirname(__FILE__);
+$ozalid_tstore = dirname(__FILE__);
 $ozalid_dir = dirname(dirname(__FILE__));
 $tconnect_dir = dirname(dirname($ozalid_dir));
 $ktbsStore_dir = $tconnect_dir."/ktbs-store";
- 
-require_once "/var/www/tconnect/project/Ozalid/TStore/php/OzaTStore.php";
+$ozalid_tstore_php = $ozalid_tstore."/php";
+
+require_once $ozalid_tstore_php."/OzaTStore.php";
 //require_once $trace_dir."/lib/Console.php";
 
 //$ktbs_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
