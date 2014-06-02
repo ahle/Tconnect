@@ -10,9 +10,9 @@ $base_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/ANONYMOUS/";
 $ktbs_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
 //$base_uri = "http://localhost:8001/ANONYMOUS/";
 
+$tconnect_dir = dirname(dirname(dirname(__FILE__)));
 $tassist_php_dir = dirname(__FILE__);
 $tassist_dir = dirname(dirname(__FILE__));
-$tconnect_dir = dirname(dirname(dirname(__FILE__)));
 $ozalid_dir = $tconnect_dir."/project/Ozalid";
 $ozalid_tstore = $ozalid_dir."/TStore";
 $ozalid_correct = $ozalid_dir."/CorrectionServer";
