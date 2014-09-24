@@ -12,9 +12,10 @@ require_once $correct_dir."/OzaTraceRepoClient.php";
 require_once $collector_dir."/php/OzaTCollector.php";
 require_once $collector_dir."/php/Console.php";
 
+
 //$server_uri = "http://rd.urbiloglabs.fr/oz_trace_repository/ws/";
 //$server_uri = "https://ozalid.orange-labs.fr/oztraces/oz_trace_repository/ws/";
-$number_of_packages = 20;
+$number_of_packages = 100;
 $number_of_obsels = 100;
 $model_uri = "http://liris.cnrs.fr/silex/2011/simple-trace-model/";
 //$base_uri = "http://localhost:8001/base1/";

@@ -11,7 +11,6 @@ class OzeViewObsel{
 				"tv",
 				"makeReady",
 				"button",
-				"idview",
 				"goidview",
 				"idPage",
 				

@@ -1,8 +1,6 @@
 <?php
 $tAssistance_dir = dirname(__FILE__);
 require_once $tAssistance_dir.'/php/global.php';
-//require_once $tAssistance_dir.'/php/TableObsel.php';
-//require_once $tAssistance_dir.'/php/TextObsel.php';
 
 $session_id = session_id();
 #$user_id = get_user($session_id); // comment for debug
@@ -294,6 +292,25 @@ if($_GET["page"]=="UserPreference"){
 
 	//echo $obsel;
 	$page = file_get_contents($root_dir."/html/UserPreference.html");
+
+	echo $page;
+	exit;
+}
+
+if($_GET["page"]=="login"){
+	
+	require_once "php/login.php";
+	
+	exit;
+}
+
+if($_GET["page"]=="Trace"){
+	$user_id = $_SESSION["user"];
+	$trace_uri = $_GET["trace_uri"];
+
+	$page = file_get_contents("html/layout1.html");
+	$page = str_replace("\$user_id", $user_id, $page);
+	$page = str_replace("\$script", "var page = new tAssistance.TracePage('".$trace_uri."');", $page);
 
 	echo $page;
 	exit;

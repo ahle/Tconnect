@@ -12,10 +12,21 @@ require_once $ktbsPhp_dir."/KtbsStoredTrace.php";
 require_once $ktbsPhp_dir."/KtbsObsel.php";
 require_once "$ozalid_tstore/php/OzaTrace.php";
 require_once "$ozalid_tstore/php/OzaObsel.php";
+require_once "$ozalid_tstore/php/OzaDoc.php";
 require_once "$ozalid_tstore/php/OzaTStore.php";
 require_once "$ozalid_tstore/php/OzaTraceProperties.php";
+require_once "$ozalid_collector/php/OzaUserDocTCollector.php";
+require_once "$ozalid_collector/php/OzaDocTCollector.php";
+require_once "$ozalid_collector/php/OzaUserCollector.php";
+require_once "$ozalid_collector/php/OzaUserTCollector.php";
+require_once "$ozalid_collector/php/OzaDocCollector.php";
+require_once "$ozalid_collector/php/OzaAllTCollector.php";
+require_once "$ozalid_collector/php/OzaValidTCollector.php";
+require_once "$ozalid_collector/php/OzaObselModifier.php";
 require_once "$ozalid_tstore/php/OzaVWCounter.php";
 require_once "$ozalid_tstore/php/BasicCounter.php";
+require_once "$ozalid_correct/OzaDBClient.php";
+require_once "$ozalid_correct/OzaWsUlti.php";
 
 class OzaTCollector {
 	
@@ -30,90 +41,50 @@ class OzaTCollector {
 		
 		$new_user = $this->makeOzaUser($obsel);
 		
-		$new_trace = $this->makeOzaTrace($new_obsel);
-		
-		$store = new OzaTStore();
-
 		$user = false;
 		
-		$old_user = $store->getUserById($new_user->id);
-		$user = false;
-		if($old_user===false){
-			$ok = $store->addUser($new_user);
-			if(!$ok) return false;
-			$user = $store->getUserById($new_trace->properties->userid);
-		}else{
-			$user = $old_user;
-		}
+		$user_collector = new OzaUserCollector();
+		$user_collector->receiveUser($new_user->id);
+		
+		$doc_collector = new OzaDocCollector();
+		$doc_collector->receiveDoc($new_obsel->idDoc);
+		
+		$user_doc_tcollector = new OzaUserDocTCollector();
+		$ok = $user_doc_tcollector->receiveObsel($new_obsel);
+		
+		
+		$doc_tcollector = new OzaDocTCollector();
+		$doc_tcollector->receiveObsel($new_obsel);
+		
+		$user_tcollector = new OzaUserTCollector();
+		$user_tcollector->receiveObsel($new_obsel);
+		
+		$all_tcollector = new OzaAllTCollector();
+		$all_tcollector->receiveObsel($new_obsel);
 				
-		$old_trace = $store->getTraceByIds($new_trace->properties->userid, $new_trace->properties->document_id);
-		$trace = false;
-		if($old_trace===false){
-			$ok = $store->addTrace($new_trace);
-			if(!$ok) return false;
-			$trace = $store->getTraceByIds($new_trace->properties->userid, $new_trace->properties->document_id);
-		}else{
-			$trace = $old_trace;
-		}
-		
-		$ok = $store->addObsel($trace,$new_obsel);
-		// add counter
-		$counter = new OzaVWCounter($trace);
-		$counter->receiveObsel($obsel);
-		// add counter
-		$counter = new BasicCounter($trace);
-		$counter->receiveObsel($obsel);		
-		
-		return $ok;		
+		return $ok;
 	}
 	
 	// api for manipulating the meta infos of an obsel from its attributes
 	function makeOzaObsel($obsel){
 		
+		// complete the infos of obsel as altoId, indPage
+		$modifier = new OzaObselModifier();
+		$obsel = $modifier->modify($obsel);
+				
 		$oza_obsel = new OzaObsel();
 		$oza_obsel->id = "o".time().mt_rand(1000,9999);
-		$oza_obsel->type = $obsel->type;		
+		$oza_obsel->type = $obsel->type;
 		$oza_obsel->user = $obsel->user;
-		
+	
 		foreach($obsel as $p=>$o){
 			$oza_obsel->$p = $o;
-		}
-		
-		return $oza_obsel;
-	}
+		}		
 	
-	// api for manipulating the trace infos of an obsel from its attributes
-	function makeOzaTrace($obsel){
-		global $ozalid_correct;
-		require_once "$ozalid_correct/OzaDBClient.php";
-		
-		$idDoc = "no_doc";
-		if(isset($obsel->idDoc)){
-			$idDoc = $obsel->idDoc;
-		}
-		
-		$trace = new OzaTrace();
-		$trace->id = "t".time().mt_rand(1000,9999);
-		
-		$db = new OzaDBClient();
-		$doc_title = "No document";
-		if($idDoc!="no_doc"){
-			$doc_title = $db->getDocumentSummary($idDoc)->desc->title;
-		}
-		$properties = new OzaTraceProperties();
-		$properties->userid = $obsel->user;
-		$properties->document_id = $idDoc;
-		$properties->document_title = $doc_title;
-		
-		$trace->properties = $properties;
-		
-		$stats = new stdClass();
-		$trace->stats = $stats;
-		
-		$trace->obsels = "obsels".$trace->id;
-		
-		return $trace;
-	}
+		return $oza_obsel;
+	}	
+	
+	
 	// api for building a user from his obsel
 	function makeOzaUser($obsel){
 		global $ozalid_tstore,$ozalid_snet;
@@ -129,12 +100,8 @@ class OzaTCollector {
 		return $user;	
 	}	
 	
-	// api for getting obsels in a trace
-	public function getObsels($trace_uri){
-		$ktbs = new KtbsClient($this->uri);
-		
-		$obsels = $ktbs->getResource($trace_uri."@obsels.json","json");
-		return $obsels;
-	}
+	
+	
+	
 	
 }

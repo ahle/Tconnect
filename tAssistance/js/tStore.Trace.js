@@ -4,4 +4,4 @@ tStore.Trace = function(){
 	this.properties;
 	this.stats;
 	
-}
+};

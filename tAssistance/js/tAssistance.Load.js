@@ -86,7 +86,9 @@ tAssistance.load = function(options){
 		
 		var doc = new tAssistance.TraceDoc(trace);
 		
+		var model = new tAssistance.OzaTraceModel("1",document.body,{});
 		
+		document.querySelector("span[name='trace_title']").innerHTML = trace.properties.title;
 	});
 	
 	

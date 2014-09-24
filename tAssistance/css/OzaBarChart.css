@@ -1,0 +1,18 @@
+.chart div.y_label {
+	  font: 10px sans-serif;
+	  background-color: white;
+	  text-align: left;
+	  padding: 3px;
+	  margin: 1px;
+	  color: blue;
+	  display:inline-block;
+}
+.chart div.bar {
+	  font: 10px sans-serif;
+	  background-color: steelblue;
+	  text-align: right;
+	  padding: 3px;
+	  margin: 1px;
+	  color: white;
+	   display:inline-block;
+}

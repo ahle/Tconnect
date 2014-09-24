@@ -1,0 +1,52 @@
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
+<link href="imgcorrect.min.css" rel="stylesheet" ></link>
+<script src="imgcorrect.min.js"></script>
+</head>
+<body>
+<div id="word"></div>
+<script>
+  var doc = {
+    altoId: "1025030"      
+  };
+  var page = {
+    indPage: "10"
+  };  
+  var word = {
+    h: 57,
+    w: 242,
+    x: 1042,
+    y: 591
+  };
+
+  //instance d'un objet BlockImageCorrecT
+  var block = Object.create(BlockImageCorrecT);
+  
+  //on initialise l'instance avec une valeur de zoom 
+  block.init({
+    deltaZoomView: 0  // zoom = image Haute Définition
+  });
+  
+  //on initialise l'instance avec informations du document/page 
+  block.getInfoTiles({
+    altoId : doc.altoId,
+    indPage :  page.indPage,
+    callback : manageText // 'manageText' est une fonction callback appelée lorsque la connection au serveur d'image est prête 
+  });
+  
+  //La connection au serveur d'image est prête
+  function manageText() {
+      //ajoute le dessin du bloc 'word' au conteneur de id='word', et d'index '1'     
+      block.addImage({
+        container : 'word',
+        idWord: 1,
+        block: word
+      });
+  }
+</script>
+
+
+
+</body>
+</html>

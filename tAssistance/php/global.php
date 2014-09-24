@@ -29,7 +29,9 @@ require_once $tassist_php_dir."/TextObsel.php";
 require_once $tassist_php_dir."/TraceList.php";
 require_once $tassist_php_dir."/TraceSearch.php";
 require_once $ozalid_tstore."/OzaTStoreClient.php";
+require_once $ozalid_tstore."/php/OzaTStore.php";
 require_once $ozalid_correct."/OzaEditorClient.php";
+require_once $tassist_php_dir."/creator/OzaWordFreMaker.php";
 
 $tassist_html_dir = $tassist_dir."/html";
 

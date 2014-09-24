@@ -9,7 +9,7 @@ class OzaEditorClient{
 		}
 	}
 	
-	public function getDocUri($doc_id){
+	public function getDocSum($doc_id){
 		return $this->uri."summary/summary.html?v=view1&tv=page-text&idDoc=".$doc_id;
 	}
 	

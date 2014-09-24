@@ -10,5 +10,6 @@ class OzeCWObsel{
 	"before",
 	"after",
 	"rfW",
+	"xywh"
 	];
 }

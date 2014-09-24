@@ -6,7 +6,12 @@ $debug = true;
 
 $files = array(	"OzaTextObsel.css",
 				"OzaTraceList.css",
-				"OzaObselSearch.css"
+				"OzaObselSearch.css",
+				"OzaTraceModel.css",
+				"OzaBarChart.css",
+				"../lib/treeview/css/bootstrap-treeview.css",
+				"../lib/imgcorrect/imgcorrect.min.css",
+				"../lib/slider/css/slider.css"
 				);
 
 $css = "";

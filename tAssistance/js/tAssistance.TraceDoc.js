@@ -1,6 +1,6 @@
-tAssistance.TraceDoc = function(trace){
+tAssistance.TraceDoc = function(id, parentNode, trace){
 	
-	this.traceParent = document.getElementById("tracePanel");
+	this.traceParent = parentNode;
 	
 	
 	this.changeTrace = function(traceid){
@@ -14,12 +14,13 @@ tAssistance.TraceDoc = function(trace){
 		var combo = new tAssistance.ComboTrace(this, traceParent, trace);
 		this.combo = combo;
 	};
+	
 	var traceParent = this.traceParent;
 	
 	var combo = new tAssistance.ComboTrace(this, traceParent, trace);
 
-	var obselsearch = new tAssistance.OzaObselSearch("hhhh", this, document.getElementById("searchPanel"), document.getElementById("resultPanel"), trace, combo);
+	//var obselsearch = new tAssistance.OzaObselSearch("hhhh", this, document.getElementById("searchPanel"), document.getElementById("resultPanel"), trace, combo);
 	
 	this.combo = combo;
-	this.obselSearch = obselsearch;
+	//this.obselSearch = obselsearch;
 };

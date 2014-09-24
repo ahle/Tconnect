@@ -3,7 +3,7 @@ class TAssistantClient {
 	public $uri = "http://localhost/tconnect/tAssistance/";
 	
 	function __construct(){
-		$this->uri =  "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/";
+		//$this->uri =  "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/";
 	}
 	
 	function getTraceUri($trace_uri){

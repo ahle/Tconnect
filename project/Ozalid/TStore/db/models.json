@@ -1,0 +1,23 @@
+[
+  {
+    "id": "oza_model",
+    "obsels": [
+      {
+        "id": "oze_idg",
+        "properties": {
+          "user": "string",
+          "idSession": "string",
+          "infos_userAgent": "string"
+        }
+      },
+      {
+        "id": "oze_view",
+        "properties": {
+          "user": "string",
+          "idSession": "string",
+          "infos_userAgent": "string"
+        }
+      }
+    ]
+  }
+]

@@ -12,15 +12,33 @@ class OzaDBClient {
 		}
 	}
 
-	public function getDocumentSummary($documentId){
-		$remote_uri = $this->uri."sec/doc/".$documentId."/summary";
+// 	public function getDocumentSummary($documentId){
+// 		$uri = $this->uri."sec/doc/".$documentId."/summary";
+		
+// 		$token = "T33JZIfVQVvOckG72pb54+Xi/RVerupemKUe/342ZNzJpQZfW8UPZI+J5J0SA1pCdcmF+oN3hJof/f4xxsh0gg==";
+		
+// 		$json = Http::getHTTPs($uri,$token);
+		
+// 		$summary = json_decode($json);
+		
+// 		return $summary;
+// 	}
+	
+	public function getDoc($doc_id){
+		$uri = $this->uri."sec/doc/".$doc_id."";
 		
 		$token = "T33JZIfVQVvOckG72pb54+Xi/RVerupemKUe/342ZNzJpQZfW8UPZI+J5J0SA1pCdcmF+oN3hJof/f4xxsh0gg==";
 		
-		$json = Http::getHTTPs($remote_uri,$token);
+		$json = Http::getHTTPs($uri,$token);
 		
-		$summary = json_decode($json);
+		$doc = json_decode($json);
 		
-		return $summary;
+		return $doc;
+	}
+	
+	public function getDocImg($alto_id,$title_page){
+		$uri = "https://ozalid.orange-labs.fr/oztiles/".$alto_id."/".$alto_id."_".$title_page."/0/0/0.png";
+		
+		return $uri;
 	}
 }

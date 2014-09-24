@@ -4,11 +4,11 @@ $ozalid_store = dirname(dirname(__FILE__));
 class OzaTStore{
 	
 	public $db = "/var/www/tconnect/project/Ozalid/TStore/db/";
-		
+	
 	function __construct(){
 		global $ozalid_store;
 		$this->db = $ozalid_store."/db/";
-	}	
+	}
 	
 	function getUserById($userid){
 		$file = $this->db."users.json";
@@ -112,7 +112,39 @@ class OzaTStore{
 		return false;
 	}
 	
-	function getTracesById($trace_id){
+	function getTraceByProperties($properties){
+		$file = $this->db."traces.json";
+		$json = file_get_contents($file);
+		$traces = json_decode($json);
+		
+		foreach($traces as $trace){
+			$match_all = true;
+			foreach($properties as $p => $value){
+				$match1 = false;
+				foreach($trace->properties as $p1 => $value1){
+					if($p1==$p){
+						if($value1==$value){
+							$match1 = true;
+						}else{
+							$match1 = false;
+						}
+						break;
+					}
+				}
+				if($match1==false) {
+					$match_all = false;
+					break;
+				}
+			}
+			if($match_all){
+				return $trace;
+			}
+		}
+	
+		return false;
+	}
+	
+	function getTraceById($trace_id){
 		$file = $this->db."traces.json";
 		$json = file_get_contents($file);
 		$traces = json_decode($json);
@@ -127,7 +159,7 @@ class OzaTStore{
 	}
 	
 	function getCompleteTraceById($trace_id){
-		$trace = $this->getTracesById($trace_id);
+		$trace = $this->getTraceById($trace_id);
 		
 		$obsels = $this->getObsels($trace_id);
 		
@@ -135,8 +167,7 @@ class OzaTStore{
 		
 		return $trace;
 	}
-	
-	
+		
 	function getObsels($traceid){
 		$file = $this->db."obsels".$traceid.".json";
 		$json = file_get_contents($file);
@@ -161,6 +192,67 @@ class OzaTStore{
 		return $ok;
 	}
 	
+	//function updateTrace(){
+	//	
+	//}
+	
+	function addModel($model){
+		$file = $this->db."models.json";
+		$json = file_get_contents($file);
+		$models = json_decode($json);
+		
+		$models[] = $model;
+		
+		$json = json_encode($models);
+		
+		$ok = file_put_contents($file, $json);
+		
+		return $ok;
+	}
+	
+	function getModels(){
+		
+		
+	}
+	
+	function addDoc($doc){
+		//$doc_id = $doc->id;
+		
+		$file = $this->db."docs.json";
+		$json = file_get_contents($file);
+		$docs = json_decode($json);
+		
+		$docs[] = $doc;
+		
+		$json = json_encode($docs);
+		
+		$ok = file_put_contents($file, $json);
+		
+		return $ok;
+	}
+	
+	function getDocById($doc_id){
+		$file = $this->db."docs.json";
+		$json = file_get_contents($file);
+		$docs = json_decode($json);
+		
+		foreach($docs as $doc){
+			if($doc->id == $doc_id){
+				return $doc;
+			}
+		}
+		
+		return false;
+	}
+	
+	function getDocs(){
+		$file = $this->db."docs.json";
+		$json = file_get_contents($file);
+		$docs = json_decode($json);
+
+	
+		return $docs;
+	}
 	
 }
 

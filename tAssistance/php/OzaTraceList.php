@@ -14,7 +14,7 @@ class OzaTraceList{
 	
 		foreach($this->traces as $trace){
 			$search = strtolower($search);
-			$title = strtolower($trace->properties->document_title);
+			$title = strtolower($trace->properties->title);
 			if(strpos($title,$search)!==false || $search == "*"){
 				$traces[]= $trace;
 			}
@@ -39,8 +39,9 @@ class OzaTraceList{
 			$trace_uri = $store_client->getTraceUri($traceid);
 			$assistant_uri = $assistant_client->getTraceUri($trace_uri);
 			
-			$html_traces.= "<div class='ozatracelist-trace'><a href='".$assistant_uri."'>".$trace->properties->document_title."</a>[<a href='#' name='more' data-less='Less' data-more='More'>More</a>]<br/>";
+			$html_traces.= "<div class='ozatracelist-trace'><img src='img/trace.png' height='14px' width='14px'></img> <a href='".$assistant_uri."'>".$trace->properties->title."</a>[<a href='#' name='more' data-less='Less' data-more='More'>More</a>]<br/>";
 			$html_traces.= "<p style='display:none'>Nombre des mots validés: ".$trace->stats->validCnt."<br/>";
+			$html_traces.= "Modèle de trace: <img src='img/model.png' height='14px' width='14px'>".$trace->properties->model."<br/>";
 			$html_traces.= "Nombre des obsels: ".$trace->stats->count."</p></div>";
 		}
 		

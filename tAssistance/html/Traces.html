@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Trace Assistance</title>
 <link href="css/trace.css" rel="stylesheet" >
-<link href="css/bootstrap.css" rel="stylesheet" >
+<link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet" >
 <link href="lib/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 <link href="css/slider.css" rel="stylesheet" >
 <link href="css/bootstrap-select.css" rel="stylesheet" >
@@ -12,7 +12,7 @@
 <link href="css/css.php" rel="stylesheet">
 <!-- <script type="text/javascript" src="../tAdapter/js/js.php"></script> -->
 <script type="text/javascript" src="js/js.php"></script>
-<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="js/bootstrap-tooltip.js"></script>
 <script type="text/javascript" src="lib/datetimepicker/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="lib/datetimepicker/js/locales/bootstrap-datetimepicker.fr.js"></script>
@@ -39,7 +39,8 @@
 
 </head>
 <body>
-<span class="label">user: $user_id</span>
+<span>user: $user_id</span>
+<img src="img/trace.png" height="14px" width="14px"><span name="trace_title"></span>
 <div id="viewPanel" style="margin:5px">
 <!-- <div class="btn-group"> -->
 
@@ -62,7 +63,11 @@
 <!-- </div> -->
 </div>
 <div class="container-fluid">
-<div id="tracePanel" style=""></div>
+<div class="panel panel-default">
+    <div class="panel-heading">Trace</div>
+    <div class="panel-body"><div id="tracePanel" style=""></div></div>
+</div>
+
 <br/>
 <div id="controlPanel" style=""></div>
 <div id="userPanel" style=""></div>
