@@ -92,7 +92,7 @@ if($_SERVER['PATH_INFO']=="/traces" && $_SERVER['REQUEST_METHOD']=="GET"){
 	exit;
 }
 
-if($_SERVER['PATH_INFO']=="/traces" && $_SERVER[REQUEST_METHOD]=="POST"){
+if($_SERVER['PATH_INFO']=="/traces" && $_SERVER['REQUEST_METHOD']=="POST"){
 
 	$user = $_POST["user"];
 
@@ -108,7 +108,7 @@ if($_SERVER['PATH_INFO']=="/traces" && $_SERVER[REQUEST_METHOD]=="POST"){
 	exit;
 }
 
-if($_SERVER['PATH_INFO']=="/docs" && $_SERVER[REQUEST_METHOD]=="GET"){
+if($_SERVER['PATH_INFO']=="/docs" && $_SERVER['REQUEST_METHOD']=="GET"){
 
 	if(isset($_GET["docid"])){
 
@@ -134,7 +134,7 @@ if($_SERVER['PATH_INFO']=="/docs" && $_SERVER[REQUEST_METHOD]=="GET"){
 	exit;
 }
 
-if($_SERVER['PATH_INFO']=="/words" && $_SERVER[REQUEST_METHOD]=="GET"){
+if($_SERVER['PATH_INFO']=="/words" && $_SERVER['REQUEST_METHOD']=="GET"){
 
 	if(isset($_GET["docid"])){
 
@@ -174,7 +174,7 @@ if($_SERVER['PATH_INFO']=="/words" && $_SERVER[REQUEST_METHOD]=="GET"){
 	exit;
 }
 
-if($_SERVER['PATH_INFO']=="/query" && $_SERVER[REQUEST_METHOD]=="GET"){
+if($_SERVER['PATH_INFO']=="/query" && $_SERVER['REQUEST_METHOD']=="GET"){
 
 	if(isset($_GET["docids"])&&isset($_GET["wordids"])){
 
