@@ -1,13 +1,14 @@
 <?php
-$ozalid_store = dirname(dirname(__FILE__));
+$tstore = dirname(__FILE__);
+$ozalid_store = dirname($tstore);
 
 class OzaTStore{
 	
 	public $db = "/var/www/tconnect/project/Ozalid/TStore/db/";
 	
 	function __construct(){
-		global $ozalid_store;
-		$this->db = $ozalid_store."/db/";
+		global $tstore;
+		$this->db = $tstore."/db/";
 	}
 	
 	function getUserById($userid){
