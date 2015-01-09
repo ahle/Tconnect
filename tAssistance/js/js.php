@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(0);
+
 require 'jsmin.php';
 
 header("Content-type: text/javascript");
@@ -8,7 +10,7 @@ $debug = true;
 
 $files = array( "../lib/jquery/jquery.js"
 				,"../lib/moment/moment.js"
-				,"../js/dateFormat.js"				
+				//,"../js/dateFormat.js"				
 				,"../js/tAssistance.js"
 				,"../js/common/Datetime.js"
 				,"../js/common/Data.js"
@@ -18,19 +20,19 @@ $files = array( "../lib/jquery/jquery.js"
 				,"../js/com/OzaObselLabel.js"
 				,"../js/tAssistance.TraceDoc.js"
 				,"../js/com/ComboTrace.js"
-				,"../js/tAssistance.OzaObselSearch.js"
-				,"../js/tAssistance.TextObselMarker.js"
+				//,"../js/tAssistance.OzaObselSearch.js"
+				//,"../js/tAssistance.TextObselMarker.js"
 				,"../js/com/OzaGroup.js"
-				,"../js/tAssistance.OzaSeqGroup.js"
-				,"../js/tAssistance.OzaObsel.js"
+				//,"../js/tAssistance.OzaSeqGroup.js"
+				//,"../js/tAssistance.OzaObsel.js"
 				,"../js/ctrler/OzaTrace.js"
 				,"../js/tAssistance.OzaTraceModel.js"
 				,"../js/ctrler/ObselMarker.js"
 				,"../js/tAssistance.Load.js"
-				,"../js/tAssistance.Obsel.js"				
+				//,"../js/tAssistance.Obsel.js"				
 				,"../js/tAssistance.Util.js"
-				,"../js/tAssistance.Group.js"
-				,"../js/tAssistance.makeOzaObsel.js"
+				//,"../js/tAssistance.Group.js"
+				//,"../js/tAssistance.makeOzaObsel.js"
 				,"../js/com/OzaImageObsel.js"
 				,"../js/ctrler/OzaImageObselMaker.js"
 				,"../js/tAssistance.SVG.js"

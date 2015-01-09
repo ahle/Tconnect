@@ -1,3 +1,0 @@
-tAssistance.OzaTraceRow = function(){
-	
-};
