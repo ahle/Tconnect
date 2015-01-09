@@ -1,6 +1,9 @@
 <?php
 error_reporting(0);
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST');
+
 $ozalid_tstore = dirname(__FILE__);
 $ozalid_dir = dirname(dirname(__FILE__));
 $tconnect_dir = dirname(dirname($ozalid_dir));

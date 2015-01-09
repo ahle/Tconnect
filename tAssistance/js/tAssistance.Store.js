@@ -2,6 +2,7 @@ tAssistance.Store = function(){
 	// assist server
 	
 	this.db = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/api.php/";
+	//this.db = "http://localhost/tconnect/tAssistance/api.php/";
 	
 	this.getUserById = function(user_id, callback){
 		var url = this.db+"users?userid="+user_id;

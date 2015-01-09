@@ -5,7 +5,7 @@ require_once $ozalid_correct."/lib/Http.php";
 
 class OzaTStoreClient {
 	public $uri = "http://localhost/tconnect/project/Ozalid/TStore/api.php/";
-	//public $uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/project/Ozalid/TStore/api.php/";
+	//public $uri = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/project/Ozalid/TStore/api.php/";
 	
 	function __construct($repo_uri){
 		if(isset($repo_uri)){

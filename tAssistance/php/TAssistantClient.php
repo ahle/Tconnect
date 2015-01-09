@@ -1,5 +1,6 @@
 <?php
 class TAssistantClient {
+	//public $uri = "http://localhost/tconnect/tAssistance/";
 	public $uri = "http://localhost/tconnect/tAssistance/";
 	
 	function __construct(){
