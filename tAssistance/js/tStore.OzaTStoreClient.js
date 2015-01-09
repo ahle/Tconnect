@@ -7,7 +7,7 @@ tStore.OzaTStoreClient = function(){
 	};
 	
 	this.getAllTraces = function(){
-		var uri = this.uri + "traces;
+		var uri = this.uri + "traces";
 		return uri;
 	};
 	
@@ -17,7 +17,7 @@ tStore.OzaTStoreClient = function(){
 	};
 	
 	this.getAllUsers = function(){
-		var uri = this.uri + "users;
+		var uri = this.uri + "users";
 		return uri;
 	};
 	
