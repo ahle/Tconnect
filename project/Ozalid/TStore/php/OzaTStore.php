@@ -1,6 +1,6 @@
 <?php
-$tstore = dirname(__FILE__);
-$ozalid_store = dirname($tstore);
+$php_tstore = dirname(__FILE__);
+$tstore = dirname($php_tstore);
 
 class OzaTStore{
 	
