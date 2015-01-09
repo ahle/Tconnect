@@ -1,8 +1,8 @@
 <?php
 error_reporting(0);
 
-//echo json_encode($_GET);
-//echo json_encode($_SERVER[REQUEST_METHOD]);
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST');
 
 $dir = dirname(__FILE__);
 require_once $dir.'/php/global.php';
