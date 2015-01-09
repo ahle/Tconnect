@@ -72,15 +72,5 @@ tAssistance.obsels = {
 	},
 	setLocalObsels: function(obsels) {
 		localStorage["tAssistance.obsels"] = JSON.stringify(obsels);
-	},
-	selectObselTypes: function(obsels) {
-		var obsel_types = [];
-		for ( var i = 0; i < obsels.length; i++) {
-			var obsel = obsels[i];
-			if (obsel_types.indexOf(obsel[tAssistance.obsel.type]) == -1) {
-				obsel_types.push(obsel[tAssistance.obsel.type]);
-			}
-		}
-		return obsel_types;
 	}
 };

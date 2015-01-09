@@ -30,11 +30,11 @@ tAssistance.OzaObselMaker = function(id,parent,x,time,src_obsel){
 		// remove dataset
 		delete tAssistance.data[id];
 	}
-		
+	
 	// create element		
 	var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 	var y = tAssistance.svg.lines["line0"],
-	r = 8;
+	r = 8;d
 	
 	var base = {
 		"x": x, "y": y, "color": color, "r": '10'

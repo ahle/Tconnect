@@ -32,6 +32,8 @@ require_once $ozalid_tstore."/OzaTStoreClient.php";
 require_once $ozalid_tstore."/php/OzaTStore.php";
 require_once $ozalid_correct."/OzaEditorClient.php";
 require_once $tassist_php_dir."/creator/OzaWordFreMaker.php";
+require_once $tassist_php_dir."/store/User.php";
+require_once $tassist_php_dir."/common/_Object.php";
 
 $tassist_html_dir = $tassist_dir."/html";
 

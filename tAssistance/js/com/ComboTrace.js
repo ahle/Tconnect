@@ -1,18 +1,6 @@
-tAssistance.ComboTrace = function(parent, element, trace){
-	
-	var trace_id = "trace"+(new Date()).getTime()+Math.floor((Math.random() * 1000) + 1);
-	var domTrace = new tAssistance.OzaTrace(trace_id, element, trace);
-	this.trace = domTrace;
-	
-	var obselList_id = "obselList_"+(new Date()).getTime()+Math.floor((Math.random() * 1000) + 1);
-	var obselList = new tAssistance.OzaObselList(obselList_id ,element, trace.obsels);
-	this.obselList = obselList;
-	
-	domTrace.addObselList(obselList);
-	
-	//var obselsearch = new tAssistance.OzaObselSearch("hhhh", document.getElementById("searchPanel"), document.getElementById("resultPanel"), trace, domTrace);
-	//this.obselSearch = obselsearch;
-	
+tAssistance.ComboTrace = function(parent, element, trace){	
+	this.trace = trace;	
+	this.obselList = obselList;		
 	this.parent = parent;
 	this.element = element;
 	

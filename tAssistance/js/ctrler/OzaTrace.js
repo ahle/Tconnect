@@ -7,57 +7,28 @@ tAssistance.OzaTrace = function(id, parentNode, trace){
 	
 	obsels = trace.obsels;
 	
-	var width = parentNode.clientWidth - 20;
-	var height = 150;	
-	
-	var opts = {
-			x_unit: 20,
-			x0: 0,
-			y0: 40
-	};
-	//make a div
-	var traceid =  "trace"+(new Date()).getTime();
-	
-	var div = document.createElement("div");
-	div.setAttribute("style","width: "+width+"px; border: solid 1px black");
-	div.setAttribute("id",traceid)
-	parentNode.appendChild(div);
+//	var width = parentNode.clientWidth - 20;
+//	var height = 150;
+//	
+//	var opts = {
+//			x_unit: 20,
+//			x0: 0,
+//			y0: 40
+//	};
+//	//make a div
+//	var traceid =  "trace"+(new Date()).getTime();
+//	
+//	var div = document.createElement("div");
+//	div.setAttribute("style","width: "+width+"px; border: solid 1px black");
+//	div.setAttribute("id",traceid)
+//	parentNode.appendChild(div);
 	
 	this.element = div;
 	
 	var zoom_id = "zoom"+(new Date()).getTime();
 	div.innerHTML = '<div><div class="zoom_out"></div><input id="'+zoom_id+'" type="range" class="span3 slider" value="0"><div class="zoom_in"></div><button type="button" class="close" aria-hidden="true" onclick=\'document.getElementById("'+traceid+'").innerHTML="";\'>×</button></div>';
 	// make slider
-	slider = this.element.getElementsByClassName("slider");
-	this.slider = slider;
 	
-	$("#"+zoom_id).slider({
-		formater: function(value){
-			return tAssistance.Datetime.unitTexts[parseInt(value)];
-		},
-		value: zoom,
-		min: 0,
-		max: 19,
-		step: 1,
-		selection: 'none',
-		tooltip: 'show'
-	}).on('slideStop', function(ev){
-		console.log(ev.value);
-		var units = tAssistance.Datetime.units;
-		var unitTexts = tAssistance.Datetime.unitTexts;
-		//var rangevalue = document.getElementById('rangevalue');
-		
-		iUnit = parseInt(ev.value);
-		
-		//rangevalue.value = unitTexts[iUnit];
-		// create an event for update the trace
-		
-		$("#"+zoom_id).trigger("changeSetting",{
-			unit: iUnit,
-			unitText: unitTexts[iUnit],
-			time: new Date(),
-		});
-	});	
 	
 	// make a svg
 	var svgNS = "http://www.w3.org/2000/svg";

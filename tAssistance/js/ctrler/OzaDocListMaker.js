@@ -7,8 +7,13 @@ tAssistance.OzaDocListMaker = function(id, element, s_docs){
 		// add the computed information to the user
 		//var assistant = new tAssistance.OzaAssistantClient();
 		//m_user.as_user_uri = assistant.getUserUri(m_user.uri);
-				
+		
 		var row = new tAssistance.OzaDocRow("abd", this, m_doc);
 	}
+	
+	this.paint = function(){
+		
+	};
+	
 	
 };

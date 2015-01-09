@@ -1,0 +1,21 @@
+.zoom_out{
+	display: inline-block;
+	margin: 5px;
+  	width: 18px;
+  	height: 18px;
+	background-image: url('../img/zoom_out.png');
+}
+.zoom_in{
+	display: inline-block;
+	vertical-align: middle;	
+	margin: 5px;
+  	width: 18px;
+  	height: 18px;
+	background-image: url('../img/zoom_in.png');
+}
+
+.slider.slider-vertical {
+  height: 150px !important;
+  left: 0px !important;
+  margin: 5px;
+}

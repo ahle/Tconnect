@@ -5,14 +5,6 @@ tAssistance.OzaObselList = function(id, element, obsels){
 	this.trace;
 	this.childs = [];
 	this.marker = false;
-	//element = document.getElementById(id);
-	//traces = element.querySelector("div[name='obsels']");
-	
-	for(i=0;i<obsels.length;i++){
-		src_obsel = obsels[i];
-		var obsel_id = "txtObsel_"+(new Date()).getTime()+Math.floor((Math.random() * 1000) + 1);	 
-		var obsel = new tAssistance.OzaTextObsel(obsel_id, this,src_obsel);
-	}
 	
 	this.markObsel = function(src_obsel_id){
 		if(this.marker){
@@ -25,8 +17,6 @@ tAssistance.OzaObselList = function(id, element, obsels){
 	};
 	
 	this.unmarkObsel = function(){
-		//if(this.marked){
-		//	this.marked.remove();
-		//}
+		
 	};
 };

@@ -1,4 +1,4 @@
-tAssistance.OzaGroup = function(id, parent, width, zoom){
+tAssistance.OzaGroup = function(id, parent, trace, width, zoom){
 	this.scale_x_time = 1000/tAssistance.Datetime.units[zoom];	
 	this.timeoffset;
 	this.xoffset;
@@ -6,7 +6,7 @@ tAssistance.OzaGroup = function(id, parent, width, zoom){
 	this.element;
 	this.scaleLevel = 0;
 	this.width = width;
-	this.trace_id = parent.trace.id;
+	this.trace_id = trace.id;
 	this.id = id;
 	this.marked;
 	this.parent = parent;
@@ -371,7 +371,7 @@ tAssistance.OzaGroup = function(id, parent, width, zoom){
 			
 			var x = this.getX(minorTime, timeoffset, xoffset, scale_x_time);
 			
-			var label = new tAssistance.OzaObselLabel(this, x, minorTime, snap);
+			var label = new tAssistance.OzaObselLabelMaker(this, x, minorTime, snap);
 		}
 	};
 	
@@ -387,21 +387,18 @@ tAssistance.OzaGroup = function(id, parent, width, zoom){
 		}
 		if(iObsel){
 			// calculate new timeoffset
-			this.timeoffset = s_obsels[iObsel].begin;
+			this.timeoffset = s_obsels[iObsel].begin;dd
 			this.update();
 		}		
 	};
 	
 	// element
-	var svg = parent.element.querySelector("svg");	
-	var svgNS = tAssistance.svg.svgNS;
-	var group = document.createElementNS(svgNS,"g");
-	group.setAttribute("transform","translate(0 0) scale(1 1)");
-	group.setAttribute("data-id",this.id);
-	svg.appendChild(group);
+	//var groupEl = new tAssistance.dom.OzaGroup("abc");
+	
+	//svg.appendChild(groupEl);
 	// save the bi-references
-	this.element = group;
-	parent.group = this;
+	//this.element = group;
+	//parent.group = this;
 	
 	tAssistance.data[id] = this;
 	

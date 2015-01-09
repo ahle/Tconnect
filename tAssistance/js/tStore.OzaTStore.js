@@ -87,4 +87,19 @@ tStore.OzaTStore = function(){
 	this.existTrace = function(trace_id){
 		
 	};
+
+	this.getUser = function(){
+		var json = localStorage["tStore.user"];
+		var user = JSON.parse(json);
+		
+		return user;
+	};
+
+	
+
+
+
+
+
+
 };

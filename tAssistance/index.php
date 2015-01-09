@@ -316,4 +316,13 @@ if($_GET["page"]=="Trace"){
 	exit;
 }
 
+if($_GET["user"]){
+	$user_id = $_GET["user"];
+	
+	$_SESSION["user"] = $user_id;
+	
+	echo $user_id." is logged";
+	exit;
+}
+
 require_once $tassist_php_dir."/oza-index.php";

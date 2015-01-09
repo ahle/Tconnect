@@ -192,10 +192,6 @@ class OzaTStore{
 		return $ok;
 	}
 	
-	//function updateTrace(){
-	//	
-	//}
-	
 	function addModel($model){
 		$file = $this->db."models.json";
 		$json = file_get_contents($file);

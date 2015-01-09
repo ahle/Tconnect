@@ -1,0 +1,5 @@
+tAssistance.dom.OzaDom = function(){
+	
+	
+	
+};

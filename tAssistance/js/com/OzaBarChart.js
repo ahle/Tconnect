@@ -11,6 +11,9 @@ tAssistance.OzaBarChart = function(id, parent, dataset){
 						
 			chart.appendChild(row);
 			
+			var icon = document.createElement("div");
+			icon.setAttribute();icon-text-underline
+			
 			var y_label = document.createElement("div");			
 			y_label.setAttribute("style","width: 120px");
 			y_label.setAttribute("class","y_label");

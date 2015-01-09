@@ -20,4 +20,9 @@ tStore.OzaTStoreClient = function(){
 		var doc_uri = this.uri + "docs?docid=" + doc_id;
 		return doc_uri;
 	};
+	
+	this.getAllDocs = function(){
+		var uri = this.uri + "docs";
+		return uri;
+	};
 };

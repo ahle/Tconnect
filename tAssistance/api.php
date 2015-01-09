@@ -19,7 +19,7 @@ require_once $dir.'/php/global.php';
 	if($_GET["o"]=="style" && $_SERVER[REQUEST_METHOD]=="DELETE"){
 		// read data input
 		
-		$style_id = $_GET["p1"];		
+		$style_id = $_GET["p1"];
 		
 		style_delete($style_id);
 		echo "1 record deleted";
@@ -127,8 +127,7 @@ require_once $dir.'/php/global.php';
 		}
 		$app_id = $ticket->app_id;
 		$remote_session = $ticket->session_id;
-		$user_id = $ticket->user_id;
-		
+		$user_id = $ticket->user_id;		
 		
 		$local_session = session_id();
 		
@@ -286,6 +285,110 @@ if($_GET["o"]=="rule" && $_SERVER[REQUEST_METHOD]=="DELETE"){
 
 	exit;
 }
+
+if($_SERVER['PATH_INFO']=="/users" && $_SERVER[REQUEST_METHOD]=="GET"){
+
+	if($_GET["o"]=="filter"){
+	
+		$user_id = $_GET["userid"];
+	
+		$velement_id = $_GET["velement_id"];
+				
+		$store = new TAssistant();
+	
+		$filter = $store->getFilter($user_id, $velement_id);
+	
+		echo json_encode($filter);
+	
+		exit;
+	}
+	
+	if(isset($_GET["userid"])){
+
+		$user_id = $_GET["userid"];
+
+		$store = new TAssistant();
+
+		$users = $store->getUserById($user_id);
+
+		echo json_encode($users);
+
+		exit;
+	}
+
+	// get all
+
+	$store = new TAssistant();
+
+	$users = $store->getUsers();
+
+	echo json_encode($users);
+
+	exit;
+}
+
+if($_SERVER['PATH_INFO']=="/users" && $_SERVER[REQUEST_METHOD]=="PUT"){
+
+	if($_GET["o"]=="pfilter" && $_GET["fn"]=="replace"){
+
+		$user_id = $_GET["userid"];
+		
+		$velement_id = $_GET["velement_id"];
+		
+		$pfilter_id = $_GET["pfilter_id"];
+		
+		$pfilter_str = file_get_contents("php://input");
+		
+		$pfilter = json_decode($pfilter_str);
+
+		$store = new TAssistant();
+
+		$users = $store->replacePFilter($user_id, $velement_id, $pfilter_id, $pfilter);
+		
+		echo "ok"; 
+
+		exit;
+	}
+	else if($_GET["o"]=="pfilter"){
+	
+		$user_id = $_GET["userid"];
+	
+		$velement_id = $_GET["velement_id"];
+	
+		$pfilter_id = $_GET["pfilter_id"];
+	
+		$updates_str = file_get_contents("php://input");
+	
+		$updates = json_decode($updates_str);
+	
+		$store = new TAssistant();
+	
+		$users = $store->updatePFilter($user_id, $velement_id, $pfilter_id, $updates);
+	
+		echo "ok";
+	
+		exit;
+	}
+	exit;
+}
+
+
+
+if($_SERVER['PATH_INFO']=="/users" && $_SERVER[REQUEST_METHOD]=="POST"){
+
+	$user = $_POST["user"];
+
+	$user_infos["id"] = $user;
+
+	$ktbs = new KtbsStore();
+
+	$ok = $ktbs->addUser($user_infos);
+
+	echo $ok;
+
+	exit;
+}
+
 
 if($_SERVER['PATH_INFO']=="/widget/TraceSearch" && $_GET["search"]){
 	// read data input

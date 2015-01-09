@@ -1,25 +1,16 @@
 tAssistance.OzaDocRow1 = function(id,parent, m_doc){
+	this.doc = m_doc;
+	//this.parent = parent;
+	
 	var doc = m_doc;
-	docid = doc.id;
-	//user_uri = user.uri;
-	//as_trace_uri = user.as_trace_uri;
+	var docid = doc.id;
+
 	as_doc_uri = doc.as_doc_uri;
-	//as_doc_uri = user.as_doc_uri;
+
+	// build an dom
+	var doc_row_el = new tAssistance.dom.OzaDocRow1(id, doc);
 	
-	var doc_row = document.createElement("div");
-	doc_row.setAttribute("class","ozatracelist-trace");
 	
-	var doc_icon = document.createElement("span");
-	doc_icon.setAttribute("class","glyphicon glyphicon-file");
-	
-	doc_row.appendChild(doc_icon);
-	
-	var doc_title = document.createElement("a");
-	doc_title.setAttribute("href", as_doc_uri);
-	doc_title.innerHTML = m_doc.title.substring(0, 50) || "Tous";
-	
-	doc_row.appendChild(doc_title);
-		
-	parent.element.appendChild(doc_row);
-	
+	parent.element.appendChild(doc_row_el);
+	this.element = doc_row_el;
 };
