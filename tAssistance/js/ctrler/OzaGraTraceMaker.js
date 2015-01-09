@@ -128,7 +128,7 @@ tAssistance.OzaGraTraceMaker = function(id, trace){
 	//setting2.querySelector("td[name='td2']").appendChild(valueList);
 	// make model
 	
-	var store = tStore.OzaTStoreClient();
+	var store = new tStore.OzaTStoreClient();
 	var trace_uri = store.getTraceUri("t_all");
 	
 	
