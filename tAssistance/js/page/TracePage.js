@@ -17,7 +17,7 @@ tAssistance.TracePage = function(trace_uri, user_id){
 			window.page.trace = trace;
 		}),
 		
-		jQuery.getJSON("http://localhost/tconnect/project/Ozalid/TStore/api.php/users?userid=Alain",function(data){	
+		jQuery.getJSON("http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/project/Ozalid/TStore/api.php/users?userid=Alain",function(data){	
 			var user = data;
 			
 			window.page.user = user;

@@ -1,4 +1,6 @@
 <?php
+error_reporting(0);
+
 $ozalid_tstore = dirname(__FILE__);
 $ozalid_dir = dirname(dirname(__FILE__));
 $tconnect_dir = dirname(dirname($ozalid_dir));
@@ -10,7 +12,7 @@ require_once $ozalid_tstore_php."/OzaQuery.php";
 
 //$ktbs_uri = "https://dsi-liris-silex.univ-lyon1.fr/ozalid/ktbs/";
 
-if($_SERVER['PATH_INFO']=="/users" && $_SERVER[REQUEST_METHOD]=="GET"){
+if($_SERVER['PATH_INFO']=="/users" && $_SERVER['REQUEST_METHOD']=="GET"){
 
 	if(isset($_GET["userid"])){
 		
@@ -36,7 +38,7 @@ if($_SERVER['PATH_INFO']=="/users" && $_SERVER[REQUEST_METHOD]=="GET"){
 	exit;
 }
 
-if($_SERVER['PATH_INFO']=="/users" && $_SERVER[REQUEST_METHOD]=="POST"){
+if($_SERVER['PATH_INFO']=="/users" && $_SERVER['REQUEST_METHOD']=="POST"){
 	
 	$user = $_POST["user"];
 	
@@ -51,7 +53,7 @@ if($_SERVER['PATH_INFO']=="/users" && $_SERVER[REQUEST_METHOD]=="POST"){
 	exit;
 }
 
-if($_SERVER['PATH_INFO']=="/traces" && $_SERVER[REQUEST_METHOD]=="GET"){
+if($_SERVER['PATH_INFO']=="/traces" && $_SERVER['REQUEST_METHOD']=="GET"){
 
 	if(isset($_GET["userid"])){
 		
