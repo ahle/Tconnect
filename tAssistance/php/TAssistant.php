@@ -2,13 +2,15 @@
 
 use TAssistance;
 
+$php_tassist_store = dirname(__FILE__);
+$tassist_store = dirname($php_tstore);
+
 class TAssistant {
 	public $db = "/var/www/tconnect/tAssistance/db/";
 	
 	function __construct(){
-		
-		
-		
+		global $tassist_store;
+		$this->db = $tassist_store."/db/";
 	}
 	
 	function getTrace(){
