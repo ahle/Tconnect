@@ -1,7 +1,7 @@
 tAssistance.UserListPage = function(){
 	
-	var tStore = tStore.OzaTStoreClient();
-	var uri = tStore.getAllUsers();
+	var store = tStore.OzaTStoreClient();
+	var uri = store.getAllUsers();
 	
 	var url = uri;
 	

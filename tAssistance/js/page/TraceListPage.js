@@ -1,7 +1,7 @@
 tAssistance.TraceListPage = function(){
 	
-	var tStore = tStore.OzaTStoreClient();
-	var uri = tStore.getAllTraces();
+	var store = tStore.OzaTStoreClient();
+	var uri = store.getAllTraces();
 	
 	var url = uri;
 	
