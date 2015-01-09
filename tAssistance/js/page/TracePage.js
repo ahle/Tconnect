@@ -5,7 +5,7 @@ tAssistance.TracePage = function(trace_uri, user_id){
 	//var url = trace_uri;
 	window.page = {};
 	
-	var store = new tStore.tStore.OzaTStoreClient();
+	var store = new tStore.OzaTStoreClient();
 	var user_uri = store.getUserUri("Alain");
 	
 	jQuery.when(
