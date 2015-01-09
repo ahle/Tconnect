@@ -3,7 +3,7 @@
 use TAssistance;
 
 $php_tassist_store = dirname(__FILE__);
-$tassist_store = dirname($php_tstore);
+$tassist_store = dirname($php_tassist_store);
 
 class TAssistant {
 	public $db = "/var/www/tconnect/tAssistance/db/";
