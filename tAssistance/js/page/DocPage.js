@@ -1,4 +1,4 @@
-tAssistance.TracePage = function(){
+tAssistance.DocPage = function(){
 	
 	var test1 = document.getElementById("test1");
 	

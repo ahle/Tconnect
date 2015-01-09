@@ -1,9 +1,14 @@
 tStore.OzaTStoreClient = function(){
-	this.uri = "http://localhost/tconnect/project/Ozalid/TStore/api.php/";
+	this.uri = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/project/Ozalid/TStore/api.php/";
 	
 	this.getTraceUri = function(trace_id){
 		var trace_uri = this.uri + "traces?traceid=" + trace_id;
 		return trace_uri;
+	};
+	
+	this.getAllTraces = function(){
+		var uri = this.uri + "traces;
+		return uri;
 	};
 	
 	this.getUserUri = function(user_id){
@@ -12,8 +17,8 @@ tStore.OzaTStoreClient = function(){
 	};
 	
 	this.getAllUsers = function(){
-		//var trace_uri = this.uri + "traces?traceid=" + trace_id;
-		//return trace_uri;
+		var uri = this.uri + "users;
+		return uri;
 	};
 	
 	this.getDocUri = function(doc_id){

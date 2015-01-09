@@ -1,6 +1,9 @@
 tAssistance.UserListPage = function(){
 	
-	var url = "http://localhost/tconnect/project/Ozalid/TStore/api.php/users";
+	var tStore = tStore.OzaTStoreClient();
+	var uri = tStore.getAllUsers();
+	
+	var url = uri;
 	
 	jQuery.getJSON(url,function(data){
 		

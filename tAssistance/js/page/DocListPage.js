@@ -1,6 +1,9 @@
 tAssistance.DocListPage = function(){
 	
-	var url = "http://localhost/tconnect/project/Ozalid/TStore/api.php/docs";
+	var tStore = tStore.OzaTStoreClient();
+	var uri = tStore.getAllDocs();
+	
+	var url = uri;
 	
 	jQuery.getJSON(url,function(data){
 		

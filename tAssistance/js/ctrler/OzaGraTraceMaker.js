@@ -128,11 +128,12 @@ tAssistance.OzaGraTraceMaker = function(id, trace){
 	//setting2.querySelector("td[name='td2']").appendChild(valueList);
 	// make model
 	
+	var tStore = tStore.OzaTStoreClient();
+	var trace_uri = tStore.getTraceUri("t_all");
 	
 	
 	
-	
-	jQuery.getJSON("http://localhost/tconnect/project/Ozalid/TStore/api.php/traces?traceid=t_all",function(data){
+	jQuery.getJSON(trace_uri,function(data){
 		var trace = data;
 		
 		var model = [];		

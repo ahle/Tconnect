@@ -1,6 +1,9 @@
 tAssistance.TraceListPage = function(){
 	
-	var url = "http://localhost/tconnect/project/Ozalid/TStore/api.php/traces";
+	var tStore = tStore.OzaTStoreClient();
+	var uri = tStore.getAllTraces();
+	
+	var url = uri;
 	
 	jQuery.getJSON(url,function(data){
 		
