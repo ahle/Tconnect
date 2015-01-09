@@ -1,6 +1,6 @@
 tAssistance.DocListPage = function(){
 	
-	var store = tStore.OzaTStoreClient();
+	var store = new tStore.OzaTStoreClient();
 	var uri = store.getAllDocs();
 	
 	var url = uri;
