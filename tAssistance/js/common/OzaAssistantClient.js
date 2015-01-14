@@ -1,5 +1,6 @@
 tAssistance.OzaAssistantClient = function(){
-	this.uri = "http://localhost/tconnect/tAssistance/";
+	//this.uri = "http://localhost/tconnect/tAssistance/";
+	this.uri = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/";
 	
 	this.getTraceUri = function(trace_uri){
 		var as_trace_uri = this.uri + "index.php?page=Trace&trace_uri=" + trace_uri;
