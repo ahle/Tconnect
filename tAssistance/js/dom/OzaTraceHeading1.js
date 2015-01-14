@@ -1,6 +1,6 @@
 tAssistance.dom.OzaTraceHeading1 = function(trc_id, width, height){
-	this.width = width;
-	this.height = height;
+	//this.width = width;
+	//this.height = height;
 	
 	
 	var heading = document.createElement("div");

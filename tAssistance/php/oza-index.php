@@ -44,6 +44,18 @@ elseif($_GET["page"]=="Docs"){
 	echo $page;
 	exit;
 }
+elseif($_GET["page"]=="Doc" && $_GET["doc_uri"]){
+
+	$user_id = $_SESSION["user"];
+	$doc_uri = $_GET["doc_uri"];
+
+	$page = file_get_contents("$tassist_dir/html/layout1.html");
+	$page = str_replace("\$user_id", $user_id, $page);
+	$page = str_replace("\$script", "var page = new tAssistance.DocPage('".$doc_uri."');", $page);
+
+	echo $page;
+	exit;
+}
 elseif($_GET["widget"]== "OzaTraceSearch" && !isset($_GET["search"])){
 	require_once "$ozalid_tstore/OzaTStoreClient.php";
 	require_once "$tassist_dir/php/OzaTraceMenu.php";

@@ -20,7 +20,7 @@ tAssistance.DocListPage = function(){
 		
 		//var trace_search = new tAssistance.OzaTraceSearch("bcd", document.body);
 		
-		var doc_list_widget = new tAssistance.OzaDocListMaker("abc",document.body, docs);
+		var doc_list_widget = new tAssistance.OzaDocListMaker("abc",document.querySelector("[placeholder='page']"), docs);
 		
 	});	
 };

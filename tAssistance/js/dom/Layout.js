@@ -173,6 +173,7 @@ tAssistance.dom.MainLayout = function(){
 	dev.appendChild(dev_a);	
 	
 	var right = document.createElement("div");
+	right.setAttribute("placeholder","page");
 	right.setAttribute("name","right");
 	right.setAttribute("class","col-md-9");
 	right.setAttribute("style","border: 1px dotted black");
@@ -183,5 +184,75 @@ tAssistance.dom.MainLayout = function(){
 	return container;
 };
 
-
+tAssistance.dom.NavBarTop = function(user_id){
+	
+	var navbar_top = document.createElement("div");
+	navbar_top.setAttribute("class","navbar navbar-inverse navbar-static-top");
+//	
+//	var navbar_inner = document.createElement("div");
+//	navbar_inner.setAttribute("class","navbar-inner");
+//	navbar_top.appendChild(navbar_inner);
+//	
+//	var container = document.createElement("div");
+//	container.setAttribute("class","container");
+//	navbar_inner.appendChild(container);
+//	
+//	var navbar_header = document.createElement("div");
+//	navbar_header.setAttribute("class","navbar-header");
+//	container.appendChild(navbar_header);
+//	
+//	var navbar_brand = document.createElement("a");
+//	navbar_brand.setAttribute("class","navbar-brand");
+//	navbar_brand.setAttribute("href","#");
+//	navbar_brand.innerHTML="Trace Assistant";
+//	navbar_header.appendChild(navbar_brand);
+//	
+//	var navbar_right = document.createElement("ul");
+//	navbar_right.setAttribute("class","nav navbar-nav navbar-right");
+//	container.appendChild(navbar_right);
+//	
+//	var li_drop = = document.createElement("li");
+//	li_drop.setAttribute("class","dropdown");
+//	navbar_right.appendChild(li_drop);
+//	
+//	var a_user = document.createElement("a");
+//	a_user.setAttribute("class","dropdown-toggle");
+//	a_user.setAttribute("role","button");
+//	a_user.setAttribute("data-toggle","dropdown");
+//	a_user.setAttribute("href","#");	
+//	li_drop.appendChild(a_user);
+//	
+//	var i_user = document.createElement("i");
+//	i_user.setAttribute("class","glyphicon glyphicon-user");
+//	a_user.appendChild(i_user);
+//	
+//	var user_id = document.createTextNode(user_id);
+//	a_user.appendChild(user_id);
+//	
+//	var span_caret = document.createElement("span");
+//	a_user.appendChild(span_caret);
+	
+	navbar_top.innerHTML = 
+	
+	
+	  '<div class="navbar-inner"> \
+	    <div class="container">\
+	    	<div class="navbar-header">    	\
+	    	<a class="navbar-brand" href="#">Trace Assistant</a>\
+	    	</div>\
+	      <ul class="nav navbar-nav navbar-right">\
+	      	<li class="dropdown">\
+	          <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-user"></i> '+user_id+' <span class="caret"></span></a>\
+	          <ul id="g-account-menu" class="dropdown-menu" role="menu">\
+	            <li><a href="#">My Profile</a></li>\
+	          </ul>\
+	        </li>\
+	        <li><a href="index.php?page=logout"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>\
+	      </ul>\
+	    </div>\
+	  </div>';
+	
+	return navbar_top;
+	
+}
 

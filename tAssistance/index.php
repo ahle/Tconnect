@@ -358,10 +358,12 @@ if($_GET["user"]){
 require_once $tassist_php_dir."/oza-index.php";
 
 //check user login
-if(true){
+if($_SERVER["QUERY_STRING"]==""){
 	
 	header('Location: index.php?page=Main');
 	exit;
+}
+else{
 }
 
 

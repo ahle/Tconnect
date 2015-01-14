@@ -20,7 +20,7 @@ tAssistance.TraceListPage = function(){
 		
 		//var trace_search = new tAssistance.OzaTraceSearch("bcd", document.body);
 		
-		var trace_list_widget = new tAssistance.OzaTraceListMaker("abc",document.body, traces);
+		var trace_list_widget = new tAssistance.OzaTraceListMaker("abc",document.querySelector("[placeholder='page']"), traces);
 		
 	});	
 };

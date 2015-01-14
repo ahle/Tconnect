@@ -7,12 +7,13 @@ tAssistance.dom.OzaTraceBtnGroup = function(trc_id, width, height){
 	group.setAttribute("class","panel-default panel");
 	group.setAttribute("style","width: 40px; margin: 5px");
 	
-	var obsel_icon = document.createElement("img");
-	obsel_icon.setAttribute("src","img/icon.png");
-	obsel_icon.setAttribute("style","margin: 4px");
-	obsel_icon.setAttribute("class","trc_btn");
-	obsel_icon.setAttribute("height","32px");
-	obsel_icon.setAttribute("width","32px");
+//	var obsel_icon = document.createElement("img");
+//	obsel_icon.setAttribute("src","img/icon.png");
+//	obsel_icon.setAttribute("style","margin: 4px");
+//	obsel_icon.setAttribute("class","trc_btn");
+//	obsel_icon.setAttribute("height","32px");
+//	obsel_icon.setAttribute("width","32px");
+//	group.appendChild(obsel_icon);
 	
 	var setting_icon = document.createElement("img");
 	setting_icon.setAttribute("src","img/setting.png");
@@ -21,18 +22,16 @@ tAssistance.dom.OzaTraceBtnGroup = function(trc_id, width, height){
 	setting_icon.setAttribute("alt","setting");
 	setting_icon.setAttribute("height","32px");
 	setting_icon.setAttribute("width","32px");
-		
-	var magnifier_icon = document.createElement("img");
-	magnifier_icon.setAttribute("src","img/magnifier.png");
-	magnifier_icon.setAttribute("style","margin: 4px;");
-	magnifier_icon.setAttribute("class","trc_btn");
-	magnifier_icon.setAttribute("title","magnifier");
-	magnifier_icon.setAttribute("height","32px");
-	magnifier_icon.setAttribute("width","32px");
-	
-	group.appendChild(obsel_icon);
 	group.appendChild(setting_icon);
-	group.appendChild(magnifier_icon);
+		
+//	var magnifier_icon = document.createElement("img");
+//	magnifier_icon.setAttribute("src","img/magnifier.png");
+//	magnifier_icon.setAttribute("style","margin: 4px;");
+//	magnifier_icon.setAttribute("class","trc_btn");
+//	magnifier_icon.setAttribute("title","magnifier");
+//	magnifier_icon.setAttribute("height","32px");
+//	magnifier_icon.setAttribute("width","32px");	
+//	group.appendChild(magnifier_icon);
 	
 	return group;
 };

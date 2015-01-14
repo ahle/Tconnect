@@ -1,17 +1,18 @@
 tAssistance.OzaGraTraceMaker = function(id, trace){
+	var page = document.body.querySelector("[placeholder='page']");
 	console.log(trace);
 		
-	var width = 1500;
+	var width = 1000;
 	var height = 250;
 	
 	// make a trace heading
 	var heading = tAssistance.dom.OzaTraceHeading1(trace.id);
-	document.body.appendChild(heading);
+	page.appendChild(heading);
 		
 	// make a trace container
 	
 	var container = tAssistance.dom.OzaTraceContainer(trace.id);
-	document.body.appendChild(container);
+	page.appendChild(container);
 		
 	// make a trace buttons
 	var btnGrp = tAssistance.dom.OzaTraceBtnGroup(trace.id);
@@ -142,3 +143,4 @@ tAssistance.OzaGraTraceMaker = function(id, trace){
 	});
 	
 };
+

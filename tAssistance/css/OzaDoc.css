@@ -1,0 +1,163 @@
+#ARTICLE_1 {
+    color: rgb(48, 48, 48);
+    height: 197px;
+    min-height: 180px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 1268.703125px;
+    border-top: 1px solid rgb(68, 68, 68);
+    border-right: 0px none rgb(48, 48, 48);
+    border-bottom: 0px none rgb(48, 48, 48);
+    border-left: 0px none rgb(48, 48, 48);
+    font: normal normal normal 13px/18px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+    padding: 15px 0px 0px;
+}/*#ARTICLE_1*/
+
+#ARTICLE_1:after {
+    clear: both;
+    color: rgb(48, 48, 48);
+    display: table;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 1px;
+    content: '';
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal normal 13px/0px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#ARTICLE_1:after*/
+
+#ARTICLE_1:before {
+    color: rgb(48, 48, 48);
+    display: table;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 1px;
+    content: '';
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal normal 13px/0px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#ARTICLE_1:before*/
+
+#DIV_2 {
+    box-sizing: border-box;
+    color: rgb(48, 48, 48);
+    float: left;
+    height: 154px;
+    min-height: 30px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 184.328125px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal normal 13px/18px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#DIV_2*/
+
+#CANVAS_3 {
+    box-shadow: rgb(51, 51, 51) 1px 1px 5px 0px;
+    color: rgb(48, 48, 48);
+    display: inline-block;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 100px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal normal 13px/18px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#CANVAS_3*/
+
+#DIV_4 {
+    box-sizing: border-box;
+    color: rgb(48, 48, 48);
+    float: left;
+    height: 197px;
+    min-height: 30px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 943.390625px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal normal 13px/18px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px 0px 0px 32.515625px;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#DIV_4*/
+
+#H2_5 {
+    color: rgb(48, 48, 48);
+    height: 18px;
+    text-decoration: none solid rgb(48, 48, 48);
+    text-rendering: optimizelegibility;
+    width: 943.390625px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal bold 16px/18.71875px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 10px 0px;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#H2_5*/
+
+#DL_6 {
+    color: rgb(48, 48, 48);
+    height: 80px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 923.390625px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal normal 13px/18px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 13px 0px 20px 20px;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#DL_6*/
+
+#DT_7 {
+    color: rgb(48, 48, 48);
+    float: left;
+    height: 20px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 58px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal bold 13px/20px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#DT_7*/
+
+#DD_8, #DD_10, #DD_12, #DD_14 {
+    color: rgb(48, 48, 48);
+    height: 20px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 913.390625px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal normal 13px/20px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px 0px 0px 10px;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#DD_8, #DD_10, #DD_12, #DD_14*/
+
+#DT_9 {
+    color: rgb(48, 48, 48);
+    float: left;
+    height: 20px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 61px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal bold 13px/20px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#DT_9*/
+
+#DT_11 {
+    color: rgb(48, 48, 48);
+    float: left;
+    height: 20px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 55px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal bold 13px/20px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#DT_11*/
+
+#DT_13 {
+    color: rgb(48, 48, 48);
+    float: left;
+    height: 20px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 137px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal bold 13px/20px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#DT_13*/
+
+#DIV_15 {
+    color: rgb(48, 48, 48);
+    height: 46px;
+    text-decoration: none solid rgb(48, 48, 48);
+    width: 943.390625px;
+    border: 0px none rgb(48, 48, 48);
+    font: normal normal normal 13px/18px Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(48, 48, 48) none 0px;
+}/*#DIV_15*/

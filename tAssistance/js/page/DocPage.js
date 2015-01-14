@@ -1,20 +1,16 @@
-tAssistance.DocPage = function(){
+tAssistance.DocPage = function(doc_uri){
 	
 	var test1 = document.getElementById("test1");
 	
-	var url = "http://localhost/tconnect/project/Ozalid/TStore/api.php/traces?traceid=t_all";
+	var tstore = new tStore.OzaTStoreClient();
+	var url = tstore.getDocUri("538c8490e4b04f38ac7352c1");
+	//var url = "http://localhost/tconnect/project/Ozalid/TStore/api.php/docs?docid=";
 	
-	jQuery.getJSON(url,function(data){
+	jQuery.getJSON(doc_uri,function(data){
 		
-		var trace = data;
-		
-		var store = new tStore.OzaTStore();
-		store.deleteTrace(trace.id);
-		store.addTrace(trace);
+		var doc = data;
 				
-		var trace = data;
-		
-		var widget = new tAssistance.OzaTraceWidget("abc",test1, trace);
+		var widget = new tAssistance.OzaDocMaker(doc);
 		
 	});
 	
