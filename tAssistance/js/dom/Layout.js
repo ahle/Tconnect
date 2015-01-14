@@ -113,3 +113,75 @@ tAssistance.dom.SidebarLayout = function(id){
 		
 	return panel;
 };
+
+tAssistance.dom.MainLayout = function(){
+	
+	var container = document.createElement("div");
+	container.setAttribute("class","container-fluid");
+	
+	var top = document.createElement("div");
+	top.setAttribute("class","row");
+	
+	container.appendChild(top);
+	
+	var body = document.createElement("div");
+	body.setAttribute("class","row");
+	
+	container.appendChild(body);
+		
+	var left = document.createElement("div");
+	left.setAttribute("role","navigation");
+	left.setAttribute("name","left");
+	left.setAttribute("class","col-md-3 sidebar-offcanvas");
+	jQuery(left).css("width","200px");
+	
+	var menu = document.createElement("ul");
+	menu.setAttribute("class","nav");
+	
+	left.appendChild(menu);
+	
+	var user =  document.createElement("li");
+	menu.appendChild(user);
+	
+	var user_a = document.createElement("a");
+	user_a.innerHTML = "User";
+	user_a.href = "index.php?page=Users";
+	user.appendChild(user_a);
+	
+	var doc =  document.createElement("li");
+	menu.appendChild(doc);
+	
+	var doc_a = document.createElement("a");
+	doc_a.innerHTML = "Document";
+	doc_a.href = "index.php?page=Docs";
+	doc.appendChild(doc_a);	
+	
+	var trace =  document.createElement("li");
+	menu.appendChild(trace);
+	
+	var trace_a = document.createElement("a");
+	trace_a.innerHTML = "Trace";
+	trace_a.href = "index.php?page=Traces";
+	trace.appendChild(trace_a);
+	
+	var dev =  document.createElement("li");
+	menu.appendChild(dev);
+	
+	var dev_a = document.createElement("a");
+	dev_a.innerHTML = "Development";
+	dev_a.href = "https://github.com/ahle/tconnect";
+	dev.appendChild(dev_a);	
+	
+	var right = document.createElement("div");
+	right.setAttribute("name","right");
+	right.setAttribute("class","col-md-9");
+	right.setAttribute("style","border: 1px dotted black");
+	
+	body.appendChild(left);
+	body.appendChild(right);
+		
+	return container;
+};
+
+
+

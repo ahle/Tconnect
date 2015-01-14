@@ -1,4 +1,5 @@
 <?php
+use TAssistance;
 $tAssistance_dir = dirname(__FILE__);
 require_once $tAssistance_dir.'/php/global.php';
 
@@ -6,6 +7,17 @@ $session_id = session_id();
 #$user_id = get_user($session_id); // comment for debug
 $user_id = "u1";// debug, need to be uncommented
 $application_server_url = "https://ozalid.orange-labs.fr/oz/ws/open/page/";
+
+//check user login
+if($_GET["page"]!="login"){
+	$user_id = $_SESSION["user"];
+	if($user_id==null){
+		$url = TAssistance\common\URI::getCurrentUrl();
+		header('Location: index.php?page=login&return='.urlencode($url));
+		exit;
+	}
+}
+
 
 if($_GET["page"]=="TraceView" && $_GET["mode"]=="demo"){
 	global $base_uri;
@@ -299,8 +311,15 @@ if($_GET["page"]=="UserPreference"){
 
 if($_GET["page"]=="login"){
 	
-	require_once "php/login.php";
+	require_once "php/page/login.php";
 	
+	exit;
+}
+
+if($_GET["page"]=="logout"){
+
+	require_once "php/page/logout.php";
+
 	exit;
 }
 
@@ -316,6 +335,17 @@ if($_GET["page"]=="Trace"){
 	exit;
 }
 
+if($_GET["page"]=="Main"){
+	$user_id = $_SESSION["user"];
+
+	$page = file_get_contents("html/layout1.html");
+	$page = str_replace("\$user_id", $user_id, $page);
+	$page = str_replace("\$script", "var page = new tAssistance.MainPage();", $page);
+
+	echo $page;
+	exit;
+}
+
 if($_GET["user"]){
 	$user_id = $_GET["user"];
 	
@@ -326,3 +356,13 @@ if($_GET["user"]){
 }
 
 require_once $tassist_php_dir."/oza-index.php";
+
+//check user login
+if(true){
+	
+	header('Location: index.php?page=Main');
+	exit;
+}
+
+
+
