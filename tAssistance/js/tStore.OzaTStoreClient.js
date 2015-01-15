@@ -1,7 +1,7 @@
 tStore.OzaTStoreClient = function(){
 	
-	//this.uri = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/project/Ozalid/TStore/api.php/";// use this line for git
-	this.uri = "http://localhost/tconnect/project/Ozalid/TStore/api.php/";// use this line for local dev
+	this.uri = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/project/Ozalid/TStore/api.php/";// use this line for git
+	//this.uri = "http://localhost/tconnect/project/Ozalid/TStore/api.php/";// use this line for local dev
 	
 	this.getTraceUri = function(trace_id){
 		var trace_uri = this.uri + "traces?traceid=" + trace_id;
