@@ -109,15 +109,6 @@ elseif($_GET["widget"]== "OzaTraceList" && isset($_GET["search"])){
 	echo $html;
 	exit;
 }
-elseif($_GET["test"]== "test"){
-	//require_once "$ozalid_tstore/OzaTStoreClient.php";
-	//require_once "$tassist_dir/php/OzaTraceList.php";
-
-	//echo "aaa";
-	$maker = new OzaWordFreMaker();
-	
-	exit;
-}
 elseif($_GET["test"]== "test1"){
 	//require_once "$ozalid_tstore/OzaTStoreClient.php";
 	//require_once "$tassist_dir/php/OzaTraceList.php";
@@ -131,7 +122,7 @@ elseif($_GET["test"]== "test1"){
 	echo $page;
 	exit;
 }
-elseif($_GET["test"]== "test2"){
+elseif($_GET["page"]== "Dashboard"){
 	//require_once "$ozalid_tstore/OzaTStoreClient.php";
 	//require_once "$tassist_dir/php/OzaTraceList.php";
 

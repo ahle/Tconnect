@@ -1,5 +1,5 @@
 tAssistance.OzaDashBoard = function(){
-	this.element = document.body;
+	this.element = document.querySelector("[placeholder='page']");;
 	this.docList;
 	this.wordList;
 	
@@ -56,7 +56,8 @@ tAssistance.OzaDashBoard = function(){
 	
 	this.updateWordList = function(){
 		
-		var word_url = "http://localhost/tconnect/project/Ozalid/TStore/api.php/words?docids="+this.docList.doc_ids;
+		var tstore = new tStore.OzaTStoreClient();
+		var word_url = tstore.uri+"/words?docids="+this.docList.doc_ids;
 		
 		this.wordList.element.parentNode.removeChild(this.wordList.element);
 		

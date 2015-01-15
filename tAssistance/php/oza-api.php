@@ -10,3 +10,13 @@ if($_SERVER['PATH_INFO']=="/OzaTraceSearch" && $_GET["search"]){
 
 	exit;
 }
+
+elseif($_SERVER['PATH_INFO']=="/words"){
+	//require_once "$ozalid_tstore/OzaTStoreClient.php";
+	//require_once "$tassist_dir/php/OzaTraceList.php";
+
+	//echo "aaa";
+	$maker = new OzaWordFreMaker();
+
+	exit;
+}

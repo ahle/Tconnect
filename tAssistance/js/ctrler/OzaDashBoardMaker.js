@@ -20,7 +20,7 @@ tAssistance.OzaDashBoardMaker = function(id, element){
 			doc.uri = doc_uri;
 		}
 		
-		var docListMaker = new tAssistance.OzaTDocListMaker("abc", document.body, docs);
+		var docListMaker = new tAssistance.OzaTDocListMaker("abc", document.querySelector("[placeholder='page']"), docs);
 		var docList = docListMaker.docList;
 		
 		dashboard.docList = docList;
@@ -52,7 +52,9 @@ tAssistance.OzaDashBoardMaker = function(id, element){
 		
 	});
 	
-	var word_url = "http://localhost/tconnect/tAssistance/index.php?test=test";
+	var as_store = new tAssistance.OzaAssistantClient();	
+	//var as_store = store.uri();
+	var word_url = as_store.uri+"api.php/words";
 	
 	jQuery.getJSON(word_url,function(countedItems){
 		console.log(countedItems);
@@ -103,19 +105,19 @@ tAssistance.OzaDashBoardMaker = function(id, element){
 		
 	});
 	
-	var obsels_url = "http://localhost/tconnect/project/Ozalid/TStore/api.php/query?docids=538c84bce4b04f38ac735311&wordids=538c84bce4b04f38ac735311_538c84bee4b04f38ac735325_1073463512";
-	
-	jQuery.getJSON(obsels_url,function(obsels){
-		console.log(obsels);
-		
-		var trace = {
-			"obsels": obsels
-		}
-	
-		var doc = new tAssistance.TraceDoc("ee",document.body, trace);
-		dashboard.obselList = doc;
-		
-	});
+//	var obsels_url = "http://localhost/tconnect/project/Ozalid/TStore/api.php/query?docids=538c84bce4b04f38ac735311&wordids=538c84bce4b04f38ac735311_538c84bee4b04f38ac735325_1073463512";
+//	
+//	jQuery.getJSON(obsels_url,function(obsels){
+//		console.log(obsels);
+//		
+//		var trace = {
+//			"obsels": obsels
+//		}
+//	
+//		var doc = new tAssistance.TraceDoc("ee",document.body, trace);
+//		dashboard.obselList = doc;
+//		
+//	});
 	
 	this.dashboard = dashboard;
 };

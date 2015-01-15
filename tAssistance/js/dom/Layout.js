@@ -172,6 +172,14 @@ tAssistance.dom.MainLayout = function(){
 	userconfig_a.href = "index.php?page=UserConfig";
 	userconfig.appendChild(userconfig_a);	
 	
+	var dashboard_config =  document.createElement("li");
+	menu.appendChild(dashboard_config);
+	
+	var dashboard_a = document.createElement("a");
+	dashboard_a.innerHTML = "Dashboard";
+	dashboard_a.href = "index.php?page=Dashboard";
+	dashboard_config.appendChild(dashboard_a);	
+	
 	var dev =  document.createElement("li");
 	menu.appendChild(dev);
 	
