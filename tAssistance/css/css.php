@@ -15,7 +15,8 @@ $files = array(	"OzaTextObsel.css",
 				"OzaTraceBtnGroup.css",
 				"../lib/treeview/css/bootstrap-treeview.css",
 				"../lib/imgcorrect/imgcorrect.min.css",
-				"../lib/slider/css/slider.css"
+				"../lib/slider/css/slider.css",
+				"../lib/jsonviewer/jsonviewer.css"
 				);
 
 $css = "";

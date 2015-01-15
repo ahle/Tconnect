@@ -164,13 +164,21 @@ tAssistance.dom.MainLayout = function(){
 	trace_a.href = "index.php?page=Traces";
 	trace.appendChild(trace_a);
 	
+	var userconfig =  document.createElement("li");
+	menu.appendChild(userconfig);
+	
+	var userconfig_a = document.createElement("a");
+	userconfig_a.innerHTML = "Configuration";
+	userconfig_a.href = "index.php?page=UserConfig";
+	userconfig.appendChild(userconfig_a);	
+	
 	var dev =  document.createElement("li");
 	menu.appendChild(dev);
 	
 	var dev_a = document.createElement("a");
 	dev_a.innerHTML = "Development";
 	dev_a.href = "https://github.com/ahle/tconnect";
-	dev.appendChild(dev_a);	
+	dev.appendChild(dev_a);
 	
 	var right = document.createElement("div");
 	right.setAttribute("placeholder","page");
@@ -238,7 +246,7 @@ tAssistance.dom.NavBarTop = function(user_id){
 	  '<div class="navbar-inner"> \
 	    <div class="container">\
 	    	<div class="navbar-header">    	\
-	    	<a class="navbar-brand" href="#">Trace Assistant</a>\
+	    	<a class="navbar-brand" href="index.php">Trace Assistant: Ozalid</a>\
 	    	</div>\
 	      <ul class="nav navbar-nav navbar-right">\
 	      	<li class="dropdown">\
@@ -255,4 +263,79 @@ tAssistance.dom.NavBarTop = function(user_id){
 	return navbar_top;
 	
 }
+
+tAssistance.dom.UserConfigLayout = function(){
+	
+	var container = document.createElement("div");
+	container.setAttribute("class","panel");
+		
+	var obsels = document.createElement("div");
+	obsels.setAttribute("name","obsel-config");	
+	
+	var icons = document.createElement("div");
+	icons.setAttribute("name","icon-config");
+	
+	var detail = document.createElement("div");
+	detail.setAttribute("name","editor");
+		
+	container.appendChild(obsels);
+	container.appendChild(icons);
+	container.appendChild(detail);
+	
+	return container;
+};
+
+tAssistance.dom.ObselTypeList = function(model){
+	
+	var navbar_top = document.createElement("div");
+	navbar_top.setAttribute("class","navbar navbar-inverse navbar-static-top");
+	
+	var html="";
+	html += "<div class=\"list-group\" id=\"list1\">";
+	html += "    <a href=\"#\" class=\"list-group-item active\">List 1 <input title=\"toggle all\" type=\"checkbox\" class=\"all pull-right\"><\/a>";
+	html += "    <a href=\"#\" class=\"list-group-item\">Second item <input type=\"checkbox\" class=\"pull-right\"><\/a>";
+	html += "    <a href=\"#\" class=\"list-group-item\">Third item <input type=\"checkbox\" class=\"pull-right\"><\/a>";
+	html += "    <a href=\"#\" class=\"list-group-item\">More item <input type=\"checkbox\" class=\"pull-right\"><\/a>";
+	html += "    <a href=\"#\" class=\"list-group-item\">Another <input type=\"checkbox\" class=\"pull-right\"><\/a>";
+	html += "    <\/div>";
+		
+};
+
+tAssistance.dom.NavTab1 = function(title){
+	var container = document.createElement("div");
+	container.setAttribute("class","container");
+	
+	var tab = document.createElement("ul");
+	tab.setAttribute("class","nav nav-tabs");
+	$(tab).css("margin-bottom","10px");
+	container.appendChild(tab);
+	
+	var li = document.createElement("li");
+	li.setAttribute("role","presentation");
+	li.setAttribute("class","active");	
+	tab.appendChild(li);
+	
+	var a = document.createElement("a");
+	a.setAttribute("href","#");	
+	a.innerHTML = title;
+	li.appendChild(a);
+	
+	var body = document.createElement("div");
+	body.setAttribute("placeholder","navtab-body");
+	container.appendChild(body);
+	
+	return container;
+	
+};
+
+
+
+
+
+
+
+
+
+
+
 

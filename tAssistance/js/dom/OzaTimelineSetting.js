@@ -871,3 +871,70 @@ tAssistance.dom.TemplRow = function(templ){
 	
 	return li;
 };
+
+tAssistance.dom.IconRow = function(icon_data){
+	
+	var tr = document.createElement("tr");
+	//tr.setAttribute('style', 'padding: 5px' );
+	
+	var td1 = document.createElement("td");
+	$(td1).css('vertical-align', 'middle');
+	td1.setAttribute('width', '30px' );
+	$(td1).css('padding', '0px');
+	
+	var icon = document.createElement("img");
+	icon.setAttribute('width', '20' );
+	icon.setAttribute('height', '20' );
+	icon.setAttribute('style', 'margin: 5px' );
+	icon.setAttribute('src','img/default.png');
+	
+	td1.appendChild(icon);
+	
+	var td2 = document.createElement("td");
+	$(td2).css('vertical-align', 'middle');
+	$(td2).css('padding', '0px');
+	td2.innerHTML = icon_data.id;
+	
+	var td3 = document.createElement("td");
+	$(td3).css('vertical-align', 'middle');
+	td3.setAttribute('width', '30px' );
+	$(td3).css('padding', '0px');
+	//var chkbox = document.createElement("div");
+	//chkbox.setAttribute("class","checkbox");
+	//chkbox.setAttribute("style","margin: 5px; padding: 5px");
+	
+	var input_chkbox = document.createElement("input");
+	input_chkbox.setAttribute("type","checkbox");
+	input_chkbox.setAttribute("style","margin: 0px; padding: 0px");
+	input_chkbox.setAttribute("value", icon_data.active);
+	
+	//chkbox.appendChild(input_chkbox);
+	
+	//chkbox.appendChild(label);
+	td3.appendChild(input_chkbox);
+	
+	var td4 = document.createElement("td");
+	$(td4).css('vertical-align', 'middle');
+	$(td4).css('padding', '0px');
+	td4.setAttribute('width', '30px' );
+	
+	var btn = document.createElement("button");
+	btn.setAttribute("class","button");
+	btn.setAttribute('style', 'margin: 5px; padding: 2px' );
+	
+	var setting = document.createElement("img");
+	setting.setAttribute('width', '20' );
+	setting.setAttribute('height', '20' );
+	setting.setAttribute('src','img/setting.png');
+	
+	btn.appendChild(setting);
+	
+	td4.appendChild(btn);
+	
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+	tr.appendChild(td3);
+	tr.appendChild(td4);
+	
+	return tr;
+};

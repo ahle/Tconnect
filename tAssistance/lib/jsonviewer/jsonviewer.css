@@ -1,0 +1,51 @@
+ul.jsonviewer {
+    margin-left: 1em;
+    padding: 0;
+    list-style-type: none;
+}
+
+.jsonviewer > li {
+	list-style-type: none;
+}
+
+.jsonviewer > li > span.json-key {
+    font-weight: bold;
+}
+
+.jsonviewer > li > .ui-icon {
+    float:left;
+    margin-right:3px;
+}
+
+.jsonviewer > li > .childless {
+    margin-left:18px;
+}
+
+.jsonviewer > li > .ui-icon-minus {
+    background-position: -48px -128px;
+    display: inline-block;
+    height: 16px;
+    text-align: left;
+    text-indent: -99999px;
+    vertical-align: middle;
+    width: 16px;
+    background: rgba(0, 0, 0, 0) url(http://code.jquery.com/ui/1.11.2/themes/smoothness/images/ui-icons_222222_256x240.png) no-repeat scroll -48px -128px / auto padding-box border-box;
+    font: normal normal normal 12px/normal 'Trebuchet MS', Arial, Helvetica, Verdana, sans-serif;
+    list-style: none outside none;
+    overflow: hidden;
+}/*#SPAN_1*/
+
+.jsonviewer > li > .ui-icon-plus {
+    background-position: -16px -128px;
+    display: inline-block;
+    height: 16px;
+    text-align: left;
+    text-indent: -99999px;
+    vertical-align: middle;
+    width: 16px;
+    background: rgba(0, 0, 0, 0) url(http://code.jquery.com/ui/1.11.2/themes/smoothness/images/ui-icons_222222_256x240.png) no-repeat scroll -16px -128px / auto padding-box border-box;
+    font: normal normal normal 12px/normal 'Trebuchet MS', Arial, Helvetica, Verdana, sans-serif;
+    list-style: none outside none;
+    overflow: hidden;
+}/*#SPAN_1*/
+

@@ -98,6 +98,7 @@ $files = array( "../lib/jquery/jquery.js"
 				,"../js/page/DocListPage.js"
 				,"../js/page/DocPage.js"
 				,"../js/page/DashBoardPage.js"
+				,"../js/page/UserConfigPage.js"
 				,"../js/page/MainPage.js"
 				,"../js/tStore.js"
 				,"../js/tStore.OzaTStore.js"
@@ -107,6 +108,7 @@ $files = array( "../lib/jquery/jquery.js"
 				,"../lib/treeview/js/bootstrap-treeview.js"
 				,"../lib/imgcorrect/imgcorrect.min.js"
 				,"../lib/slider/js/bootstrap-slider.js"
+				,"../lib/jsonviewer/jsonviewer.js"
 				);
 
 $js = "";

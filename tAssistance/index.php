@@ -334,7 +334,17 @@ if($_GET["page"]=="Trace"){
 	echo $page;
 	exit;
 }
+if($_GET["page"]=="UserConfig"){
+	$user_id = $_SESSION["user"];
+	//$trace_uri = $_GET["trace_uri"];
 
+	$page = file_get_contents("html/layout1.html");
+	$page = str_replace("\$user_id", $user_id, $page);
+	$page = str_replace("\$script", "var page = new tAssistance.UserConfigPage('".$user_id."');", $page);
+
+	echo $page;
+	exit;
+}
 if($_GET["page"]=="Main"){
 	$user_id = $_SESSION["user"];
 

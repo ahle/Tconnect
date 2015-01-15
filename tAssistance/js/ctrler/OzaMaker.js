@@ -18,15 +18,15 @@ tAssistance.OzaTimelineConfigMaker = function(){
 
 tAssistance.OzaVElementsEditorMaker = function(velements){
 	
-	var layout = new tAssistance.dom.PanelLayout();
+	var layout = new tAssistance.dom.NavTab1("Obsels to display");
 	
-	layout.querySelector("div.panel-title").innerHTML = "Timeline: Obsels to display";
+	//layout.querySelector("div.panel-title").innerHTML = "Timeline: Obsels to display";
 	//$(layout.querySelector("div.panel-body")).css("height","300px");
 	//$(layout.querySelector("div.panel-body")).css("overflow","scroll");
 		
 	var table = new tAssistance.dom.OzaVElementsTable("aaa1");
 	var tbody = table.querySelector("tbody");
-	var panel_body = layout.querySelector("div.panel-body");
+	var panel_body = layout.querySelector("[placeholder='navtab-body']");
 	panel_body.appendChild(table);
 	
 	for(var i in velements){
@@ -44,6 +44,33 @@ tAssistance.OzaVElementsEditorMaker = function(velements){
 //			
 //			var store = new tAssistance.Store();
 //			store.updatePFilter("hoang","velement1", "pfilter1", "active", "1");
+		};		
+		
+		tbody.appendChild(row);		
+	}	
+	
+	return layout;
+};
+
+tAssistance.IconConfigMaker = function(icons){
+	
+	var layout = new tAssistance.dom.NavTab1("Icons to display");
+		
+	var table = new tAssistance.dom.OzaVElementsTable("aaa1");
+	var tbody = table.querySelector("tbody");
+	var panel_body = layout.querySelector("[placeholder='navtab-body']");
+	panel_body.appendChild(table);
+	
+	for(var i in icons){
+		var icon = icons[i];
+		icon;
+		
+		var row = tAssistance.dom.IconRow(icon);
+		
+		var chk_box = row.querySelector("input[type='checkbox']");
+		
+		chk_box.onclick = function(){
+
 		};		
 		
 		tbody.appendChild(row);		
@@ -316,57 +343,46 @@ tAssistance.PFilterBtnControlMaker = function(params){
 	return control;
 };
 
-tAssistance.OzaUserConfigMaker = function(trace){
+tAssistance.UserConfigMaker = function(user){
+	var page = document.querySelector("[placeholder='page']");
 	
-	var user = { 
-					type: "user", 
-					id: "alain", 
-					configs: [
-					          {
-					        	  type: "config",
-					        	  id: "timeline",
-					        	  velements: [
-					        	  ]
-					          }]};
+	///jsonviewer(, user);
 	
+	var layout = tAssistance.dom.UserConfigLayout();
+	page.appendChild(layout);
+	
+	var obsels_place = layout.querySelector("div[name='obsel-config']");
 	
 	var velements = user.configs[0].velements;
 	
-	for(i = 0; i< trace.obsels.length; i++){
-		
-		
-		
-	}
+	var ofilter = new tAssistance.OzaVElementsEditorMaker(velements);
+	obsels_place.appendChild(ofilter);
+	
+	var icons_place = layout.querySelector("div[name='icon-config']");
+	
+	var icons = user.configs[0].icons;
+	
+	var icon_config = new tAssistance.IconConfigMaker(icons);
+	icons_place.appendChild(icon_config);
+	
+	var editor_place = layout.querySelector("div[name='editor']");
+	
+	var velement = user.configs[0].velements[0];
+	
+	var obsel_config = new tAssistance.ObselConfigMaker(velement);
+	editor_place.appendChild(obsel_config);
+	
 };
 
 tAssistance.OzaTraceHeaderMaker = function(trace){
 	
 	if(trace.properties.type == "UserDoc"){
 		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
+};
+
+
+tAssistance.ObselSelectorMaker = function(model){
 	
 	
 	
