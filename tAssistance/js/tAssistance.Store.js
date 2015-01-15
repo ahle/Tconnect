@@ -1,8 +1,8 @@
 tAssistance.Store = function(){
 	// assist server
 	
-	//this.db = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/api.php/";// use this line for git
-	this.db = "http://localhost/tconnect/tAssistance/api.php/";// use this line for local dev
+	this.db = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/api.php/";// use this line for git
+	//this.db = "http://localhost/tconnect/tAssistance/api.php/";// use this line for local dev
 	
 	this.getUserById = function(user_id, callback){
 		var url = this.db+"users?userid="+user_id;
