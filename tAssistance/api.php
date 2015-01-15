@@ -414,5 +414,5 @@ if($_SERVER['PATH_INFO']=="/widget/TraceSearch" && $_GET["search"]){
 	exit;
 }
 
-require_once "/var/www/tconnect/tAssistance/php/oza-api.php";
+require_once $dir."/php/oza-api.php";
 
