@@ -228,6 +228,30 @@ class OzaTStore{
 		return $ok;
 	}
 	
+	function updateDoc($new_doc){
+		$file = $this->db."docs.json";
+		$json = file_get_contents($file);
+		$docs = json_decode($json);
+	
+		$index = false;
+		for($i=0;$i<count($docs);$i++){
+			if($docs[$i]->id == $new_doc->id){
+				$index = $i;
+			}
+		}
+	
+		if($index===false) return false;
+	
+		$docs[$index] = $new_doc;
+	
+		$json = json_encode($docs);
+	
+		$ok = file_put_contents($file, $json);
+	
+		return $ok;
+	
+	}
+	
 	function getDocById($doc_id){
 		$file = $this->db."docs.json";
 		$json = file_get_contents($file);

@@ -73,4 +73,13 @@ class User{
 		return $info;
 	}
 	
+	public static function indexOf($users,$new_user){
+		
+		foreach($users as $i => &$user) {
+			if ($new_user->id == $user->id) {
+				return $i;
+			}
+		}
+		return false;
+	}
 }

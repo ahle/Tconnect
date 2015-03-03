@@ -351,21 +351,15 @@ if($_SERVER['PATH_INFO']=="/users" && $_SERVER[REQUEST_METHOD]=="PUT"){
 
 		exit;
 	}
-	else if($_GET["o"]=="pfilter"){
-	
-		$user_id = $_GET["userid"];
-	
-		$velement_id = $_GET["velement_id"];
-	
-		$pfilter_id = $_GET["pfilter_id"];
-	
+	else if($_GET["o"]=="config"){
+			
 		$updates_str = file_get_contents("php://input");
 	
-		$updates = json_decode($updates_str);
+		$user = json_decode($updates_str);
 	
 		$store = new TAssistant();
 	
-		$users = $store->updatePFilter($user_id, $velement_id, $pfilter_id, $updates);
+		$users = $store->updateUser($user);
 	
 		echo "ok";
 	

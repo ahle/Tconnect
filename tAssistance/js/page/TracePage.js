@@ -8,6 +8,9 @@ tAssistance.TracePage = function(trace_uri, user_id){
 	var store = new tStore.OzaTStoreClient();
 	var user_uri = store.getUserUri("Alain");
 	
+	var assistant_store = new tAssistance.Store();
+	var userconfig_uri = assistant_store.getUserUri("alain");
+			
 	jQuery.when(
 		jQuery.getJSON(trace_uri,function(data){	
 			var trace = data;
@@ -24,15 +27,27 @@ tAssistance.TracePage = function(trace_uri, user_id){
 			var user = data;
 			
 			window.page.user = user;
+		}),
+		jQuery.getJSON(userconfig_uri,function(data){
+			var userconfig = data;
+			
+			window.page.userconfig = userconfig;
 		})
 		
 	).then(function(){
 		var trace = window.page.trace;
 		var user = window.page.user;
+		var userconfig = window.page.userconfig;
+		var page = document.body.querySelector("[placeholder='page']");
 		
-		var widget = new tAssistance.OzaGraTraceMaker("abc", trace, user);
+		var params = {
+			"id": "abc",
+			"trace": trace,
+			"page": page,
+			"userconfig": userconfig
+		}		
 		
-		
+		var widget = new tAssistance.OzaGraTraceMaker(params);
 		
 	});
 	

@@ -13,5 +13,19 @@ tAssistance.data.Obsels = function(obsels){
 		return obsel_types;
 	};
 	
+	this.listAttributs = function(){
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 };

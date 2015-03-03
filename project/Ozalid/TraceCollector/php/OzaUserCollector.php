@@ -11,8 +11,8 @@ class OzaUserCollector{
 		require_once "$ozalid_snet/OzaNetClient.php";
 		require_once "$ozalid_tstore/php/OzaUser.php";
 		
-		$net = new OzaNetClient();
-		$userid = $net->getUser($obsel->user);
+		//$net = new OzaNetClient();
+		//$userid = $net->getUser($obsel->user);
 		
 		$user = new OzaUser();
 		$user->id = $userid;

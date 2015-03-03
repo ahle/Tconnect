@@ -18,7 +18,18 @@
 var navbar = new tAssistance.dom.NavBarTop("$user_id");
 document.body.appendChild(navbar);
 
-var menu = new tAssistance.dom.MainLayout();
+var collector = new tCollector.OzaTCollectorClient();
+var collector_uri = collector.getIndexPageUri();
+
+var corrector = new tCorrector.OzaTCorrectorClient();
+var corrector_uri = corrector.uri;
+
+var params = {
+	"collector_uri": collector_uri,
+	"editor_uri": corrector_uri
+}
+
+var menu = new tAssistance.dom.MainLayout(params);
 document.body.appendChild(menu);
 
 $script

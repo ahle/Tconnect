@@ -1,4 +1,11 @@
-tAssistance.OzaGroup = function(id, parent, trace, width, zoom){
+tAssistance.OzaGroup = function(params){
+	var id = params.id;
+	var parent = params.parent;
+	var trace = params.trace;
+	var width = params.width;
+	var zoom = params.zoom;	
+	var userconfig = params.userconfig;
+	
 	this.scale_x_time = 1000/tAssistance.Datetime.units[zoom];	
 	this.timeoffset;
 	this.xoffset;
@@ -212,7 +219,20 @@ tAssistance.OzaGroup = function(id, parent, trace, width, zoom){
 			var x = this.getX(utcBegin, timeoffset, xoffset, scale_x_time);
 			var obsel_id = "obsel"+(new Date()).getTime()+Math.floor((Math.random() * 1000) + 1);	
 			
-			var obsel = new tAssistance.OzaImageObselMaker(obsel_id,this,x, utcBegin, src_obsel);
+			var params = {
+				id: obsel_id,
+				group: this,
+				x: x,
+				time: utcBegin, 
+				"obsel": src_obsel,
+				userconfig: userconfig
+			};		
+			
+			var obsel = new tAssistance.OzaObselMaker(params);
+			
+			
+			
+			
 		}
 		end = new Date().getTime();
 		console.log("performance: "+(end-begin));

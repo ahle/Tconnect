@@ -40,8 +40,17 @@ class OzaDocCollector{
 		
 		$doc = false;
 		if($old_doc===false){
-			$ok = $store->addDoc($new_doc);
+			$ok = $store->addDoc($new_doc);					
 			if(!$ok) return false;
+			
+			$line = new stdClass();
+			$line->type = "newDoc";
+			$line->docid = $new_doc->id;
+			$line->doc_title = $new_doc->title;
+			
+			global $console;
+			$console->log(json_encode($line));
+			
 			$doc = $store->getDocById($new_doc->id);
 		}else{
 			$doc = $old_doc;

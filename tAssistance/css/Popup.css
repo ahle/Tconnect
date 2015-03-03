@@ -1,0 +1,361 @@
+.popup_container {
+    border-collapse: collapse;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 10px 0px;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    /*height: 87px;*/
+    /*left: 601.5px;*/
+    /*position: absolute;*/
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    /*top: 288px;*/
+    width: 277px;
+    z-index: 1010;
+    background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px 6px 6px 6px;
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 10px 0px 0px;
+    outline: rgb(51, 51, 51) none 0px;
+    padding: 1px;
+    transition: opacity 0.15s linear 0s;
+}/*#DIV_1*/
+
+#DIV_2 {
+    border-collapse: collapse;
+    bottom: -11px;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    height: 11px;
+    left: 136.5px;
+    position: absolute;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    width: 22px;
+    border-top: 11px solid rgba(0, 0, 0, 0.247059);
+    border-right: 11px solid rgba(0, 0, 0, 0);
+    border-bottom: 0px solid rgba(0, 0, 0, 0);
+    border-left: 11px solid rgba(0, 0, 0, 0);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px 0px 0px -11px;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#DIV_2*/
+
+#DIV_2:after {
+    border-collapse: collapse;
+    bottom: 1px;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    height: 10px;
+    position: absolute;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    width: 20px;
+    content: ' ';
+    border-top: 10px solid rgb(255, 255, 255);
+    border-right: 10px solid rgba(0, 0, 0, 0);
+    border-bottom: 0px solid rgba(0, 0, 0, 0);
+    border-left: 10px solid rgba(0, 0, 0, 0);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px 0px 0px -10px;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#DIV_2:after*/
+
+.popup_title {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    height: 35px;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    width: 273px;
+    background: rgb(247, 247, 247) none repeat scroll 0% 0% / auto padding-box border-box;
+    border-top: 0px none rgb(51, 51, 51);
+    border-right: 0px none rgb(51, 51, 51);
+    border-bottom: 1px solid rgb(235, 235, 235);
+    border-left: 0px none rgb(51, 51, 51);
+    border-radius: 5px 5px 0 0;
+    font: normal normal normal 14px/18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px;
+    outline: rgb(51, 51, 51) none 0px;
+    padding: 8px 14px;
+}/*#H3_3*/
+
+.popup_body {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    /*height: 48px;*/
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    /*width: 273px;*/
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+    padding: 9px 14px;
+}/*#DIV_4*/
+
+#DIV_5 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    height: 30px;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    width: 245px;
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#DIV_5*/
+
+#DIV_6 {
+    background-position: 50% 50%;
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    display: none;
+    height: 25px;
+    min-width: 25px;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    width: auto;
+    background: rgba(0, 0, 0, 0) url(http://vitalets.github.io/x-editable/assets/x-editable/bootstrap3-editable/img/loading.gif) no-repeat scroll 50% 50% / auto padding-box border-box;
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#DIV_6*/
+
+#FORM_7 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    height: 30px;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    width: 245px;
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#FORM_7*/
+
+#DIV_8 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    display: inline-block;
+    height: 30px;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 245px;
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#DIV_8*/
+
+#DIV_9 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    height: 30px;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    white-space: nowrap;
+    width: 245px;
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#DIV_9*/
+
+#DIV_10 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    display: inline-block;
+    height: 30px;
+    position: relative;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    vertical-align: top;
+    width: 163px;
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#DIV_10*/
+
+#INPUT_11 {
+    border-collapse: collapse;
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    color: rgb(85, 85, 85);
+    height: 30px;
+    text-decoration: none solid rgb(85, 85, 85);
+    vertical-align: middle;
+    width: 163px;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 3px 3px 3px 3px;
+    font: normal normal normal 12px/18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px;
+    outline: rgb(85, 85, 85) none 0px;
+    padding: 5px 24px 5px 10px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}/*#INPUT_11*/
+
+#SPAN_12 {
+    background-position: 50% 50%;
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    display: block;
+    height: 13px;
+    opacity: 0.6000000238418579;
+    position: absolute;
+    right: 6px;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    top: 216px;
+    width: 13px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0) url(http://vitalets.github.io/x-editable/assets/x-editable/bootstrap3-editable/img/clear.png) no-repeat scroll 50% 50% / auto padding-box border-box;
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: -6px 0px 0px;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#SPAN_12*/
+
+#DIV_13 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    display: inline-block;
+    height: 30px;
+    text-align: left;
+    text-decoration: none solid rgb(51, 51, 51);
+    vertical-align: top;
+    white-space: nowrap;
+    width: 75px;
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px 0px 0px 7px;
+    outline: rgb(51, 51, 51) none 0px;
+}/*#DIV_13*/
+
+#BUTTON_14 {
+    border-collapse: collapse;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    height: 30px;
+    text-decoration: none solid rgb(255, 255, 255);
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 34px;
+    background: rgb(66, 139, 202) none repeat scroll 0% 0% / auto padding-box border-box;
+    border: 1px solid rgb(53, 126, 189);
+    border-radius: 3px 3px 3px 3px;
+    font: normal normal normal 12px/18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px;
+    outline: rgb(255, 255, 255) none 0px;
+    padding: 5px 10px;
+}/*#BUTTON_14*/
+
+#I_15 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    display: inline-block;
+    height: 12px;
+    position: relative;
+    text-align: center;
+    text-decoration: none solid rgb(255, 255, 255);
+    top: 1px;
+    white-space: nowrap;
+    width: 12px;
+    align-self: flex-start;
+    border: 0px none rgb(255, 255, 255);
+    font: normal normal normal 12px/12px 'Glyphicons Halflings';
+    outline: rgb(255, 255, 255) none 0px;
+}/*#I_15*/
+
+#I_15:before {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none solid rgb(255, 255, 255);
+    white-space: nowrap;
+    content: '';
+    border: 0px none rgb(255, 255, 255);
+    font: normal normal normal 12px/12px 'Glyphicons Halflings';
+    outline: rgb(255, 255, 255) none 0px;
+}/*#I_15:before*/
+
+#BUTTON_16 {
+    border-collapse: collapse;
+    color: rgb(51, 51, 51);
+    cursor: pointer;
+    height: 30px;
+    text-decoration: none solid rgb(51, 51, 51);
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 34px;
+    background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 3px 3px 3px 3px;
+    font: normal normal normal 12px/18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0px 0px 0px 7px;
+    outline: rgb(51, 51, 51) none 0px;
+    padding: 5px 10px;
+}/*#BUTTON_16*/
+
+#I_17 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    cursor: pointer;
+    display: inline-block;
+    height: 12px;
+    position: relative;
+    text-align: center;
+    text-decoration: none solid rgb(51, 51, 51);
+    top: 1px;
+    white-space: nowrap;
+    width: 12px;
+    align-self: flex-start;
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 12px/12px 'Glyphicons Halflings';
+    outline: rgb(51, 51, 51) none 0px;
+}/*#I_17*/
+
+#I_17:before {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none solid rgb(51, 51, 51);
+    white-space: nowrap;
+    content: '';
+    border: 0px none rgb(51, 51, 51);
+    font: normal normal normal 12px/12px 'Glyphicons Halflings';
+    outline: rgb(51, 51, 51) none 0px;
+}/*#I_17:before*/
+
+#DIV_18 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(115, 115, 115);
+    display: none;
+    height: auto;
+    max-width: 300px;
+    text-align: left;
+    text-decoration: none solid rgb(115, 115, 115);
+    width: auto;
+    border: 0px none rgb(115, 115, 115);
+    font: normal normal normal 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 5px 0px 0px;
+    outline: rgb(115, 115, 115) none 0px;
+}/*#DIV_18*/
+

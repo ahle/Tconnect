@@ -1,7 +1,7 @@
 <?php
 class TAssistantClient {
-	//public $uri = "http://localhost/tconnect/tAssistance/";
-	public $uri = "http://localhost/tconnect/tAssistance/";
+	public $uri = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/";// use this line for git
+	//public $uri = "http://localhost/tconnect/tAssistance/";// use this line for local dev
 	
 	function __construct(){
 		//$this->uri =  "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/";

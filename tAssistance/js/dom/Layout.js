@@ -114,7 +114,10 @@ tAssistance.dom.SidebarLayout = function(id){
 	return panel;
 };
 
-tAssistance.dom.MainLayout = function(){
+tAssistance.dom.MainLayout = function(params){
+	
+	var collector_uri = params.collector_uri;
+	var editor_uri = params.editor_uri;
 	
 	var container = document.createElement("div");
 	container.setAttribute("class","container-fluid");
@@ -178,7 +181,23 @@ tAssistance.dom.MainLayout = function(){
 	var dashboard_a = document.createElement("a");
 	dashboard_a.innerHTML = "Dashboard";
 	dashboard_a.href = "index.php?page=Dashboard";
-	dashboard_config.appendChild(dashboard_a);	
+	dashboard_config.appendChild(dashboard_a);
+	
+	var collector_config =  document.createElement("li");
+	menu.appendChild(collector_config);
+	
+	var collector_a = document.createElement("a");
+	collector_a.innerHTML = "Collector";
+	collector_a.href = collector_uri;
+	collector_config.appendChild(collector_a);
+	
+	var editor_config =  document.createElement("li");
+	menu.appendChild(editor_config);
+	
+	var editor_a = document.createElement("a");
+	editor_a.innerHTML = "Editor";
+	editor_a.href = editor_uri;
+	editor_config.appendChild(editor_a);
 	
 	var dev =  document.createElement("li");
 	menu.appendChild(dev);
@@ -336,14 +355,39 @@ tAssistance.dom.NavTab1 = function(title){
 	
 };
 
+tAssistance.dom.PopupLayout = function(title){
+	
+	var container = document.createElement("div");
+	container.setAttribute("class","popup_container");
+	
+	var title_div = document.createElement("div");
+	title_div.setAttribute("class","popup_title");
+	title_div.innerHTML = title;
+	
+	container.appendChild(title_div);
+	
+	var body = document.createElement("div");
+	body.setAttribute("class","popup_body");
+	container.appendChild(body);
+	
+	return container;
+};
 
-
-
-
-
-
-
-
-
-
-
+tAssistance.dom.GroupLayout = function(params){
+	
+	var group = document.createElement("div");
+	group.setAttribute("class","container");
+	$(group).css("margin","5px");
+	
+	var heading =  document.createElement("div");
+	heading.setAttribute("class","group-heading");
+	
+	group.appendChild(heading);
+	
+	var items = document.createElement("div");
+	items.setAttribute("class","group-items");
+	
+	group.appendChild(items);
+	
+	return group;	
+};

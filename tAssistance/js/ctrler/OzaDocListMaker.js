@@ -1,4 +1,5 @@
 tAssistance.OzaDocListMaker = function(id, element, s_docs){
+	
 	this.element = element;
 	
 	for(i=0; i<s_docs.length;i++){
@@ -12,7 +13,13 @@ tAssistance.OzaDocListMaker = function(id, element, s_docs){
 		var assistant = new tAssistance.OzaAssistantClient();
 		m_doc.as_doc_uri = assistant.getDocUri(m_doc.doc_uri);
 		
-		var row = new tAssistance.OzaDocRow("abd", this, m_doc);
+		var params = {
+			"id": "abd",
+			"doc": m_doc			
+		}
+		
+		var row = new tAssistance.dom.OzaDocRow(params);
+		element.appendChild(row);
 	}
 	
 	this.paint = function(){

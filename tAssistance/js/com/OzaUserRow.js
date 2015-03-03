@@ -9,8 +9,7 @@ tAssistance.OzaUserRow = function(id,parent, m_user){
 	var user_row = document.createElement("div");
 	user_row.setAttribute("class","ozatracelist-trace");
 	
-	var user_icon = document.createElement("span");
-	user_icon.setAttribute("class","glyphicon glyphicon-user");
+	user_icon = new tAssistance.dom.UserIcon();
 	
 	user_row.appendChild(user_icon);
 	

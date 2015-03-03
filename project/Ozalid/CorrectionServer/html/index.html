@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Orange Service</title>
+
+<script type="text/javascript" src="../js/jquery.js"></script>
+</head>
+<body>
+
+Document Id: <input id="docid" />
+
+<button type="submit" name="getDoc">Get</button>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	  $("button[name='getDoc']").click(function(){
+		  var docid = document.getElementById("docid").value;
+		  
+		  $.ajax({
+			  	type: "GET",
+			    url: "https://ozalid.orange-labs.fr/oz/ws/sec/doc/"+docid+"/summary",
+			    headers: { 'AUTH_TOKEN': "rajBeIwdv+qi5jiNddqwrZV7WwJHjxIYoD8JqZMOFDYiyP9MAa8fptlbt1RwYTUqwohJ7e9ij3hW5uYs1enDYg==" }
+			}) .done(function( data ) {
+			   		alert(data);
+			    });
+		  	  
+	  });
+	  
+	 
+	  
+	});
+
+
+
+
+</script>
+
+
+</body>
+</html>

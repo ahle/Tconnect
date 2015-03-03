@@ -1,4 +1,7 @@
-tAssistance.dom.OzaTextObsel = function(id,src_obsel){
+tAssistance.dom.OzaTextObsel = function(params){
+	var id = params.id;
+	var src_obsel = params.obsel;
+	
 	// properties and events for the object controller
 	this.src_obsel = src_obsel;
 	//this.parent = parent;
@@ -72,13 +75,14 @@ tAssistance.dom.OzaTextObsel = function(id,src_obsel){
 				parts = tAssistance.Datetime.split(date);
 				pText = "Begin";
 				valueText = parts["hh"]+":"+parts["ii"]+":"+parts["ss"]+" on "+parts["DD"]+" "+parts["dd"]+"/"+parts["MM"]+"/"+parts["yyyy"];
+				valueText = parts["hh"]+":"+parts["ii"]+":"+parts["ss"]+" on "+parts["dd"]+"/"+parts["M"]+"/"+parts["yy"];
 				begin = valueText;
 			}
 	    	else if(p=="end"){
 	    		date = new Date(value);
 	    		parts = tAssistance.Datetime.split(date);
 				pText = "End";
-				valueText = parts["hh"]+":"+parts["ii"]+":"+parts["ss"]+" on "+parts["DD"]+" "+parts["dd"]+"/"+parts["MM"]+"/"+parts["yyyy"];
+				valueText = parts["hh"]+":"+parts["ii"]+":"+parts["ss"]+" on "+parts["DD"]+" "+parts["dd"]+"/"+parts["M"]+"/"+parts["yy"];
 				end = valueText;
 			}
 	    	else if(p=="type"){

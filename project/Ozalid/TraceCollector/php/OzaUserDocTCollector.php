@@ -69,7 +69,7 @@ class OzaUserDocTCollector{
 		$counter = new OzaVWCounter($trace);
 		$counter->receiveObsel($new_obsel);
 		// add counter
-		$counter = new BasicCounter($trace);
+		$counter = new BasicCounter($trace);d
 		$counter->receiveObsel($new_obsel);
 		
 		return $ok;

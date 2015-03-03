@@ -24,7 +24,7 @@ tAssistance.dom.OzaTimelineSetting = function(id){
 	return list;
 };
 
-tAssistance.dom.OzaVElementsTable = function(id){
+tAssistance.dom.OzaTable = function(id){
 		
 	var table = document.createElement("table");
 	table.setAttribute("class","table table-striped table-condensed");
@@ -34,6 +34,22 @@ tAssistance.dom.OzaVElementsTable = function(id){
 
 	return table;
 };
+
+tAssistance.dom.PropertiesTable = function(){
+	var table = document.createElement("table");
+	table.setAttribute("class","table table-striped table-condensed");
+	
+	var caption =  document.createElement("caption");
+	$(caption).css("text-align","left");
+	caption.innerHTML = "Properties";	
+	table.appendChild(caption);
+		
+	var tbody = document.createElement("tbody");
+	table.appendChild(tbody);
+
+	return table;
+};
+
 
 tAssistance.dom.OzaTimelineCondSetting = function(id, propertyList){
 	var panel = document.createElement("div");
@@ -259,10 +275,10 @@ tAssistance.dom.PropertyList = function(list){
 	return propertyList;
 };
 
-tAssistance.dom.NumberFilter = function(pfilter){
+tAssistance.dom.NumberFilterControl = function(pfilter){
 			
 	var control =  document.createElement("div");
-	control.setAttribute('class', 'pfilter-control');
+	control.setAttribute('class', 'contraint-params-control number-filter');
 	control.setAttribute('style', 'padding: 5px');
 	
 	var text1 = document.createElement("span");
@@ -397,14 +413,14 @@ tAssistance.dom.PFilterTemplateControl = function(templates){
 	return control;	
 };
 
-tAssistance.dom.StringFilter = function(pfilter){
+tAssistance.dom.StringFilterControl = function(pfilter){
 	
 	var control =  document.createElement("div");
-	control.setAttribute('class', 'pfilter-control');
+	control.setAttribute('class', 'contraint-params-control string-filter');
 	control.setAttribute('style', 'padding: 5px');
 	
 	var text = document.createElement("span");
-	text.innerHTML = "Filter the values which match the regular expression ";
+	text.innerHTML = tAssistance.messages.contain;
 	
 	var search_wrap = document.createElement("div");
 	search_wrap.setAttribute('class', 'form-control');
@@ -779,69 +795,125 @@ tAssistance.dom.PFilterRow = function(pfilter){
 	return tr;
 };
 
-tAssistance.dom.VElementRow = function(velement){
+tAssistance.dom.ObselConfigRow = function(obsel){
 	
 	var tr = document.createElement("tr");
-	//tr.setAttribute('style', 'padding: 5px' );
+	tr.setAttribute('style', 'padding: 5px' );
 	
 	var td1 = document.createElement("td");
 	$(td1).css('vertical-align', 'middle');
-	td1.setAttribute('width', '30px' );
+	//td1.setAttribute('width', '30px' );
 	$(td1).css('padding', '0px');
+			
+	var obsel_title = document.createElement("span");
+	obsel_title.innerHTML = obsel.title;
+	td1.appendChild(obsel_title);
+		
+	function make_desc(select, ofilter ,pfilters){
+		var descs = new Array(ofilter);
+		
+		for(i in pfilters){
+			var pfilter = pfilters[i];
+			descs.push(pfilter.filter_desc);
+		}
+				
+		return select + " where "+ descs.join(" and ");
+		
+	}
+	
+	var active = document.createElement("a");
+	active.innerHTML = obsel.active ? "show" : "hide";
+	$(active).css("margin-left","5px");
+	td1.appendChild(active);
+	
+	var more = document.createElement("a");
+	more.setAttribute("data-less","[Less]");
+	more.setAttribute("data-more","[More]");
+	more.innerHTML = "["+tAssistance.messages.show_more+"]";
+	$(more).css("margin-left","5px");
+	td1.appendChild(more);
+	
+	var detail = document.createElement("p");
+	detail.setAttribute("name","detail");
+	$(detail).css("display","none");
+	td1.appendChild(detail);
+		
+	//td1.appendChild(document.createElement("br"));	
+	
+	var icon_text = document.createElement("span");
+	icon_text.innerHTML = "Icon: ";
+	
+	detail.appendChild(icon_text);
 	
 	var icon = document.createElement("img");
 	icon.setAttribute('width', '20' );
 	icon.setAttribute('height', '20' );
 	icon.setAttribute('style', 'margin: 5px' );
-	icon.setAttribute('src','img/default.png');
+	icon.setAttribute('src',obsel.icon_img);
 	
-	td1.appendChild(icon);
+	detail.appendChild(icon);
 	
-	var td2 = document.createElement("td");
-	$(td2).css('vertical-align', 'middle');
-	$(td2).css('padding', '0px');
-	td2.innerHTML = velement.id;
+	var properties_div = document.createElement("div");
+	$(properties_div).css("padding-left", "20px");
+	properties_div.setAttribute("name","properties");
+	detail.appendChild(properties_div);
 	
-	var td3 = document.createElement("td");
-	$(td3).css('vertical-align', 'middle');
-	td3.setAttribute('width', '30px' );
-	$(td3).css('padding', '0px');
-	//var chkbox = document.createElement("div");
-	//chkbox.setAttribute("class","checkbox");
-	//chkbox.setAttribute("style","margin: 5px; padding: 5px");
+	// add events to the element
+	var moreBtn = td1.querySelector("a[data-more]");
+	var detailP = td1.querySelector("p[name='detail']");
 	
-	var input_chkbox = document.createElement("input");
-	input_chkbox.setAttribute("type","checkbox");
-	input_chkbox.setAttribute("style","margin: 0px; padding: 0px");
-	input_chkbox.setAttribute("value", velement.active);
-	
-	//chkbox.appendChild(input_chkbox);
-	
-	//chkbox.appendChild(label);
-	td3.appendChild(input_chkbox);
-	
-	var td4 = document.createElement("td");
-	$(td4).css('vertical-align', 'middle');
-	$(td4).css('padding', '0px');
-	td4.setAttribute('width', '30px' );
-	
-	var btn = document.createElement("button");
-	btn.setAttribute("class","button");
-	btn.setAttribute('style', 'margin: 5px; padding: 2px' );
-	
-	var setting = document.createElement("img");
-	setting.setAttribute('width', '20' );
-	setting.setAttribute('height', '20' );
-	setting.setAttribute('src','img/setting.png');
-	
-	btn.appendChild(setting);
-	
-	td4.appendChild(btn);
+	moreBtn.onclick = function(){
+		
+		var display = detailP.style.display;
+		if(display=="none"){
+			moreBtn.innerHTML = moreBtn.dataset["less"];
+			detailP.style.display = "block";
+		}
+		else{
+			moreBtn.innerHTML = moreBtn.dataset["more"];
+			detailP.style.display = "none";
+		}	
+	};	
 	
 	tr.appendChild(td1);
-	tr.appendChild(td2);
-	tr.appendChild(td3);
-	tr.appendChild(td4);
+
+	
+	return tr;
+};
+
+
+
+tAssistance.dom.PropertyConfigRow = function(property){
+	
+	var tr = document.createElement("tr");
+	tr.setAttribute('style', 'padding: 5px' );
+	
+	var td1 = document.createElement("td");
+	$(td1).css('vertical-align', 'middle');
+	//td1.setAttribute('width', '30px' );
+	$(td1).css('padding', '0px');
+	
+	var name = document.createElement("span");	
+	name.innerHTML = property.name;
+	
+	var contraint_desc = document.createElement("a");
+	contraint_desc.innerHTML = ContraintText(property.contraint);
+	
+	function ContraintText(contraint){
+		if(contraint.name == "number"){
+			return " > "+ contraint.min;
+		}
+		else if (contraint.name == "string"){
+			return " contain '" + contraint.regex +"'"; 
+		}
+		return "None";
+	}
+	
+	
+	td1.appendChild(name);
+	td1.appendChild(contraint_desc);
+	
+	tr.appendChild(td1);
 	
 	return tr;
 };
@@ -886,14 +958,14 @@ tAssistance.dom.IconRow = function(icon_data){
 	icon.setAttribute('width', '20' );
 	icon.setAttribute('height', '20' );
 	icon.setAttribute('style', 'margin: 5px' );
-	icon.setAttribute('src','img/default.png');
+	icon.setAttribute('src',icon_data.img);
 	
 	td1.appendChild(icon);
 	
 	var td2 = document.createElement("td");
 	$(td2).css('vertical-align', 'middle');
 	$(td2).css('padding', '0px');
-	td2.innerHTML = icon_data.id;
+	td2.innerHTML = icon_data.title;
 	
 	var td3 = document.createElement("td");
 	$(td3).css('vertical-align', 'middle');
@@ -937,4 +1009,263 @@ tAssistance.dom.IconRow = function(icon_data){
 	tr.appendChild(td4);
 	
 	return tr;
+};
+
+tAssistance.dom.ModelSelectControl = function(models){
+	
+	var model_div = document.createElement("div");
+	model_div.setAttribute('width', '30px' );
+	
+	var model_label = document.createElement("label");
+	model_label.setAttribute('for', 'model_input' );
+	model_label.innerHTML = "Model";
+	model_div.appendChild(model_label);
+	
+	var model_dropdown =  document.createElement("div");
+	model_dropdown.setAttribute('class', 'dropdown' );
+	
+	var model_button = document.createElement("button");
+	model_button.setAttribute('class', 'btn btn-default dropdown-toggle' );
+	model_button.setAttribute('type', 'button' );
+	model_button.setAttribute('id', 'dropdown_model' );
+	model_button.setAttribute('data-toggle', 'dropdown' );
+	model_button.setAttribute('aria-expanded', 'true' );
+	
+	
+	model_button.innerHTML = tAssistance.messages.select_a_model+' <span class="caret"></span> </button>';
+	model_dropdown.appendChild(model_button);
+	
+	var model_menu = document.createElement("ul");
+	model_menu.setAttribute('id', 'model_input' );
+	model_menu.setAttribute('class', 'dropdown-menu' );
+	model_menu.setAttribute('role', 'menu' );
+	
+	for(var i in models){
+		var model_id = models[i].id;
+		var model_li = document.createElement("li");
+		model_li.setAttribute('role', 'presentation' );
+		model_li.innerHTML = '<a role="menuitem" tabindex="-1" href="#">'+model_id+'</a>';
+		
+		model_menu.appendChild(model_li);
+		
+		tAssistance.dom.DropDownEventControl($(model_li).find("a"));
+	}
+	
+	model_dropdown.appendChild(model_menu);
+	
+	model_div.appendChild(model_dropdown);
+		
+	
+	
+	return model_div;
+};
+
+tAssistance.dom.ObselSelectControl = function(obsels){
+	
+	// obsel types
+	
+	var obsels_div = document.createElement("div");
+	obsels_div.setAttribute('width', '30px' );
+	
+	var obsel_label = document.createElement("label");
+	obsel_label.setAttribute('for', 'model_input' );
+	obsel_label.innerHTML = "Obsel";
+	obsels_div.appendChild(obsel_label);
+	
+	var model_dropdown =  document.createElement("div");
+	model_dropdown.setAttribute('class', 'dropdown' );
+	
+	var model_button = document.createElement("button");
+	model_button.setAttribute('class', 'btn btn-default dropdown-toggle' );
+	model_button.setAttribute('type', 'button' );
+	model_button.setAttribute('id', 'dropdownMenu1' );
+	model_button.setAttribute('data-toggle', 'dropdown');
+	model_button.setAttribute('aria-expanded', 'true' );
+	
+	
+	model_button.innerHTML = tAssistance.messages.select_an_obsel+' <span class="caret"></span> </button>';
+	model_dropdown.appendChild(model_button);
+	
+	var model_menu = document.createElement("ul");
+	model_menu.setAttribute('id', 'model_input' );
+	model_menu.setAttribute('class', 'dropdown-menu' );
+	model_menu.setAttribute('role', 'menu' );
+	
+	//var model = models[0];
+	//var obsels = model.obsels;
+	for(var i in obsels){
+		var obsel = obsels[i];
+		var obsel_id = obsel.id;
+		var model_li = document.createElement("li");
+		model_li.setAttribute('role', 'presentation' );
+		model_li.innerHTML = '<a role="menuitem" tabindex="-1" href="#">'+obsel_id+'</a>';
+		
+		model_menu.appendChild(model_li);
+		
+		tAssistance.dom.DropDownEventControl($(model_li).find("a"));
+	}
+	
+	model_dropdown.appendChild(model_menu);
+	
+	obsels_div.appendChild(model_dropdown);
+		
+	return obsels_div;
+};
+
+tAssistance.dom.PropertySelectControl = function(properties){
+	
+	var properties_div = document.createElement("div");
+	properties_div.setAttribute('width', '30px' );
+	
+	var model_label = document.createElement("label");
+	model_label.setAttribute('for', 'model_input' );
+	model_label.innerHTML = "Property";
+	properties_div.appendChild(model_label);
+	
+	var model_dropdown =  document.createElement("div");
+	model_dropdown.setAttribute('class', 'dropdown' );
+	
+	var model_button = document.createElement("button");
+	model_button.setAttribute('class', 'btn btn-default dropdown-toggle' );
+	model_button.setAttribute('type', 'button' );
+	model_button.setAttribute('id', 'dropdownMenu1' );
+	model_button.setAttribute('data-toggle', 'dropdown');
+	model_button.setAttribute('aria-expanded', 'true' );
+	
+	
+	model_button.innerHTML = tAssistance.messages.select_a_property+' <span class="caret"></span> </button>';
+	model_dropdown.appendChild(model_button);
+	
+	var model_menu = document.createElement("ul");
+	model_menu.setAttribute('id', 'model_input' );
+	model_menu.setAttribute('class', 'dropdown-menu' );
+	model_menu.setAttribute('role', 'menu' );
+			
+	for(var i in properties){
+		//var property = properties[i];
+		var property_id = i;
+		var model_li = document.createElement("li");
+		model_li.setAttribute('role', 'presentation' );
+		model_li.innerHTML = '<a role="menuitem" tabindex="-1" href="#">'+property_id+'</a>';
+		
+		model_menu.appendChild(model_li);
+		
+		tAssistance.dom.DropDownEventControl($(model_li).find("a"));
+	}
+	
+	model_dropdown.appendChild(model_menu);
+	
+	properties_div.appendChild(model_dropdown);
+
+	return properties_div;
+}
+
+tAssistance.dom.ContraintSelectControl = function(contraints, onclick){
+	
+	var contraints_div = document.createElement("div");
+	contraints_div.setAttribute('class', 'contraint-selector' );
+	contraints_div.setAttribute('width', '30px' );
+	
+	var model_label = document.createElement("label");
+	model_label.setAttribute('for', 'model_input' );
+	model_label.innerHTML = "Contraints";
+	contraints_div.appendChild(model_label);
+	
+	var model_dropdown =  document.createElement("div");
+	model_dropdown.setAttribute('class', 'dropdown' );
+	
+	var model_button = document.createElement("button");
+	model_button.setAttribute('class', 'btn btn-default dropdown-toggle' );
+	model_button.setAttribute('type', 'button' );
+	model_button.setAttribute('id', 'dropdownMenu1' );
+	model_button.setAttribute('data-toggle', 'dropdown');
+	model_button.setAttribute('aria-expanded', 'true' );
+	
+	
+	model_button.innerHTML = tAssistance.messages.select_a_constraint+' <span class="caret"></span> </button>';
+	model_dropdown.appendChild(model_button);
+	
+	var model_menu = document.createElement("ul");
+	model_menu.setAttribute('id', 'model_input' );
+	model_menu.setAttribute('class', 'dropdown-menu' );
+	model_menu.setAttribute('role', 'menu' );
+	
+	//var model = [0];
+	//var properties = model.obsels[0].properties;
+	for(var i in contraints){
+		//var property = properties[i];
+		var contraint_id = contraints[i];
+		var model_li = document.createElement("li");
+		model_li.setAttribute('role', 'presentation' );
+		model_li.innerHTML = '<a role="menuitem" tabindex="-1" href="#">'+contraint_id+'</a>';
+		
+		model_menu.appendChild(model_li);
+		
+		tAssistance.dom.DropDownEventControl($(model_li).find("a"), onclick);
+	}
+	
+	model_dropdown.appendChild(model_menu);
+	
+	contraints_div.appendChild(model_dropdown);
+	
+	return contraints_div;
+}
+
+tAssistance.dom.ContraintForm = function(models, contraints){
+	
+	var form = document.createElement("div");
+	//tr.setAttribute('style', 'padding: 5px' );
+	
+	var model_div = tAssistance.dom.ModelSelectControl(models);
+	
+	form.appendChild(model_div);
+	
+	var model = models[0];
+	
+	var obsels = model.obsels; 
+	
+	var obsel_types_div = tAssistance.dom.ObselSelectControl(obsels);
+	
+	form.appendChild(obsel_types_div);
+	
+	// properties
+	
+	var properties = obsels[0].properties;
+	
+	var properties_div = tAssistance.dom.PropertySelectControl(properties);
+		
+	form.appendChild(properties_div);
+	
+	// contraints
+	
+	var contraints_div = tAssistance.dom.ContraintSelectControl(contraints);
+		
+	form.appendChild(contraints_div);
+	
+	// contraint control
+	
+	var popup = tAssistance.dom.PopupLayout("ho");
+	
+	form.appendChild(popup);
+		
+	return form;
+};
+
+tAssistance.dom.ContraintEditor = function(contraints){
+	
+	var form = document.createElement("div");
+			
+	return form;
+};
+
+tAssistance.dom.DropDownEventControl = function(a, onclick){
+	
+	$(a).click(function(){
+		  var value = $(this).text();
+		  var btn = $(this).parents(".dropdown").find('.btn');
+		  btn.text(value);
+		  btn.val(value);
+		  onclick(value);
+		});
+	
 };

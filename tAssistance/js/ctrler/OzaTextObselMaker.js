@@ -1,15 +1,23 @@
-tAssistance.OzaTextObselMaker = function(id,parentNode,src_obsel){
+tAssistance.OzaTextObselMaker = function(params){
+	var id = params.id;
+	var obsel = params.obsel;
+	
+	
 	// properties and events for the object controller
 	//this.src_obsel = src_obsel;
 	//this.parent = parent;
 	//this.id = id;
 	//this.type="obsel";
 	
-	var textObsel = new tAssistance.OzaTextObsel(id, src_obsel);
+	var textObsel = new tAssistance.OzaTextObsel(id, obsel);
 	
-	var textObselEl = new tAssistance.dom.OzaTextObsel(id, src_obsel);
+	var params = {
+		"id": id,
+		"obsel": obsel
+	}
 	
-	parentNode.appendChild(textObselEl);
+	var textObselEl = new tAssistance.dom.OzaTextObsel(params);
+	
 //	textObsel.click = function(){
 //		var src_obsel_id = src_obsel.id;
 //		this.parent.markObsel(src_obsel_id);
@@ -106,5 +114,5 @@ tAssistance.OzaTextObselMaker = function(id,parentNode,src_obsel){
 	
 	
 	
-	
+	return textObselEl;
 };

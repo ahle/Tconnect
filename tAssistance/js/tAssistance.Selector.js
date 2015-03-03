@@ -25,7 +25,7 @@ tAssistance.selector = {
 				}
 				else if(parentNode.data_mode=="obsel_type"){
 					var selector_id = parentNode.querySelector("input[name='id']").value;
-					var obsel_type = parentNode.querySelector("select[name='obsel_type']").value;						
+					var obsel_type = parentNode.querySelector("select[name='obsel_type']").value;
 					
 					var script = "function(obsel){";
 					script += "	if(obsel['"+tAssistance.obsel.type+"']=='"+obsel_type+"'){";

@@ -7,8 +7,14 @@ tAssistance.OzaUserListMaker = function(id, element, s_users){
 		// add the computed information to the user
 		var assistant = new tAssistance.OzaAssistantClient();
 		m_user.as_user_uri = assistant.getUserUri(m_user.uri);
-				
-		var row = new tAssistance.OzaUserRow("abd", this, m_user);
+		
+		var params = {
+			"user": m_user
+		};
+		
+		var row = new tAssistance.dom.OzaUserRow(params);
+		
+		element.appendChild(row);
 	}
 	
 };

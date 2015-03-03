@@ -1,4 +1,11 @@
-tAssistance.OzaObselMaker = function(id,parent,x,time,src_obsel){
+tAssistance.OzaObselMaker = function(params){
+	var id = params.id;
+	var parent = params.group;
+	var x = params.x;
+	var time = params.time;
+	var src_obsel = params.obsel;
+	var userconfig = params.userconfig;
+	
 	this.src_obsel = src_obsel;
 	this.x = x;
 	this.time = time;
@@ -34,21 +41,32 @@ tAssistance.OzaObselMaker = function(id,parent,x,time,src_obsel){
 	// create element		
 	var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 	var y = tAssistance.svg.lines["line0"],
-	r = 8;d
+	r = 8;
 	
 	var base = {
 		"x": x, "y": y, "color": color, "r": '10'
-	}	
+	}
 	
-	var element = tAssistance.makeOzaObsel(this.src_obsel, base.x);
-	if(element===false) return false;
-	element.setAttribute("data-id",id);
-	parent.element.appendChild(element);
+	var params = {
+		"obsel": this.src_obsel,
+		"x": base.x,
+		userconfig: userconfig
+	};
+	
+	//var icon = tAssistance.dom.OzaObselIcon(params);
+	var icon = tAssistance.OzaObselIconMaker(params);
+	
+	if(icon===false) return false;
+	icon.setAttribute("data-id",id);
+	icon.setAttribute("x",x);
+	icon.setAttribute("y",y);
+	
+	parent.element.appendChild(icon);
 	parent.childs.push(this);
 	
 	var obsel = this;
 	// add the event
-	element.onclick = function(e){
+	icon.onclick = function(e){
 		//var obsel_in_html = obsel.renderProperty("#controlPanel");
 		parent.markObsel(obsel.src_obsel.id);
 		
@@ -64,11 +82,9 @@ tAssistance.OzaObselMaker = function(id,parent,x,time,src_obsel){
 	if(this.parent.marked && this.parent.marked.src_obsel_id == this.src_obsel.id){
 		var markObsel = new tAssistance.markObsel(this);
 	}
-	
-	
-	
+		
 	// save the bi-references
-	this.element = element;
+	this.element = icon;
 	tAssistance.data[id] = this;
 	
 };

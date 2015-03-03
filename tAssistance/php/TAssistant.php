@@ -37,7 +37,7 @@ class TAssistant {
 	
 	function updateUser($new_user){
 		$users = $this->getUsers();
-		$pos=$this->indexOf($users, $new_user);
+		$pos=TAssistance\store\User::indexOf($users, $new_user);
 		
 		if($pos===false){// if not exist, create new
 			// add new selector
@@ -47,7 +47,7 @@ class TAssistant {
 		}
 		else{// if exist, replace
 			$users[$pos] = $new_user;
-			$ok = updateUsers($users);
+			$ok = $this->updateUsers($users);
 			return $ok;
 		}
 	}

@@ -8,8 +8,9 @@
 </head>
 <body>
 
-<button name="update">Update</button><button onclick="window.location='index.php/log'">Log</button>
-
+<button name="store">Store</button>
+<button name="update">Update</button>
+<button onclick="window.location='index.php/log'">Log</button>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -19,6 +20,11 @@ $(document).ready(function(){
 			  window.location = "index.php/log";
 		  });
 	  });
+	  
+	  $("button[name='store']").click(function(){
+		  window.location = "http://rd.urbiloglabs.fr/oz_trace_repository/ws/get/50";
+	  });
+	  
 	});
 
 
