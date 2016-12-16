@@ -1,3 +1,4 @@
+// for the User List page
 tAssistance.OzaUserListMaker = function(id, element, s_users){
 	this.element = element;
 	
@@ -15,6 +16,5 @@ tAssistance.OzaUserListMaker = function(id, element, s_users){
 		var row = new tAssistance.dom.OzaUserRow(params);
 		
 		element.appendChild(row);
-	}
-	
+	}	
 };

@@ -36,3 +36,12 @@ if($_SERVER['PATH_INFO']=="/test" && $_SERVER[REQUEST_METHOD]=="GET"){
 	echo $page;
 	exit;
 }
+
+// render a index page
+if(true && $_SERVER[REQUEST_METHOD]=="GET"){
+
+	$page = file_get_contents($dir."/html/index.html");
+
+	echo $page;
+	exit;
+}

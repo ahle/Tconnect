@@ -84,6 +84,20 @@ if($_SERVER['PATH_INFO']=="/traces" && $_SERVER['REQUEST_METHOD']=="GET"){
 		exit;
 	}
 	
+	if(isset($_GET["docids"])&&isset($_GET["userids"])){
+	
+		$docids = $_GET["docids"] == "1" ? true : explode(",", $_GET["docids"]);
+		$userids = $_GET["userids"] == "1" ? true : explode(",", $_GET["userids"]);
+	
+		$store = new OzaTStore();
+	
+		$trace = $store->getFusedTraceByIds($userids,$docids);
+	
+		echo json_encode($trace);
+	
+		exit;
+	}
+	
 	// get all
 
 	$store = new OzaTStore();

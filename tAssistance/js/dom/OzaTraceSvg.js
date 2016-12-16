@@ -1,4 +1,8 @@
-tAssistance.dom.OzaTraceSvg = function(width, height){
+tAssistance.dom.OzaTraceSvg = function(params){
+	
+	var width = params.width;
+	var height = params.height;
+	
 	this.width = width;
 	this.height = height;
 	

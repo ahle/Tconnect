@@ -275,6 +275,74 @@ class OzaTStore{
 		return $docs;
 	}
 	
+	function getTraceIdByIds($userids, $docids){
+		
+		$traces = $this->getTraces();
+		$traceIds = array();
+				
+		foreach($traces as $trace){
+			$doc_id = $trace->properties->document_id;
+			$user_id = $trace->properties->userid;
+			$type = $trace->properties->type;
+			$traceid = $trace->id;
+			
+			if($docids===true&&$userids===true){
+				$traceIds[] = "t_all";
+				return $traceIds;
+			}
+			if($docids===true&&$userids!==true&&$type=="User"){// User Trace
+				
+				$ok = in_array($user_id, $userids);  
+				if($ok)
+					$traceIds[] = $trace->id;
+				
+			}
+			else if($userids===true&&$docids!==true&&$type=="Doc"){
+				$ok = in_array($doc_id, $docids);
+				if($ok)
+					$traceIds[] = $trace->id;				
+			}
+			else if($userids!==true&&$docids!==true&&$type=="UserDoc"){
+				$user_ok = in_array($user_id, $userids);
+				$doc_ok = in_array($doc_id, $docids);
+				if($user_ok && $doc_ok)
+					$traceIds[] = $trace->id;
+			}
+		}
+		
+		//echo json_encode($traceIds)."<br/><br/>";
+		
+		return $traceIds;
+	}
+	
+	function getFusedTrace($traceids){
+		
+		$new_obsels = array();
+		
+		foreach($traceids as $traceid){
+			
+			$trace = $this->getCompleteTraceById($traceid);
+			$obsels = $trace->obsels;
+			$new_obsels = array_merge($new_obsels,$obsels);			
+		}
+		
+		$new_trace = new stdClass();
+		$new_trace->id= "t".time();
+		$new_trace->obsels = $new_obsels;
+		
+		//echo json_encode($new_trace);
+		
+		return $new_trace;
+	}
+	
+	function getFusedTraceByIds($userids, $docsids){
+		$traceids = $this->getTraceIdByIds($userids, $docsids);
+		
+		//echo json_encode($traceids);
+		
+		$trace = $this->getFusedTrace($traceids);
+		return $trace;
+	}
 }
 
 

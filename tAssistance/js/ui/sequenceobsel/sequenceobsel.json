@@ -1,0 +1,30 @@
+[
+	{
+		"@context": "example.com",
+		"@type": "Icon", 
+		"@id": "leftarrow",
+		"url": "img/img.php/leftarrow"	
+	},
+	{
+		"@context": "example.com",
+		"@type": "Assersion",
+		"@id": "leftarrow",
+		"url": "img/img.php/leftarrow"	
+	},
+	{
+		"@context": "example.com",
+		"@type": "Assersion",
+		"@id": "rightarrow",
+		"url": "img/img.php/rightarrow"	
+	},
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+]

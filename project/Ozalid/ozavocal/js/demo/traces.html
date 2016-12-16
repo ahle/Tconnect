@@ -1,0 +1,452 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Levenshteinenator</title>	
+	<script type="text/javascript" charset="utf-8" src="levenshtein.js"></script>
+	<script type="text/javascript" charset="utf-8" src="jquery.js"></script>
+	<script type="text/javascript" charset="utf-8" src="jquery.tablesorter.js"></script>
+	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	
+</head>
+<body>
+
+<h1>
+	Traces
+</h1>
+
+<p>
+	Sds:
+	<div name="level1"> </div>
+</p>
+
+<p>
+	Niveau2: <div name="level2"> </div>
+</p>
+
+<p>
+	Niveau3: <div name="level3"> </div>
+</p>
+
+<hr />
+
+<form onsubmit="getLevenshteinenated(this);return false;">
+	<p>
+		<input type="text" size="40" maxlength="255" name="trace" value="" /> Trace [<a href="#" onclick="document.forms[0].trace.value=this.innerHTML;return false;">|in*0L*-1L*-1L*-1L*-1L*-1L*-1L*-1R*0R*1R*2R*3R*4L*3R*4L*3L*2L*1R*2R*3R*4R*5R*6R*7R*8R*9R*10R*11R*12R*13R*14R*15D*15*15*15EnGd11</a>, <a href="#" onclick="document.forms[0].string_a.value=this.innerHTML;return false;">gumbo</a>]<br />
+	</p>
+	<p>
+		<table type="text" size="10" name="result" value="" name="similarity" ><caption>Similarity</caption>
+		<thead><tr><th>episode</th><th>distance</th></tr></thead>
+		<tbody></tbody>
+		</table>
+	</p>
+	<p>
+		<input type="button" value="Levenshteinenate me!" onclick="getLevenshteinenated(this.form);" />
+	</p>
+</form>
+
+<hr />
+
+<div id="resultHTML"></div>
+
+<div style="clear: both;"></div>
+
+<script type="text/javascript" charset="utf-8">
+
+	getSds = function(trace){
+		
+		var sequences = document.createElement("ul");
+		sequences.setAttribute("class","list-inline");
+		
+		var list_symbols = [];
+		
+		for(var i in trace){
+			
+			var pck = trace[i];
+			
+			var data = pck.data;
+			var pt = data.pT;
+			var vocal = pt[0].vocal;
+			
+			if(!vocal) continue;
+			var word = "Sds";
+			if(vocal.substr(0,word.length)!== word) continue;
+			
+			var symbols = vocal.substr(vocal.indexOf("Z_")+2);
+			
+			//var icon = document.createElement("div");
+			
+			
+			
+			list_symbols.push(symbols);
+
+			var icon = SequencedObsel({text: "Sds"});
+			
+			sequences.appendChild(icon);
+		}
+		
+		var symbols = list_symbols[4];
+		
+		console.log(symbols);
+		
+		SequenceParser(symbols);
+		
+		return sequences;
+	};
+	
+	getSd = function(trace){
+		
+		var sequences = document.createElement("ul");
+		sequences.setAttribute("class","list-inline");
+		
+		var list_symbols = [];
+		
+		for(var i in trace){
+			
+			var pck = trace[i];
+			
+			var data = pck.data;
+			var pt = data.pT;
+			var vocal = pt[0].vocal;
+			
+			if(!vocal) continue;
+			var word = "Sd";
+			if(vocal.substr(0,word.length)!== word) continue;
+			
+			var symbols = vocal.substr(vocal.indexOf("Z_")+2);
+			
+			//var icon = document.createElement("div");
+			
+			
+			
+			list_symbols.push(symbols);
+
+			var icon = Obsel({text: "Sd", file: pck.file});
+						
+			icon.onclick = function(symbols){
+				//var symbols = symbols;
+				
+				console.log(symbols);
+				return function(e){
+					$(this).siblings().css("background-color","white");
+					$(this).css("background-color","yellow");
+					
+					document.querySelector("div[name='level2']").innerHTML = "";
+					document.querySelector("div[name='level2']").appendChild(document.createTextNode(symbols));
+					
+					var sequences = getSequenceSd(symbols);
+					document.querySelector("div[name='level2']").appendChild(sequences);
+				};
+			}(symbols, pck);
+			
+			sequences.appendChild(icon);
+		}
+		
+		//var symbols = list_symbols[4];
+		
+		//console.log(symbols);
+		
+		//SequenceParser(symbols);
+		
+		return sequences;
+	};
+	
+	getSv = function(trace){
+		
+		var sequences = document.createElement("ul");
+		sequences.setAttribute("class","list-inline");
+		
+		var list_symbols = [];
+		
+		for(var i in trace){
+			
+			var pck = trace[i];
+			
+			var data = pck.data;
+			var pt = data.pT;
+			var vocal = pt[0].vocal;
+			
+			if(!vocal) continue;
+			var word = "Sv";
+			if(vocal.substr(0,word.length)!== word) continue;
+			
+			var symbols = vocal.substr(vocal.indexOf("Z_")+2);
+			
+			//var icon = document.createElement("div");
+			
+			
+			
+			list_symbols.push(symbols);
+
+			var icon = SequencedObsel({text: "Sv"});
+			
+			sequences.appendChild(icon);
+		}
+		
+		var symbols = list_symbols[4];
+		
+		console.log(symbols);
+		
+		SequenceParser(symbols);
+		
+		return sequences;
+	};
+	
+	getSh = function(trace){
+		
+		var sequences = document.createElement("ul");
+		sequences.setAttribute("class","list-inline");
+		
+		var list_symbols = [];
+		
+		for(var i in trace){
+			
+			var pck = trace[i];
+			
+			var data = pck.data;
+			var pt = data.pT;
+			var vocal = pt[0].vocal;
+			
+			if(!vocal) continue;
+			var word = "Sh";
+			if(vocal.substr(0,word.length)!== word) continue;
+			
+			var symbols = vocal.substr(vocal.indexOf("Z_")+2);
+			
+			//var icon = document.createElement("div");
+			
+			
+			
+			list_symbols.push(symbols);
+
+			var icon = SequencedObsel({text: "Sh"});
+			
+			sequences.appendChild(icon);
+		}
+		
+		var symbols = list_symbols[4];
+		
+		console.log(symbols);
+		
+		SequenceParser(symbols);
+		
+		return sequences;
+	};
+
+	getSequenceSd = function(str){
+		var list = [];
+		
+		SequenceParser(str, list);
+		
+		var obsel = SequenceObsel(list);
+		
+		return obsel;
+	};
+	
+	
+// Sds
+SequenceParser1 = function(str, list){
+	var rest = str;
+	
+	if(rest.substr(0,3) == "|in"){
+		list.push("|in");
+		
+		rest = rest.substr(3);
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,3) == "|ri"){
+		list.push("|ri");
+		
+		rest = rest.substr(3);		
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,3) == "|rt"){
+		list.push("|rt");
+		
+		rest = rest.substr(3);		
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,3) == "|Rn"){
+		list.push("|Rn");
+		
+		rest = rest.substr(3);		
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,2) == "Qu"){
+		list.push("Qu");
+		
+		rest = rest.substr(2);	
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,2) == "ES"){
+		list.push("ES");
+		
+		rest = rest.substr(2);	
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,1) == "L"){
+		list.push("L");
+		
+		rest = rest.substr(1);	
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,1) == "*"){
+				
+		rest = rest.substr(1);
+		
+		index = rest.match(/^[-+]?\d+/)[0] // "3"
+		
+		list.push("*"+index);
+		
+		rest = rest.substr(index.length);
+		
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,1) == "R"){
+		list.push("R");
+		
+		rest = rest.substr(1);	
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,1) == "D"){
+		list.push("D");
+		
+		rest = rest.substr(1);	
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,2) == "En"){
+		list.push("En");
+		
+		rest = rest.substr("En".length);	
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,2) == "Ii"){
+		list.push("Ii");
+		
+		rest = rest.substr("Ii".length);
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,2) == "Ia"){
+				
+		rest = rest.substr("Ia".length);
+		
+		input = rest.match(/\[(.*?)\]/)[0] // "3"
+		
+		list.push(input);
+		
+		rest = rest.substr(input.length);
+		
+		
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,2) == "Mf"){
+		
+		
+		rest = rest.substr("Mf".length);
+		
+		cf = rest.match(/\[(.*?)\]/)[0] // "3"
+		
+		list.push("Mf["+cf+"]");
+			
+		rest = rest.substr(cf.length);
+		
+		nbd = rest.match(/\[(.*?)\]/)[0] // "3"
+		
+		list.push(nbd);
+			
+		rest = rest.substr(nbd.length);
+				
+		SequenceParser(rest, list);
+	}
+	else if(rest.substr(0,2) == "Gd"){
+		
+		rest = rest.substr("Gd".length);
+		
+		index = rest.match(/^[-+]?\d+/)[0] // "3"
+		
+		list.push("Gd"+index);
+		
+		rest = rest.substr(index.length);
+		SequenceParser(rest, list);
+	}
+	else{
+		
+	}
+};
+
+// Sd
+
+	
+Obsel = function(obsel){
+	var text = obsel.text ? obsel.text : "?";
+	var file = obsel.file ? obsel.file : "?";
+	
+	var icon = document.createElement('li');
+	$(icon).css("border","blue 1px solid");
+	$(icon).css("border-radius","3px");
+	
+	var a = document.createElement("a");
+	a.href = "#"+file;
+	a.innerHTML = text;
+	
+	//icon.innerHTML = text;
+	icon.appendChild(a);
+	
+	var hash = window.location.hash.substring(1);
+	
+	if(hash==file){
+		$(icon).addClass("active");
+	}
+	
+	return icon;
+};
+
+SequenceObsel = function(sequences, file){
+	
+	var obsel = document.createElement('ul');
+	obsel.setAttribute("class","list-inline");
+	obsel.setAttribute("name", (new Date()).getTime());
+	obsel.href = "#"+file;
+	
+	for(var i in sequences){
+		var item = sequences[i];
+		
+		var text = item ? item : "?";
+		
+		var subobsel = document.createElement('li');
+		$(subobsel).css("border","blue 1px solid");
+		$(subobsel).css("border-radius","3px");
+		subobsel.innerHTML = text;
+		
+		obsel.appendChild(subobsel);
+	}	
+	
+	return obsel;
+};
+
+	
+	$.get("trace.json", function(data){
+		
+		/* var sds = getSds(data);		
+		document.querySelector("div[name='level1']").appendChild(sds); */
+		
+		var sd = getSd(data);		
+		document.querySelector("div[name='level1']").appendChild(sd);
+		
+		/* var sv = getSv(data);		
+		document.querySelector("div[name='level1']").appendChild(sv);
+		
+		var sh = getSh(data);		
+		document.querySelector("div[name='level1']").appendChild(sh); */
+		//list.push(sequences);
+		
+		
+	});
+
+
+
+</script>
+
+
+</body>
+</html>

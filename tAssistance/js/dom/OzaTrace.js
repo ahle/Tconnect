@@ -227,6 +227,7 @@ tAssistance.dom.OzaDocTraceHeading = function(params){
 		title = document.createElement("a");
 		title.innerHTML = "Title: "+doc.title;
 		title.href = trace.as_trace_uri;
+		title.setAttribute("docid", doc.id);
 		title.style.display = "inline";		
 	}
 	

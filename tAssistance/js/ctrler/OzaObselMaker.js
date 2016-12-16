@@ -61,6 +61,20 @@ tAssistance.OzaObselMaker = function(params){
 	icon.setAttribute("x",x);
 	icon.setAttribute("y",y);
 	
+//	if(params.obsel.index > 0){
+//		//y = parseInt(parent.element.lastChild.getAttribute("y"));		
+//		if(parent.element.lastChild.getBBox().x > 900){
+//			x = parent.element.firstChild.getBBox().x;
+//			y = parseInt(parent.element.lastChild.getAttribute("y")) + 20;
+//		}
+//		else{
+//			x = parseInt(parent.element.lastChild.getAttribute("x")) + 20;
+//			y = parseInt(parent.element.lastChild.getAttribute("y"));
+//		}
+//		icon.setAttribute("x",x);
+//		icon.setAttribute("y",y);
+//	}	
+	
 	parent.element.appendChild(icon);
 	parent.childs.push(this);
 	

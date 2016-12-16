@@ -160,5 +160,26 @@ tAssistance.Datetime = {
 		val.mm = (val.m < 10 ? '0' : '') + val.m;
 					
 		return val;
+	},
+	getWeekNumber: function(date,weekstart) {
+	    var target = new Date(date.valueOf());
+
+	    // Set default for weekstart and clamp to useful range        
+	    if (weekstart === undefined) weekstart = 1;
+	    weekstart %= 7;
+
+	    // Replaced offset of (6) with (7 - weekstart)
+	    var dayNr = (date.getDay() + 7 - weekstart) % 7;
+	    target.setDate(target.getDate() - dayNr + 3);
+
+	    var firstThursday = target.valueOf();
+
+	    target.setMonth(0, 1);
+	    if (target.getDay() !== 4) {
+	        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+	    }
+
+	    return 1 + Math.ceil((firstThursday - target) / 604800000);
 	}
+
 };

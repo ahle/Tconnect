@@ -24,9 +24,13 @@ var collector_uri = collector.getIndexPageUri();
 var corrector = new tCorrector.OzaTCorrectorClient();
 var corrector_uri = corrector.uri;
 
+var store = new tStore.OzaTStoreClient();
+var store_uri = store.index_uri;
+
 var params = {
 	"collector_uri": collector_uri,
-	"editor_uri": corrector_uri
+	"editor_uri": corrector_uri,
+	"store_uri": store_uri
 }
 
 var menu = new tAssistance.dom.MainLayout(params);

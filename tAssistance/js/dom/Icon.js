@@ -22,3 +22,49 @@ tAssistance.dom.DocIcon = function(){
 	
 	return doc_icon;
 };
+
+tAssistance.dom.DashboardIcon = function(){
+	var icon = document.createElement("img");
+	icon.setAttribute("src","img/icon-dashboard.png");
+	icon.setAttribute("height","14px");
+	icon.setAttribute("width","14px");
+	$(icon).css("margin-right","5px");
+	
+	return icon;
+};
+
+tAssistance.dom.CheckIcon = function(){
+	var icon = document.createElement("span");
+	icon.setAttribute("class","glyphicon glyphicon-ok");
+	$(icon).css("margin-right","5px");
+	
+	return icon;
+};
+
+tAssistance.dom.ObselIconRow = function(params){
+	var icon_data = params.icon;
+	
+	//alert(icon.title);
+	
+	var obsel_icon = document.createElement("div");
+	$(obsel_icon).hover(function(){
+	    $(obsel_icon).css("background-color", "orange");
+	    }, function(){
+	    $(obsel_icon).css("background-color", "");
+	});
+	
+	var icon = document.createElement("img");
+	icon.setAttribute("src",icon_data.img);
+	icon.setAttribute("height","20px");
+	icon.setAttribute("width","20px");
+	$(icon).css("margin-right","5px");
+	
+	obsel_icon.appendChild(icon);
+	
+	var title = document.createElement("span");
+	title.innerHTML = icon_data.title;
+	
+	obsel_icon.appendChild(title);
+	
+	return obsel_icon;
+};

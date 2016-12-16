@@ -135,6 +135,32 @@ elseif($_GET["page"]== "Dashboard"){
 	echo $page;
 	exit;
 }
+elseif($_GET["page"]== "T1"){
+	//require_once "$ozalid_tstore/OzaTStoreClient.php";
+	//require_once "$tassist_dir/php/OzaTraceList.php";
+
+	$user_id = $_SESSION["user"];
+
+	$page = file_get_contents("html/layout1.html");
+	$page = str_replace("\$user_id", $user_id, $page);
+	$page = str_replace("\$script", "var page = new tAssistance.T1Page();", $page);
+
+	echo $page;
+	exit;
+}
+elseif($_GET["page"]== "T2"){
+	//require_once "$ozalid_tstore/OzaTStoreClient.php";
+	//require_once "$tassist_dir/php/OzaTraceList.php";
+
+	$user_id = $_SESSION["user"];
+
+	$page = file_get_contents("html/layout1.html");
+	$page = str_replace("\$user_id", $user_id, $page);
+	$page = str_replace("\$script", "var page = new tAssistance.T2Page();", $page);
+
+	echo $page;
+	exit;
+}
 elseif($_GET["test"]== "test3"){
 	//require_once "$ozalid_tstore/OzaTStoreClient.php";
 	//require_once "$tassist_dir/php/OzaTraceList.php";

@@ -3,16 +3,18 @@ tAssistance.OzaGraTraceMaker = function(params){
 	var trace = params.trace;
 	var page = params.page;
 	var userconfig = params.userconfig;
+	var width = params.width ? params.width : 1000;
+	var height = params.height ? params.height : 250;
 		
 	console.log(trace);
 	
-	var width = 1000;
-	var height = 250;
-	
+//	var width = 1000;
+//	var height = 250;
+//	
 	var container = document.createElement("div");
 	
 	// make a trace heading
-	var heading = tAssistance.dom.OzaTraceHeading1(trace.id);
+	var heading = tAssistance.dom.OzaTraceHeading1(trace);
 	page.appendChild(heading);
 		
 	// make a trace container
@@ -29,7 +31,13 @@ tAssistance.OzaGraTraceMaker = function(params){
 	heading_place.appendChild(btnGrp);
 	
 	// make a svg
-	var svg = tAssistance.dom.OzaTraceSvg(width, height);
+	
+	var params = {
+		"width": width,
+		"height": height
+	};
+	
+	var svg = tAssistance.dom.OzaTraceSvg(params);
 	
 	trace_place.appendChild(svg);
 	
@@ -88,4 +96,7 @@ tAssistance.OzaGraTraceMaker = function(params){
 	var obselList = new tAssistance.OzaObselListMaker(params);
 	obsellist_place.appendChild(obselList);
 };
+
+
+
 

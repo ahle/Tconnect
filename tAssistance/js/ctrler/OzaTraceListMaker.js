@@ -2,6 +2,7 @@ tAssistance.OzaTraceListMaker = function(params){
 	
 	
 	var list = document.createElement("div");
+	list.setAttribute("class","trace-list");
 		
 	for(i=0; i<traces.length;i++){
 		var s_trace = traces[i];
@@ -25,6 +26,7 @@ tAssistance.OzaTraceListByDocMaker = function(params){
 	var id = params.id;
 	var traces = params.traces;
 	var list = document.createElement("div");
+	list.setAttribute("class","trace-list");
 	
 	var groups = {};
 	
@@ -129,6 +131,7 @@ tAssistance.OzaTraceListByUserMaker = function(params){
 	var id = params.id;
 	var traces = params.traces;
 	var list = document.createElement("div");
+	list.setAttribute("class","trace-list");
 	
 	var groups = {};
 	

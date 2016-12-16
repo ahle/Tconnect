@@ -21,7 +21,7 @@ if(String::startsWith($_SERVER['PATH_INFO'], "/root")){
 		if($local_path==$reference->local_path){
 			$remote_uri = $reference->remote_uri;
 		}else if($local_path==$reference->local_path."@obsels.json"){
-			$remote_uri = $reference->remote_uri."@obsels.json";			
+			$remote_uri = $reference->remote_uri."@obsels.json";
 		}
 	}
 	
@@ -165,6 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_SERVER['PATH_INFO']=="/logon"){
 		echo "Logon succesfull.";
 	}
 	
+	// hack code
 	if($user->name == "hoang" && $user->password == "hoang"){
 		// if successfully
 		$_SESSION['authorized'] = true;
@@ -183,5 +184,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_SERVER['PATH_INFO']=="/logon"){
 
 // request authentication
 if ($_SERVER["REQUEST_METHOD"] == "GET" && $_SERVER['PATH_INFO']=="/access_token"){
-		
+	
 }

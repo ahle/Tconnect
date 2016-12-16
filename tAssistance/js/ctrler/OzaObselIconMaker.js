@@ -251,14 +251,21 @@ tAssistance.OzaObselIconMaker = function(params){
 					var ok = ObselTester(params);
 					
 					if(ok==true){
+//						var params = {
+//							"img": obselConfig.icon_img
+//						};						
+						
+						//var icon = tAssistance.dom.OzaObselIcon(params);
+						
 						var params = {
-							"img": obselConfig.icon 
-						}
-						var icon = tAssistance.dom.OzaObselIcon(params);
+								"text": new_obsel.value
+						};
+						
+						var icon = tAssistance.dom.OzaObselTextBox(params);
 						return icon;
 					}
 				}				
-			}
+			}			
 		}
 		
 		return false;	

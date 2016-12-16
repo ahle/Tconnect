@@ -1,0 +1,8 @@
+ozavocal.TCollector = function(){
+	
+	
+	
+	
+	
+	
+};

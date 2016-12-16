@@ -185,6 +185,9 @@ tAssistance.OzaGroup = function(params){
 		
 	};
 	this.addObsels = function(obsels){
+		
+		if(obsels.length ==0) return;
+		
 		//var g;
 		var y = tAssistance.svg.lines["line0"],
 		r = 8;

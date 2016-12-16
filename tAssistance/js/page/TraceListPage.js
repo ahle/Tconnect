@@ -20,15 +20,26 @@ tAssistance.TraceListPage = function(){
 		
 		//var trace_search = new tAssistance.OzaTraceSearch("bcd", document.body);
 		
-		var params = {
-			"id": "abc",
-			"traces": traces
+		var shared = {
 		};
 		
-		var list = new tAssistance.OzaTraceListByDocMaker(params);
+		var params = {
+			"id": "abc",
+			"traces": traces,
+			"shared": shared,
+			"mode": "doc"
+		};		
 		
 		var page_place = document.querySelector("[placeholder='page']");
 		
+		var listmode = new tAssistance.TraceListBtnMaker(params);
+		
+		page_place.appendChild(listmode);
+		
+		var list = new tAssistance.OzaTraceListByDocMaker(params);
+		
 		page_place.appendChild(list);
+		
+		shared.container = list;
 	});	
 };

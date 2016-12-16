@@ -54,15 +54,7 @@ tAssistance.dom.ImgButton = function(img, class_name){
 	return btn;
 };
 
-tAssistance.dom.TextButton = function(text, class_name){
-	
-	var btn = document.createElement("button");
-	btn.setAttribute("class","button");
-	btn.setAttribute('style', 'margin: 5px; padding: 2px' );
-	btn.innerHTML = text;
-	
-	return btn;
-};
+
 
 tAssistance.dom.PfilterButtons = function(){
 	

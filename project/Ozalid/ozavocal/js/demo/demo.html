@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Levenshteinenator</title>	
+	<script type="text/javascript" charset="utf-8" src="../lib/levenshtein/levenshtein.js"></script>
+	<script type="text/javascript" charset="utf-8" src="jquery.js"></script>
+	<script type="text/javascript" charset="utf-8" src="jquery.tablesorter.js"></script>
+	
+</head>
+<body>
+
+<h1>
+	Levenshteinenator
+</h1>
+
+<p>
+	Enter two strings in the fields below, then click &#8220;Levenshteinenate me!&#8221; The Levenshteinenator will then compute the <a href="http://en.wikipedia.org/wiki/Levenshtein_distance" target="_blank">Levenshtein distance</a> between the two strings. To see my JavaScript implementation of the algorithm, take a look <a href="levenshtein.js" title="Download the JavaScript source for this implementation of the Levenshtein distance algorithm">here</a>.
+</p>
+
+<hr />
+
+<form onsubmit="getLevenshteinenated(this);return false;">
+	<p>
+		<input type="text" size="40" maxlength="255" name="trace" value="" /> Trace [<a href="#" onclick="document.forms[0].trace.value=this.innerHTML;return false;">|in*0L*-1L*-1L*-1L*-1L*-1L*-1L*-1R*0R*1R*2R*3R*4L*3R*4L*3L*2L*1R*2R*3R*4R*5R*6R*7R*8R*9R*10R*11R*12R*13R*14R*15D*15*15*15EnGd11</a>, <a href="#" onclick="document.forms[0].string_a.value=this.innerHTML;return false;">gumbo</a>]<br />
+	</p>
+	<p>
+		<table type="text" size="10" name="result" value="" name="similarity" ><caption>Similarity</caption>
+		<thead><tr><th>episode</th><th>distance</th></tr></thead>
+		<tbody></tbody>
+		</table>
+	</p>
+	<p>
+		<input type="button" value="Levenshteinenate me!" onclick="getLevenshteinenated(this.form);" />
+	</p>
+</form>
+
+<hr />
+
+<div id="resultHTML"></div>
+
+<div style="clear: both;"></div>
+
+<script type="text/javascript" charset="utf-8">
+
+	function trace2sequences(trace){
+		
+		var sequences = [];
+		
+		for(var i in trace){
+			
+			var pck = trace[i];
+			
+			var data = pck.data;
+			var pt = data.pT;
+			var vocal = pt[0].vocal;
+			
+			if(!vocal) continue;
+			if(vocal.substr(0,3)!=="Sds") continue;
+			
+			var symbols = vocal.substr(vocal.indexOf("Z_")+2);
+			
+			sequences.push(symbols);
+		}
+		return sequences;
+	}
+	
+	function getLevenshteinenated(form){
+		var trace = document.forms[0].trace.value;
+		var table = document.body.querySelector("table");		
+		var tbody = document.body.querySelector("tbody");		
+		
+		for(var i in window.episodes){
+			
+			var episode = window.episodes[i];
+			
+			var distArray = levenshteinenator(episode, trace);
+			var dist = distArray[ distArray.length - 1 ][ distArray[ distArray.length - 1 ].length - 1 ];
+			
+			var tr = document.createElement("tr");
+			tr.innerHTML = "<td title='"+episode+"'>"+episode.substr(0,50)+"</td>"+"<td>"+dist+"</td>";
+			
+			tbody.appendChild(tr);
+		}
+		
+		$(table).tablesorter();
+	}
+	
+	$.get("trace.json", function(data){
+		
+		window.episodes = trace2sequences(data);
+		
+		
+		
+		
+		//console.log(sequences);
+		
+		
+	});
+
+
+
+</script>
+
+
+</body>
+</html>

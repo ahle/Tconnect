@@ -14,10 +14,16 @@ $files = array(	"OzaTextObsel.css",
 				"OzaDoc.css",
 				"Popup.css",
 				"OzaTraceBtnGroup.css",
+				
 				"../lib/treeview/css/bootstrap-treeview.css",
 				"../lib/imgcorrect/imgcorrect.min.css",
 				"../lib/slider/css/slider.css",
-				"../lib/jsonviewer/jsonviewer.css"
+				"../lib/jsonviewer/jsonviewer.css",
+				"../lib/jasny/css/jasny-bootstrap.css",
+				//"../lib/datetimepicker/css/bootstrap-datetimepicker.css",
+				"../lib/daterangepicker/daterangepicker-bs3.css",
+				"../lib/datatables/media/css/jquery.dataTables.css"
+		
 				);
 
 $css = "";

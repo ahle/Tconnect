@@ -9,11 +9,24 @@ header("Content-type: text/javascript");
 $debug = true;
 
 $files = array( "../lib/jquery/jquery.js"
-				,"../lib/moment/moment.js"		
+				,"../lib/moment/moment.js"
 				,"../lib/treeview/js/bootstrap-treeview.js"
 				,"../lib/imgcorrect/imgcorrect.min.js"
 				,"../lib/slider/js/bootstrap-slider.js"
 				,"../lib/jsonviewer/jsonviewer.js"
+				,"../lib/jasny/js/jasny-bootstrap.js"
+				,"../lib/jquery.timeago/jquery.timeago.js"
+				//,"../lib/datetimepicker/js/bootstrap-datetimepicker.js"
+				,"../lib/daterangepicker/daterangepicker.js"
+				,"../lib/flot/jquery.flot.js"
+				,"../lib/flot/jquery.flot.pie.js"
+				//,"../lib/flot/jquery.flot.bar.js"
+				,"../lib/flot/jquery.flot.categories.js"
+				,"../lib/flot/jquery.flot.tickrotor.js"
+		
+				,"../lib/datatables/media/js/jquery.dataTables.js"
+				,"../lib/tMining/js/Similarity.js"
+		
 		
 				//,"../js/dateFormat.js"				
 				,"../js/tAssistance.js"
@@ -43,7 +56,8 @@ $files = array( "../lib/jquery/jquery.js"
 				//,"../js/tAssistance.Obsel.js"				
 				
 				//,"../js/tAssistance.Group.js"
-				
+				,"../js/data/Obsels.js"
+				,"../js/data/UserConfig.js"
 				
 				,"../js/tAssistance.Touchpad.js"
 				,"../js/tAssistance.Rule.js"
@@ -54,6 +68,7 @@ $files = array( "../lib/jquery/jquery.js"
 				,"../js/tAssistance.TextObsel.js"
 				,"../js/tAssistance.OzaTraceSearch.js"
 		
+				,"../js/ctrler/ObselIconListMaker.js"
 				,"../js/ctrler/OzaTraceListMaker.js"
 				,"../js/ctrler/OzaUserListMaker.js"
 				,"../js/ctrler/OzaTDocListMaker.js"
@@ -75,7 +90,7 @@ $files = array( "../lib/jquery/jquery.js"
 				,"../js/ctrler/OzaObselMaker.js"
 				,"../js/ctrler/OzaObselIconMaker.js"
 				,"../js/ctrler/ObselMarker.js"
-		
+				,"../js/ctrler/ModalMaker.js"		
 				
 				,"../js/com/OzaUserRow.js"
 				,"../js/com/OzaBarChart.js"				
@@ -90,8 +105,7 @@ $files = array( "../lib/jquery/jquery.js"
 				,"../js/com/OzaObselList.js"							
 				,"../js/com/OzaImageObsel.js"
 				,"../js/com/ComboTrace.js"
-				,"../js/com/OzaObselLabel.js"
-				
+				,"../js/com/OzaObselLabel.js"				
 				,"../js/com/OzaImageObsel.js"
 				,"../js/com/Mousepad.js"
 				,"../js/com/OzaGroup.js"
@@ -120,15 +134,35 @@ $files = array( "../lib/jquery/jquery.js"
 				,"../js/dom/OzaDoc.js"
 				,"../js/dom/Icon.js"
 				,"../js/dom/OzaUser.js"
+				,"../js/dom/Control.js"
+				,"../js/dom/Editor.js"
+				,"../js/dom/Button.js"
+				,"../js/dom/Nav.js"
+				,"../js/dom/Input.js"
+				,"../js/dom/Section.js"
+				,"../js/dom/Modal.js"
+				,"../js/dom/Panel.js"
+				,"../js/dom/BreadCrumb.js"
 			
 				,"../js/page/TracePage.js"
+				,"../js/page/TracePage1.js"
 				,"../js/page/TraceListPage.js"
 				,"../js/page/UserListPage.js"
 				,"../js/page/DocListPage.js"
 				,"../js/page/DocPage.js"
 				,"../js/page/DashBoardPage.js"
+				,"../js/page/DashBoardPage.Data.js"
 				,"../js/page/UserConfigPage.js"
 				,"../js/page/MainPage.js"
+				,"../js/page/T1Page.js"
+				,"../js/page/T1Page.Data.js"
+				,"../js/page/T2Page.js"
+				,"../js/page/SimilarityPage.js"
+		
+				,"../js/parser/Trace.js"			
+
+				,"../js/handler/UserConfig.js"
+				,"../js/handler/Obsels.js"
 		
 				,"../js/tStore.js"
 				,"../js/tStore.OzaTStore.js"
@@ -140,6 +174,11 @@ $files = array( "../lib/jquery/jquery.js"
 				,"../js/ext/tCollector/OzaTCollectorClient.js"
 				,"../js/ext/tCorrector/tCorrector.js"
 				,"../js/ext/tCorrector/OzaTCorrectorClient.js"
+				
+				,"../js/ui/sequenceobsel/sequenceobsel.js"
+		
+				,"/var/www/tconnect/project/Ozalid/ozavocal/js/obsels/TraceParser1.js"
+		
 				);
 
 $js = "";

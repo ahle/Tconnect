@@ -76,6 +76,18 @@ tAssistance.dom.OzaObselIcon = function(params){
 	drawnObsel.setAttributeNS(null,'y', 0 );
 	drawnObsel.setAttributeNS(null,'width', '20' );
 	drawnObsel.setAttributeNS(null,'height', '20' );
-	drawnObsel.setAttributeNS("http://www.w3.org/1999/xlink",'href','img/'+img+'.png');
+	drawnObsel.setAttributeNS("http://www.w3.org/1999/xlink",'href', img);
+	return drawnObsel;
+};
+
+tAssistance.dom.OzaObselTextBox = function(params){
+	var text = params.text;
+	
+	drawnObsel = document.createElementNS('http:\/\/www.w3.org\/2000\/svg','text');
+	drawnObsel.setAttributeNS(null,'x', 0 );
+	drawnObsel.setAttributeNS(null,'y', 0 );
+	//drawnObsel.setAttributeNS(null,'width', '20' );
+	//drawnObsel.setAttributeNS(null,'height', '20' );
+	drawnObsel.appendChild(document.createTextNode(text));
 	return drawnObsel;
 };

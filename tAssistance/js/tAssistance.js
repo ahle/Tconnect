@@ -4,10 +4,18 @@
 
 	/** @namespace */
 	tAssistance = {};
-	//jTBA.Version = '0.1';
 	tAssistance.location = "http://assist.com/";
-	tAssistance.debug = true;
+	tAssistance.debug = true;	
+	tAssistance.dom = {};
+	tAssistance.page = {};
+	tAssistance.pageSession = {};
+	tAssistance.modal = {
+		"container": null
+	};
 	
+	tAssistance.model = {};
+	tAssistance.handler = {};
+	tAssistance.ui = {};
 	
 	
 	/** 
@@ -277,7 +285,7 @@
 		return childNodes;
 	}	
 	
-tAssistance.processKeyPress = function(g,evt){
+	tAssistance.processKeyPress = function(g,evt){
 	var ta = tAssistance;
 	
 	var transform_obj = tAssistance.svg.group.parse_transform(g);
@@ -303,15 +311,9 @@ tAssistance.processKeyPress = function(g,evt){
 	
 	var isDown = false;
 	
-	/** 
-	 * @function
-	 * @memberof tAssistance
-	 * @name trace_view
-	 * @param options.trace_uri the uri of trace 
-	 * @desc format the obsels in html */
 	
 	
-tAssistance.getObsels = function(base_uri, name, callback){
+	tAssistance.getObsels = function(base_uri, name, callback){
 	mgr = new tService.TraceManager({
 		"base_uri": base_uri,
 		async: true
@@ -330,7 +332,7 @@ tAssistance.getObsels = function(base_uri, name, callback){
 	});
 }
 
-tAssistance.loadUserPreference = function(){
+	tAssistance.loadUserPreference = function(){
 	// enable bootstrap-select
 	$('.selectpicker').selectpicker();
 	// 

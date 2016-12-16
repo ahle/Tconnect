@@ -1,0 +1,107 @@
+[
+          {
+            "type": "obselType",
+            "id": "group",
+            "icon": "oze_idg",
+            "title": "Open a dialog",
+            "select": "select obsel",
+            "ofilter": "obsel.type = 'oze_idg'",
+            "active": true,
+            "properties": [
+              {
+                "class": "property",
+                "type": "string",
+                "name": "type",
+                "contraint": {
+                  "class": "contraint",
+                  "name": "string",
+                  "text": " > 10",
+                  "min": "2",
+                  "max": "3",
+                  "clicked": true,
+                  "regex": "group"
+                }
+              },
+              {
+                "class": "property",
+                "type": "number",
+                "name": "begin",
+                "contraint": {
+                  "class": "contraint",
+                  "name": "number",
+                  "text": " > 10",
+                  "min": "10",
+                  "max": null,
+                  "clicked": true
+                }
+              },
+              {
+                "class": "property",
+                "type": "number",
+                "name": "end",
+                "contraint": {
+                  "class": "contraint",
+                  "name": "number",
+                  "text": " > 10",
+                  "min": "10",
+                  "max": null,
+                  "clicked": true,
+                  "regex": "alain1"
+                }
+              }
+            ],
+            "icon_img": "img/img.php/oze_idg"
+          },
+          {
+            "type": "obselType",
+            "id": "oze_view",
+            "icon": "oze_view",
+            "title": "Open a view",
+            "active": true,
+            "select": "select obsel",
+            "ofilter": "obsel.type = 'oze_idg'",
+            "properties": [
+              {
+                "class": "property",
+                "type": "string",
+                "name": "id",
+                "contraint": {
+                  "class": "contraint",
+                  "name": "string",
+                  "text": " > 10",
+                  "min": 10,
+                  "max": null,
+                  "clicked": true,
+                  "regex": "o"
+                }
+              }
+            ],
+            "icon_img": "img/img.php/oze_view"
+          },
+          {
+            "type": "obselType",
+            "id": "ozec_w",
+            "icon": "ozec_w",
+            "title": "Correct a word",
+            "active": true,
+            "select": "select obsel",
+            "ofilter": "obsel.type = 'oze_idg'",
+            "properties": [
+              {
+                "class": "property",
+                "type": "string",
+                "name": "id",
+                "contraint": {
+                  "class": "contraint",
+                  "name": "string",
+                  "text": " > 10",
+                  "min": 10,
+                  "max": null,
+                  "clicked": true,
+                  "regex": "o"
+                }
+              }
+            ],
+            "icon_img": "img/img.php/ozec_w"
+          }
+        ]

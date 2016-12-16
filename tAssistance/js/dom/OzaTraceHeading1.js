@@ -1,11 +1,17 @@
-tAssistance.dom.OzaTraceHeading1 = function(trc_id, width, height){
+tAssistance.dom.OzaTraceHeading1 = function(trace, width, height){
 	//this.width = width;
 	//this.height = height;
 	
 	
-	var heading = document.createElement("div");
-	heading.setAttribute("class","panel-default panel");
-	heading.setAttribute("style","background-color: #b2bac2");
+	//var header = document.createElement("details");
+	//header.setAttribute("class","panel-default panel");
+	//heading.setAttribute("style","background-color: #b2bac2");
+	
+	var header = more = tAssistance.dom.More();
+    var title = more.querySelector(".title");
+    var details = more.querySelector(".details");
+	
+	//var summary = document.createElement("summary");
 	
 	var trace_icon = document.createElement("img");
 	trace_icon.setAttribute("src","img/trace.png");
@@ -15,21 +21,35 @@ tAssistance.dom.OzaTraceHeading1 = function(trc_id, width, height){
 	
 	var trace_id = document.createElement("a");
 	trace_id.setAttribute("href","#");
-	trace_id.innerHTML = "Trace ID: "+trc_id;
-		
-	var plus_btn = document.createElement("img");
-	plus_btn.setAttribute("src","img/zoom_in.png");
-	plus_btn.setAttribute("style","display: inline-block");
-	plus_btn.setAttribute("height","14px");
-	plus_btn.setAttribute("width","14px");
+	trace_id.innerHTML = "Trace ID: "+trace.id;
 	
-	var stats_text = document.createElement("a");
-	stats_text.setAttribute("href","#");
-	stats_text.innerHTML = "Charts";
+	title.appendChild(trace_icon);
+	title.appendChild(trace_id);
 	
-	heading.appendChild(trace_icon);
-	heading.appendChild(trace_id);
-	heading.appendChild(plus_btn);
+	var type = tAssistance.dom.PropertyValueFormatter("Type",trace.properties.type);
 	
-	return heading;
+	var document_id = tAssistance.dom.PropertyValueFormatter("Document ID",trace.properties.document_id);
+	
+	var document_title = tAssistance.dom.PropertyValueFormatter("Model",trace.properties.model);
+	
+	var title = tAssistance.dom.PropertyValueFormatter("Title",trace.properties.title);
+	
+	var numObsels = tAssistance.dom.PropertyValueFormatter("Number of Obsels",trace.stats.count);
+	
+    var properties = document.createElement("p");
+         
+    properties.innerHTML = 'properties';
+    
+    //var details = properties.querySelector("details");
+       
+    details.appendChild(type);
+    details.appendChild(document_id);
+    details.appendChild(document_title);
+    details.appendChild(title);
+    details.appendChild(numObsels);
+	
+	//header.appendChild(summary);	
+    details.appendChild(properties);
+	
+	return header;
 };

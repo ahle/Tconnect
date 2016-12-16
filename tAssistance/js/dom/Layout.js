@@ -20,33 +20,6 @@ tAssistance.dom.TBTLayout = function(id){
 	return container;
 };
 
-tAssistance.dom.PanelLayout = function(id){
-	
-	var panel = document.createElement("div");
-	panel.setAttribute("class","panel panel-primary");
-	panel.setAttribute("style","display:block");
-	
-	var panel_heading = document.createElement("div");
-	panel_heading.setAttribute("class","panel-heading");
-	panel_heading.setAttribute("style","padding: 0px; margin: 0px;");
-	
-	panel.appendChild(panel_heading);
-		
-	var panel_title = document.createElement("div");
-	panel_title.setAttribute("class","panel-title");
-	panel_title.setAttribute("style","padding: 5px; margin: 0px;  font-size: 14px");
-	panel_title.innerHTML = "Condition Setting";
-	
-	panel_heading.appendChild(panel_title);
-	
-	var panel_body = document.createElement("div");
-	panel_body.setAttribute("class","panel-body");
-		
-	panel.appendChild(panel_body);
-	
-	return panel;
-};
-
 tAssistance.dom.Gird4Layout = function(id){
 	
 	var panel = document.createElement("div");
@@ -57,7 +30,7 @@ tAssistance.dom.Gird4Layout = function(id){
 	
 	var bot = document.createElement("div");
 	bot.setAttribute("class","row");
-		
+	
 	panel.appendChild(top);
 	panel.appendChild(bot);
 		
@@ -118,6 +91,7 @@ tAssistance.dom.MainLayout = function(params){
 	
 	var collector_uri = params.collector_uri;
 	var editor_uri = params.editor_uri;
+	var store_uri = params.store_uri;
 	
 	var container = document.createElement("div");
 	container.setAttribute("class","container-fluid");
@@ -183,6 +157,22 @@ tAssistance.dom.MainLayout = function(params){
 	dashboard_a.href = "index.php?page=Dashboard";
 	dashboard_config.appendChild(dashboard_a);
 	
+	var t1_dashboard =  document.createElement("li");
+	menu.appendChild(t1_dashboard);
+	
+	var t1_a = document.createElement("a");
+	t1_a.innerHTML = "T1";
+	t1_a.href = "index.php?page=T1";
+	t1_dashboard.appendChild(t1_a);
+	
+	var t2_dashboard =  document.createElement("li");
+	menu.appendChild(t2_dashboard);
+	
+	var t2_a = document.createElement("a");
+	t2_a.innerHTML = "T2";
+	t2_a.href = "index.php?page=T2";
+	t2_dashboard.appendChild(t2_a);
+	
 	var collector_config =  document.createElement("li");
 	menu.appendChild(collector_config);
 	
@@ -190,6 +180,14 @@ tAssistance.dom.MainLayout = function(params){
 	collector_a.innerHTML = "Collector";
 	collector_a.href = collector_uri;
 	collector_config.appendChild(collector_a);
+	
+	var store_config =  document.createElement("li");
+	menu.appendChild(store_config);
+	
+	var store_a = document.createElement("a");
+	store_a.innerHTML = "Store";
+	store_a.href = store_uri;
+	store_config.appendChild(store_a);
 	
 	var editor_config =  document.createElement("li");
 	menu.appendChild(editor_config);
@@ -291,26 +289,7 @@ tAssistance.dom.NavBarTop = function(user_id){
 	
 }
 
-tAssistance.dom.UserConfigLayout = function(){
-	
-	var container = document.createElement("div");
-	container.setAttribute("class","panel");
-		
-	var obsels = document.createElement("div");
-	obsels.setAttribute("name","obsel-config");	
-	
-	var icons = document.createElement("div");
-	icons.setAttribute("name","icon-config");
-	
-	var detail = document.createElement("div");
-	detail.setAttribute("name","editor");
-		
-	container.appendChild(obsels);
-	container.appendChild(icons);
-	container.appendChild(detail);
-	
-	return container;
-};
+
 
 tAssistance.dom.ObselTypeList = function(model){
 	
@@ -391,3 +370,23 @@ tAssistance.dom.GroupLayout = function(params){
 	
 	return group;	
 };
+
+tAssistance.dom.PropertyValueFormatter = function(name, value){
+	
+	var property = document.createElement("p");
+	
+	var name_dom = document.createElement("span");
+	name_dom.innerHTML = name;
+	$(name_dom).css("color","red");
+	
+	var value_dom = document.createElement("span");
+	value_dom.innerHTML = value;
+	
+	property.appendChild(name_dom);
+	property.appendChild(document.createTextNode(" "));
+	property.appendChild(value_dom);
+	
+	return property;
+};
+
+

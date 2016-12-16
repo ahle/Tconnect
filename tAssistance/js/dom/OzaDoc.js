@@ -63,10 +63,11 @@ tAssistance.dom.OzaDocRow = function(params){
 		
 	var image =  document.createElement("img");
 	image.src = doc.img;
-	//image.style.display = "block";
 	
+		
 	var title =  document.createElement("span");
-	title.innerHTML = docid || "Tous";	
+	title.innerHTML = "ID: ";
+	title.innerHTML+= docid || "Tous";	
 	title.style.display = "block";
 	
 	var author = document.createElement("span");
@@ -82,6 +83,16 @@ tAssistance.dom.OzaDocRow = function(params){
 	more_detail.appendChild(author);	
 	more_detail.appendChild(date);
 	
+	tAssistance.dom.style.OzaDocRow(doc_row);
+	
 	return doc_row;
 };
 
+if(tAssistance.dom.style==null)
+	tAssistance.dom.style = {};
+
+tAssistance.dom.style.OzaDocRow = function(doc_row){
+	var img = doc_row.querySelector("img");
+	$(img).css("width","200px");
+	$(img).css("height","300px");
+};

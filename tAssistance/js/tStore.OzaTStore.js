@@ -9,7 +9,10 @@ tStore.OzaTStore = function(){
 		var json = localStorage["tStore.traces"];
 		var traces = JSON.parse(json);
 		
-		traces.push(trace);
+		if(traces.length<20){
+			traces.push(trace);
+		}
+		//
 		
 		json = JSON.stringify(traces);
 		
@@ -94,12 +97,5 @@ tStore.OzaTStore = function(){
 		
 		return user;
 	};
-
-	
-
-
-
-
-
 
 };
