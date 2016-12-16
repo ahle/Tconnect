@@ -1,1 +1,0 @@
-tAssistance.dom = {};
