@@ -16,6 +16,9 @@ See also [tApp REST API](https://rawgithub.com/ahle/tconnect/master/doc/rest-api
 * tAssistance: API for high-level requests on traces (transformation, visualisation, analyse, mining).
 See also [tAssistance REST API](https://rawgithub.com/ahle/tconnect/master/doc/rest-api/index.html)
 and [tAssistance JS API](https://rawgithub.com/ahle/tconnect/master/doc/js-api/index_tassistance.html)
+* tLearning: API for trace based reasoning
+
+
 
 The figure below is an example of using TConnect in order to build a user assistance system. 
 To build a such system, see the tutorial [Install TConnect](doc/tut_setup.md)
