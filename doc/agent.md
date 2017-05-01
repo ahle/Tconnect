@@ -1,6 +1,6 @@
 *Human agent*
 
-An editor, a system designer or any kind of users of editing systems who interact with the editing sytems for correcting the documents
+The users interact with the editing sytems for correcting the documents such as i.e. editor, system designer.
 
 *Assistance agent*
 
