@@ -2,7 +2,12 @@
 
 In this section, we describe more precisely about assistance agent in TConnect at high level of description PEAS.
 
-* Performance Metrics: How does the AI know it's doing what it's supposed to be doing?
+* Performance Metrics: How does the assistance agent know it's doing what it's supposed to be doing?
+The assistance agent has an assistance policy which tell him how to do.
+
 * Environment: What environment does the agent interact with?
+For example, TConnect editor 
 * Actuators: How does the AI affect its environment?
+Recommendation System
 * Sensors: How does the AI get information from its environment?
+Interaction trace
