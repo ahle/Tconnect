@@ -1,6 +1,6 @@
 # Part II: Assistance agent
 
-In this section, we describe more precisely about assistance agent at high level of description PEAS.
+In this section, we describe more precisely about assistance agent in TConnect at high level of description PEAS.
 
 * Performance Metrics: How does the AI know it's doing what it's supposed to be doing?
 * Environment: What environment does the agent interact with?
