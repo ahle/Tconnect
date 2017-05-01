@@ -1,3 +1,5 @@
+# Part I: Multi agents in collaborative editing
+
 *Human agent*
 
 The users interact with the editing sytems for correcting the documents such as i.e. editor, system designer.
