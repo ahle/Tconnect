@@ -4,7 +4,7 @@ The users interact with the editing sytems for correcting the documents such as 
 
 *Assistance agent*
 
-An intelligence agent observes the user interaction and helps the users.
+An intelligence agent observes user interaction and helps the users.
 
 *Environment*
 
