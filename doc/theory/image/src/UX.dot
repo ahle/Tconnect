@@ -1,0 +1,9 @@
+digraph G { 
+rankdir = LR;
+node [shape = rectangle];  
+  "Associated emotions" -> "Ordered Events"  
+  "User experience" -> "Interaction trace" [label = "information loss"]
+  "Ordered Events" -> "User experience"  
+  "Time, space, action" -> "Ordered Events"
+  "Contextual knowledge" -> "User experience"
+}

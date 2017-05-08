@@ -1,0 +1,8 @@
+digraph G { 
+rankdir = LR;
+node [shape = rectangle];
+  "Observation" -> "Controlled observartion" -> "Action"
+  "Controlled observartion" -> "State"
+  //"Action" -> "Precond"
+  //"Action" -> "Effect"
+}
