@@ -1,6 +1,6 @@
-#### Experimenation configuration
+#### Experimentation configuration
 
 The primary traces collected in 1,5,10 seconds.
 With the mouse events, click buttons.
 
-The application is Google docs
+The application is Google docs, Git etc...
