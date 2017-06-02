@@ -1,0 +1,115 @@
+{
+  "apiVersion": null,
+  "swaggerVersion": "1.2",
+  "basePath": "http://hello.com",
+  "resourcePath": "/session",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/session/{app_id}/{session_id}",
+      "operations": [
+        {
+          "method": "PUT",
+          "summary": "update a remote session ",
+          "notes": "",
+          "responseClass": "",
+          "nickname": "updateRemoteSession",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "app_id",
+              "description": "ID of application that needs to be updated",
+              "required": true,
+              "allowMultiple": false,
+              "dataType": "string",
+              "paramType": "path"
+            },
+            {
+              "name": "session_id",
+              "description": "ID of the session is changed",
+              "required": true,
+              "allowMultiple": false,
+              "dataType": "string",
+              "paramType": "path"
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": ""
+            },
+            {
+              "code": 404,
+              "message": "Session not found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/session/{app_id}",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "validate a ticket ",
+          "notes": "",
+          "responseClass": "",
+          "nickname": "validate_ticket",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "app_id",
+              "description": "ID of application that needs to be updated",
+              "required": true,
+              "allowMultiple": false,
+              "dataType": "string",
+              "paramType": "path"
+            },
+            {
+              "name": "ticket",
+              "description": "Ticket object that needs to be validated",
+              "required": true,
+              "allowMultiple": false,
+              "dataType": "Ticket",
+              "paramType": "query"
+            },
+	    {
+              "name": "returnUrl",
+              "description": "If ticket is validated, the request will be redirected to this url ",
+              "required": true,
+              "allowMultiple": false,
+              "dataType": "string",
+              "paramType": "query"
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 302,
+              "message": "Found but redirect to returnUrl"
+            },
+            {
+              "code": 500,
+              "message": "Ticket no validated"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+    "Ticket": {
+	"properties":{
+	   "message": {
+              "type": "string",	     
+              "description": "The encrypted ticket contain information (app_id, session_id, user_id, expire)"
+           }
+	}
+    }
+  }
+}
