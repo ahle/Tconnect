@@ -45,6 +45,6 @@ For user assistance website :
 
 Authors
 -------
-Anh-Hoang Le
+-  `Anh-Hoang Le <https://github.com/ahle>`__
 
 
