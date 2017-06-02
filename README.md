@@ -26,7 +26,9 @@ To build a such system, see the tutorial [Install TConnect](doc/tut_setup.md)
 
 ![Tconnect architecture](doc/img/tconnect_archi.png)
 
-### Requirements ###
+Requirements
+------------
+
 For kTBS : 
 * See also the tutorial [Installing kTBS ](https://kernel-for-trace-based-systems.readthedocs.org/en/latest/tutorials/install.html)
 
@@ -39,7 +41,8 @@ For user assistance website :
 * PHP 5.3.5 [Download PHP 5.3](http://php.net/downloads.php)
 * MongoDB
 
-### Download ###
+Download
+--------
 
 [Development version 1.0 ](https://github.com/ahle/tconnect/edit/master.zip)
 
