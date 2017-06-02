@@ -9,10 +9,8 @@ TConnect's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 3
    :glob:
-
-   *
+   
    theory/*
    modules/*
 
