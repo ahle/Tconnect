@@ -3,7 +3,8 @@ TConnect
 
 a platform for collecting, visualizing traces 
 
-### Introduction ###
+Introduction
+------------
 
 TConnect is a web based platform for connecting the trace based applications as end-user web application, user assistance system and trace base management system. 
 For facilitating the developement, TConnect is organized into modules specialized for different types of systems.  
@@ -42,4 +43,8 @@ For user assistance website :
 
 [Development version 1.0 ](https://github.com/ahle/tconnect/edit/master.zip)
 
-*single asterisks*
+Authors
+-------
+Anh-Hoang Le
+
+
