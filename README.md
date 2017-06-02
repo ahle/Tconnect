@@ -24,7 +24,7 @@ and [tAssistance JS API](https://rawgithub.com/ahle/tconnect/master/doc/js-api/i
 The figure below is an example of using TConnect in order to build a user assistance system. 
 To build a such system, see the tutorial [Install TConnect](doc/tut_setup.md)
 
-![Tconnect architecture](doc/img/tconnect_archi.png)
+![Tconnect architecture](docs/img/tconnect_archi.png)
 
 Requirements
 ------------
