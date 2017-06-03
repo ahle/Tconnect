@@ -178,7 +178,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'ReadtheDocsTemplatedoc'
+htmlhelp_basename = 'TConnect Documentation'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -198,8 +198,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'ReadtheDocsTemplate.tex', u'Read the Docs Template Documentation',
-   u'Read the Docs', 'manual'),
+  ('index', 'ReadtheDocsTemplate.tex', u'Tconnect Template Documentation',
+   u'Anh Hoang Le', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
