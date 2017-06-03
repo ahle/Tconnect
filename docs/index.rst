@@ -12,7 +12,7 @@ Contents:
    :glob:
    
    theory/*
-   modules/*
+   
 
 
 
