@@ -48,6 +48,6 @@ Download
 
 Authors
 -------
--  [Anh-Hoang Le] (https://github.com/ahle)
+-  [Anh-Hoang Le](https://github.com/ahle)
 
 
