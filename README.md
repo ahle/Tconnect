@@ -50,7 +50,7 @@ Online Demo
 ----
 http://88.191.236.98/tconnect/tAssistance/index.php?page=Main 
 
-(This version is hosted on a personal server. So it could be not available)
+(This version is hosted on a personal server. The service could be temporarily unavailable)
 
 Authors
 -------
