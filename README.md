@@ -41,10 +41,9 @@ For user assistance website :
 * PHP 5.3.5 [Download PHP 5.3](http://php.net/downloads.php)
 * MongoDB
 
-Download
+Documents
 --------
 
-[Development version 1.0 ](https://github.com/ahle/tconnect/edit/master.zip)
 
 Online Demo
 ----
