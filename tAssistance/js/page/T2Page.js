@@ -325,7 +325,7 @@ tAssistance.page.T2.dom.WordRow = function(params){
 	
 	//td1.innerHTML = obsel.altoID + " " + obsel.indPage + " " + obsel.info_rfW;
 	var image = document.createElement("img");
-	image.src = "http://localhost/tconnect/project/Ozalid/TStore/db/img/ajouter.jpg";
+	image.src = "/tconnect/project/Ozalid/TStore/db/img/ajouter.jpg";
 	
 	td1.appendChild(image);
 	
@@ -355,7 +355,7 @@ tAssistance.page.T2.dom.CorrectionRow = function(params){
 	//td1.innerHTML = obsel.altoID + " " + obsel.indPage + " " + obsel.info_rfW;
 	
 	var image = document.createElement("img");
-	image.src = "http://localhost/tconnect/project/Ozalid/TStore/db/img/ajouter.jpg";
+	image.src = "/tconnect/project/Ozalid/TStore/db/img/ajouter.jpg";
 	
 	td1.appendChild(image);
 	

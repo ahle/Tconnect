@@ -132,10 +132,26 @@ tMining.PearsonSimilarity = function(user1, user2){
 	
 	sum(iterate(common_items, function(item){
 		rate(user,item)-rate(neighbour, item);
-	}));
+	}));	
+};
+
+tMining.test = function(){
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 	
 };
+
+
 

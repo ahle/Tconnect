@@ -4,7 +4,8 @@ $ozalid_correct = $ozalid_dir."/CorrectionServer";
 require_once $ozalid_correct."/lib/Http.php";
 
 class OzaTStoreClient {
-	public $uri = "http://localhost/tconnect/project/Ozalid/TStore/api.php/";
+	public $uri = "http://88.191.236.98/tconnect/project/Ozalid/TStore/api.php/";
+	//public $uri = "http://localhost/tconnect/project/Ozalid/TStore/api.php/";
 	//public $uri = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/project/Ozalid/TStore/api.php/";
 	
 	function __construct($repo_uri){

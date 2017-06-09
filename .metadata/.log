@@ -1,0 +1,108 @@
+!SESSION 2016-10-17 12:44:34.806 -----------------------------------------------
+eclipse.buildId=4.4.0.I20131212-1600
+java.version=1.6.0_27
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.php.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.php.product
+
+!ENTRY org.eclipse.ui 2 0 2016-10-17 12:44:55.426
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2016-10-17 12:44:55.426
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+
+!ENTRY org.eclipse.ui 2 0 2016-10-17 12:44:56.873
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2016-10-17 12:44:56.873
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+!SESSION 2016-10-28 19:01:13.205 -----------------------------------------------
+eclipse.buildId=4.4.0.I20131212-1600
+java.version=1.6.0_27
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.php.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.php.product
+
+!ENTRY org.eclipse.ui 2 0 2016-10-28 19:01:19.134
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2016-10-28 19:01:19.134
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+
+!ENTRY org.eclipse.ui 2 0 2016-10-28 19:01:20.323
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2016-10-28 19:01:20.323
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+!SESSION 2016-10-28 19:09:19.102 -----------------------------------------------
+eclipse.buildId=4.4.0.I20131212-1600
+java.version=1.6.0_27
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.php.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.php.product
+
+!ENTRY org.eclipse.ui 2 0 2016-10-28 19:09:23.479
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2016-10-28 19:09:23.481
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+
+!ENTRY org.eclipse.ui 2 0 2016-10-28 19:09:24.381
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2016-10-28 19:09:24.382
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+!SESSION 2016-10-28 19:10:41.691 -----------------------------------------------
+eclipse.buildId=4.4.0.I20131212-1600
+java.version=1.6.0_27
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.php.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.php.product
+
+!ENTRY org.eclipse.ui 2 0 2016-10-28 19:10:46.261
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2016-10-28 19:10:46.261
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+
+!ENTRY org.eclipse.ui 2 0 2016-10-28 19:10:47.802
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2016-10-28 19:10:47.802
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+!SESSION 2017-05-15 00:06:39.990 -----------------------------------------------
+eclipse.buildId=4.4.0.I20131212-1600
+java.version=1.6.0_27
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.php.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.php.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2017-05-15 00:06:55.788
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.ui 2 0 2017-05-15 00:06:58.123
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2017-05-15 00:06:58.123
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+
+!ENTRY org.eclipse.ui 2 0 2017-05-15 00:06:59.638
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2017-05-15 00:06:59.638
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+!SESSION 2017-06-09 13:56:42.700 -----------------------------------------------
+eclipse.buildId=4.4.0.I20131212-1600
+java.version=1.6.0_27
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.php.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.php.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2017-06-09 13:56:45.638
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.ui 2 0 2017-06-09 13:56:47.282
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2017-06-09 13:56:47.282
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'
+
+!ENTRY org.eclipse.ui 2 0 2017-06-09 13:56:48.059
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2017-06-09 13:56:48.059
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.php.ui', id='org.eclipse.dltk.ui.edit.text.java.source.quickMenu', categoryId='org.eclipse.jdt.ui.category.source'

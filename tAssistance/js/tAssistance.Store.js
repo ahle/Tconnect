@@ -3,8 +3,8 @@ tAssistance.Store = function(params){
 		this.after_update_userconfig = params.after_update_userconfig;
 	}
 	
-	//this.db = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/api.php/";// use this line for git
-	this.db = "http://localhost/tconnect/tAssistance/api.php/";// use this line for local dev
+	this.db = "http://88.191.236.98/tconnect/tAssistance/api.php/";// use this line for git
+	//this.db = "http://localhost/tconnect/tAssistance/api.php/";// use this line for local dev
 	
 	this.getUserById = function(user_id, callback){
 		var url = this.db+"users?userid="+user_id;

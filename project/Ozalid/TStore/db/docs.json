@@ -7,7 +7,7 @@
                         "genre": "MONOGRAPHIE",
                         "publisher": "V. Masson",
                         "date": "1864",
-                        "img": "http://localhost/tconnect/project/Ozalid/TStore/db/img/3.jpg",
+                        "img": "http://88.191.236.98/tconnect/project/Ozalid/TStore/db/img/3.jpg",
                         "id": "538c8490e4b04f38ac7352c1"
                       },
                       {
@@ -18,7 +18,7 @@
                         "genre": "MONOGRAPHIE",
                         "publisher": "Leclerc (Paris)",
                         "date": "1756",
-                        "img": "http://localhost/tconnect/project/Ozalid/TStore/db/img/2.jpg",
+                        "img": "http://88.191.236.98/tconnect/project/Ozalid/TStore/db/img/2.jpg",
                         "id": "538c84ffe4b04f38ac73544e"
                       },
                       {
@@ -51,7 +51,7 @@
                         "genre": "MONOGRAPHIE",
                         "publisher": "Techener (Paris)",
                         "date": "1892",
-                        "img": "http://localhost/tconnect/project/Ozalid/TStore/db/img/1.jpg",
+                        "img": "http://88.191.236.98/tconnect/project/Ozalid/TStore/db/img/1.jpg",
                         "id": "546ed25ee4b091320026b1b0"
                       }
                     ]

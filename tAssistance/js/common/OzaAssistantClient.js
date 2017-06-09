@@ -1,6 +1,6 @@
 tAssistance.OzaAssistantClient = function(){
-	this.uri = "http://localhost/tconnect/tAssistance/";// use this line for local dev
-	//this.uri = "http://dsi-liris-silex.univ-lyon1.fr/ozalid/tconnect/tAssistance/";// use this line for git
+	//this.uri = "http://localhost/tconnect/tAssistance/";// use this line for local dev
+	this.uri = "http://88.191.236.98/tconnect/tAssistance/";// use this line for git
 	
 	this.getTraceUri = function(trace_uri){
 		var as_trace_uri = this.uri + "index.php?page=Trace&trace_uri=" + trace_uri;
