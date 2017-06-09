@@ -1,4 +1,4 @@
-[Read thedocs](http://tconnect.readthedocs.io/en/latest/index.html)
+
 
 <link rel="import" href="http://example.com/elements.html">
 
