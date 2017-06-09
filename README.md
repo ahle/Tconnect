@@ -43,7 +43,7 @@ For user assistance website :
 
 Documents
 --------
-
+[Read thedocs](http://tconnect.readthedocs.io/en/latest/index.html)
 
 Online Demo
 ----
