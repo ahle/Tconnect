@@ -14,3 +14,5 @@ Let's talk with an example with an event sequence of alarm systems:
 <p align="center"> An sequence of events </p>
 
 One basic problem in analyzing event sequences is to find frequent episodes, i.e. a collection of events occuring frequently together.
+When discovering episodes in a telecommunication network alarm log, the goal is to find relationships between alarms.
+Such relationships can then be used in the on-line analysis of the incoming alarm stream, e.g., to better explain the problems that cause alarms, to suppress redundant alarms, and to predict servere faults.
