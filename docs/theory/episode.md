@@ -10,5 +10,6 @@ FEM aims at identifying all the frequent episodes whose frequencies are larger t
 Let's talk with an example with an event sequence of alarm systems:
 
 ![image](image/episode.png)
+<div style="text-align: center"> An sequence of events </div>
 
 One basic problem in analyzing event sequences is to find frequent episodes, i.e. a collection of events occuring frequently together.
