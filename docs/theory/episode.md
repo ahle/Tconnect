@@ -84,7 +84,7 @@ Clearly, all the elements in $S_j^k$ are the last minimal occurrences within the
   Thus, the mining process can only be conducted in the original event space, which may lead to a sharp increase of memory consumption for storing all minimal knowledge occurrences.
   To tackle this challenge, we propose a storage management framework, as shown in Fig. 3.
 
-In Fig. 3, all elements in `$\mathcal{M}_{in}$` and $\mathcal{M}_{ex}$ are stored by chronological orders.
+In Fig. 3, all elements in $$\mathcal{M}_{in}$$ and $$\mathcal{M}_{ex}$$ are stored by chronological orders.
 Since, the $\delta - 1$ elements in $\mathcal{M}_{in}$ will be updated with the new coming events, $\mathcal{M}_{in}$ can always stay in the main memory. (Note that $\delta$ usually is a small number).
 For the other part $\mathcal{M}_{ex}$, since the new coming events do not affect any elements in $\mathcal{M}_{ex}$, we can save the $k-\delta+1$ elements into the external storage when k is very large.
 
