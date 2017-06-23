@@ -65,12 +65,14 @@ The set of all the last episode occurrences within the time window of $[t_i,t_j]
 With the definition of the last episode occurrence, the set of $M_j^k$ can be divided into two parts.
 Namely, considering the time window of $[k - \sigma + 1, k]$ can be represented as
 
-$M_j^k = \left\{
+<!-- $M_j^k = \left\{
                 \begin{array}{ll}
                   S_j^k = M_j^k \cap L_{k-\sigma+1}^k\\
                   \overline{S_j^k} = M_j^k - S_j^k
                 \end{array}
-              \right.$
+              \right.$ -->
+
+![image](https://latex.codecogs.com/png.latex?%24M_j%5Ek%20%3D%20%5Cbegin%7Bcases%7D%20S_j%5Ek%20%3D%20M_j%5Ek%20%5Ccap%20L_%7Bk-%5Csigma&plus;1%7D%5Ek%5C%5C%20%5Coverline%7BS_j%5Ek%7D%20%3D%20M_j%5Ek%20-%20S_j%5Ek%20%5Cend%7Bcases%7D%20%24)
 
 Clearly, all the elements in $S_j^k$ are the last minimal occurrences within the time window of $[k-\sigma +1, k]$. However, the elements in $\overline{S_j^k}$ are just the minimal occurrences, but not the last ones.
 
@@ -79,10 +81,16 @@ Clearly, all the elements in $S_j^k$ are the last minimal occurrences within the
 **The Storage Framework**
   For the batch mode of frequent episode mining, all solutions remove infrequent events by scanning the whole sequence in the first round, and then the mining process performs in the space of frequent events.
   This preprocessing step greatly reduces the observed element space and thus saves much memory consumption.
-  However, in the online mode of 
+  However, in the online mode of trace model we cannot apply such pre-processing since an infrequent event in the current sequence may become frequent episode in the future.
+  Thus, the mining process can only be conducted in the original event space, which may lead to a sharp increase of memory consumption for storing all minimal knowledge occurrences.
+  To tackle this challenge, we propose a storage management framework, as shown in Fig. 3.
 
+In Fig. 3, all elements in $\mathcal{M}_{in}$ and $\mathcal{M}_{ex}$ are stored by chronological orders.
+Since, the $\delta - 1$ elements in $\mathcal{M}_{in}$ will be updated with the new coming events, $\mathcal{M}_{in}$ can always stay in the main memory. (Note that $\delta$ usually is a small number).
+For the other part $\mathcal{M}_{ex}$, since the new coming events do not affect any elements in $\mathcal{M}_{ex}$, we can save the $k-\delta+1$ elements into the external storage when k is very large.
 
+There are still two simple structures stored in the framework, namely *frequent episode set* and *infrequent episode set*.
+Both of them are tables of which they key records the name of episodes and the value records the support count of the corresponding episode.
 
-
-![The storage framework for trace model](image/storage.png)
+![The storage framework for trace model](image/storage.svg)
 <p align="center"> Fig. 3. The storage framework in our approach.</p>
