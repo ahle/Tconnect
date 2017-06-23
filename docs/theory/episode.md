@@ -12,7 +12,7 @@ Let's talk with an example with an event sequence of alarm systems:
 
 ![image](image/episode.png)
 
-<p align="center"> A sequence of events </p>
+<p align="center"> Fig. 1. A sequence of events </p>
 
 One basic problem in analyzing event sequences is to find frequent episodes, i.e. a collection of events occuring frequently together.
 When discovering episodes in a telecommunication network alarm log, the *goal* is to find relationships between alarms.
@@ -24,11 +24,65 @@ We are not aware of prior work on the problem of online *infrequent episode* min
 ### Episode Trie
 In [CTM](7.CTM.md) method, we use the an **episode trie** to identifying all the new minimal episode occurences.
 
-Firstly, we  give the description of the data structure, which stores all minimal occurences in $M_i^j$. Remind that $M_i^j$ is the set of all minimal episode occurrences, starting at time $t_i$ and ending no later than $t_j$. 
+Firstly, we  give the description of the data structure, which stores all minimal occurences in $M_i^j$. Remind that $M_i^j$ is the set of all minimal episode occurrences, starting at time $t_i$ and ending no later than $t_j$.
 
 A *episode trie* has the structure as following:
 
 A **trie**, also called *prefix tree*, is an ordered tree data structure that is used to store a dynamic set where the keys are usually strings.
 In a trie, all the descendants of a node have a common prefix of the string associated with that node, and the root is associated with the empty string.
 
-In this study we ultilize the trie structure to store
+<!-- digraph G {
+  "root:5" -> "A:5"
+  "A:5" -> "A:6"
+  "A:5" -> "B:6"
+  "A:6" -> "B:7"
+  "B:6" -> "B:7 "
+} -->
+![The episode trie](https://chart.googleapis.com/chart?chl=digraph+G+%7B%0D%0A++%22root%3A5%22+-%3E+%22A%3A5%22%0D%0A++%22A%3A5%22+-%3E+%22A%3A6%22%0D%0A++%22A%3A5%22+-%3E+%22B%3A6%22%0D%0A++%22A%3A6%22+-%3E+%22B%3A7%22%0D%0A++%22B%3A6%22+-%3E+%22B%3A7+%22%0D%0A%7D&cht=gv)
+<p align="center"> Fig. 2. An example of episode trie </p>
+
+**Definition (Episode Trie)**
+Given a time-window $[t_i, t_j]$, an episode trie (E-trie for short, denoted $\mathcal{T}_i^j$) is a trie-like structure defined below.
+
+1) Each node $p$, denoted by $p.event:p.time$, consists of two fields: $p.event$ and $p.time$. Here, $p.event$ registers which event this node represents, and $p.time$ registers the occurence time stamp of such event.
+
+2) The event field of the root is associated with the empty string (labeled as "root"), and the *time* field of the root is equal to its content, and its occurrence window is $[t_i, p.time]$.
+
+For example, Figure 2 shows the episode trie $\mathcal{T}_5^7$) to store all the elements in $M_5^7$ for the running example in Figure 1.
+
+It contains 5 minimal episode occurrences.
+More importantly, each element in $M_5^7$ corresponds to a node in (except the root) in $\mathcal{T}_5^7$.
+For example, the occurrence of ($A \rightarrow A \rightarrow B$)
+
+#### Last Episode occurrence
+
+Next, we introduce another important definition, the last episode occurrence, which is the key concept to the proposed online algorithm.
+
+**Definition (The last episode occurrence)**
+Given a time window $[t_i,t_j]$, an episode occurrence $(\alpha, [t_1,t_2])$ is the last episode occurrence of $\alpha$ within this time window if and only if there does not exist another occurrence of $(\alpha, [t'_1,t'_2]) (t'_i \leq t'_1 \leq t'_2 \leq t'_j)$ such that $t'_1 > t_1$.
+The set of all the last episode occurrences within the time window of $[t_i,t_j]$ is denoted by $L_i^j$.
+
+With the definition of the last episode occurrence, the set of $M_j^k$ can be divided into two parts.
+Namely, considering the time window of $[k - \sigma + 1, k]$ can be represented as
+
+$M_j^k = \left\{
+                \begin{array}{ll}
+                  S_j^k = M_j^k \cap L_{k-\sigma+1}^k\\
+                  \overline{S_j^k} = M_j^k - S_j^k
+                \end{array}
+              \right.$
+
+Clearly, all the elements in $S_j^k$ are the last minimal occurrences within the time window of $[k-\sigma +1, k]$. However, the elements in $\overline{S_j^k}$ are just the minimal occurrences, but not the last ones.
+
+<!-- The whole framework in our approach, where $i = max(1, k - \Delta + 1)$. -->
+
+**The Storage Framework**
+  For the batch mode of frequent episode mining, all solutions remove infrequent events by scanning the whole sequence in the first round, and then the mining process performs in the space of frequent events.
+  This preprocessing step greatly reduces the observed element space and thus saves much memory consumption.
+  However, in the online mode of 
+
+
+
+
+![The storage framework for trace model](image/storage.png)
+<p align="center"> Fig. 3. The storage framework in our approach.</p>
