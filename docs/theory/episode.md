@@ -1,3 +1,4 @@
+
 ## Episode in Trace
 <!-- Introcduction -->
 This section provides an overview of the definitions and properties about episode mining.
