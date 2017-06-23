@@ -65,9 +65,7 @@ The set of all the last episode occurrences within the time window of $[t_i,t_j]
 With the definition of the last episode occurrence, the set of $M_j^k$ can be divided into two parts.
 Namely, considering the time window of $[k - \sigma + 1, k]$ can be represented as
 
-<!-- $M_j^k = \left\{
-                \begin{array}{ll}
-                  S_j^k = M_j^k \cap L_{k-\sigma+1}^k\\
+<!-- $M_j^k = \left\{                \begin{array}{ll}                  S_j^k = M_j^k \cap L_{k-\sigma+1}^k\\
                   \overline{S_j^k} = M_j^k - S_j^k
                 \end{array}
               \right.$ -->
