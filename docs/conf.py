@@ -31,6 +31,7 @@ from recommonmark.parser import CommonMarkParser
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ["sphinx.ext.mathjax"]
+mathjax_path='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=https://rawgit.com/ahle/ahle.github.io/master/customCDN/MathJax/config.js'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
