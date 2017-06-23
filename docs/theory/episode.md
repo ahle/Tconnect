@@ -38,7 +38,7 @@ In a trie, all the descendants of a node have a common prefix of the string asso
   "A:6" -> "B:7"
   "B:6" -> "B:7 "
 } -->
-![The episode trie](https://chart.googleapis.com/chart?chl=digraph+G+%7B%0D%0A++%22root%3A5%22+-%3E+%22A%3A5%22%0D%0A++%22A%3A5%22+-%3E+%22A%3A6%22%0D%0A++%22A%3A5%22+-%3E+%22B%3A6%22%0D%0A++%22A%3A6%22+-%3E+%22B%3A7%22%0D%0A++%22B%3A6%22+-%3E+%22B%3A7+%22%0D%0A%7D&cht=gv)
+<img src="https://chart.googleapis.com/chart?chl=digraph+G+%7B%0D%0A++%22root%3A5%22+-%3E+%22A%3A5%22%0D%0A++%22A%3A5%22+-%3E+%22A%3A6%22%0D%0A++%22A%3A5%22+-%3E+%22B%3A6%22%0D%0A++%22A%3A6%22+-%3E+%22B%3A7%22%0D%0A++%22B%3A6%22+-%3E+%22B%3A7+%22%0D%0A%7D&cht=gv"/>
 <p align="center"> Fig. 2. An example of episode trie </p>
 
 **Definition (Episode Trie)**
