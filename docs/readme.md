@@ -9,7 +9,7 @@ The user interaction trace in Ozalid project: [download](/var/www/tconnect/proje
 **Summary:** 6 users, 3 types of action
 
 
-<div style="display:block">fqdfsqdfqsdf</div>
+<div style="display:none">fqdfsqdfqsdf</div>
 
 
 
