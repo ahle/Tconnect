@@ -56,6 +56,11 @@ For user assistance website :
 * PHP 5.3.5 [Download PHP 5.3](http://php.net/downloads.php)
 * MongoDB
 
+Used technologies
+------
+Image to Text: [Naptha](http://projectnaptha.com/)
+
+
 Documents
 --------
 [Read thedocs](http://tconnect.readthedocs.io/en/latest/index.html)
