@@ -59,7 +59,7 @@ For user assistance website :
 Used technologies
 ------
 Image to Text: [Naptha](http://projectnaptha.com/)
-
+Macro (record and replay): Kantu for Chrome 
 
 Documents
 --------
