@@ -61,7 +61,6 @@ Used technologies
 * Image to Text: [Naptha](http://projectnaptha.com/)
 * Macro (record and replay): Kantu for Chrome
 * Reading time estimation: [Article Reading Time]()
-* User abort: PHP user abort
 
 Documents
 --------

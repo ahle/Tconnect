@@ -1,3 +1,5 @@
+
+
 tMining.DataMaker = function(traces){
 	
 	var vectors = [];
@@ -153,5 +155,9 @@ tMining.test = function(){
 	
 };
 
-
-
+module.exports = {
+  DataMaker: tMining.DataMaker,
+  bar: function () {
+    // whatever
+  }
+};
