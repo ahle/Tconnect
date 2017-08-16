@@ -61,7 +61,7 @@ Used technologies
 * Image to Text: [Naptha](http://projectnaptha.com/)
 * Macro (record and replay): Kantu for Chrome
 * Reading time estimation: [Article Reading Time]()
-* DOM Difference algorithm: https://github.com/fiduswriter/diffDOM
+* DOM difference algorithm: https://github.com/fiduswriter/diffDOM
 
 Documents
 --------
