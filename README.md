@@ -62,6 +62,7 @@ Used technologies
 * Macro (record and replay): Kantu for Chrome
 * Reading time estimation: [Article Reading Time]()
 * DOM difference algorithm: https://github.com/fiduswriter/diffDOM
+* Stress keystroke: https://github.com/fnokeke/keystroke-stress
 
 Documents
 --------
