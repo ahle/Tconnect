@@ -6,4 +6,4 @@ tStore is a trace base management system with the security features based on the
 
 Format
 ----------------
-OCNL: Ontorion Controlled Natural Language (OCNL) that is a human friendly alternative to XML ontology language like OWL or RDF but is completely compatible with OWL2, RDF and SWRL.
+**OCNL**: Ontorion Controlled Natural Language (OCNL) that is a human friendly alternative to XML ontology language like OWL or RDF but is completely compatible with OWL2, RDF and SWRL.
