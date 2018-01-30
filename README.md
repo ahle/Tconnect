@@ -63,6 +63,7 @@ Used technologies
 * Reading time estimation: [Article Reading Time]()
 * DOM difference algorithm: https://github.com/fiduswriter/diffDOM
 * Stress keystroke: https://github.com/fnokeke/keystroke-stress
+* Conflict resolution: https://github.com/gnieh/sohva/wiki/Automatic-Conflict-Resolution
 
 Documents
 --------
